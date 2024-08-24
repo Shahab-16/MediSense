@@ -4,7 +4,8 @@ import feature2 from './feature3_medicine.jpeg';
 import feature3 from './feature2_model.jpg';
 
 export const images={
-    doctor1
+    doctor1,
+
 }
 
 

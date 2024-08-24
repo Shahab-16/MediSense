@@ -7,7 +7,7 @@ const HeroSection = () => {
       <div className="flex flex-col-reverse lg:flex-row items-center justify-between px-4 lg:px-20 py-10 gap-6">
         
         {/* Left Section */}
-        <div className="w-full lg:w-1/2 flex flex-col gap-6 items-start">
+        <div className="w-full lg:w-1/2 flex flex-col gap-6 items-center lg:items:start">
           <h2 className="text-3xl lg:text-5xl font-bold mb-4">
             Welcome to MediSense
           </h2>
@@ -42,11 +42,11 @@ const HeroSection = () => {
         </div>
         
         {/* Right Section */}
-        <div className="w-full lg:w-1/2 mb-8 lg:mb-0 flex justify-center">
+        <div className="w-full lg:w-1/2 mb-8 lg:mb-0 flex justify-center lg:justify-end">
           <img
             src={images.doctor1}
             alt="Doctor"
-            className="w-[80%] h-auto max-w-md lg:max-w-full"
+            className="w-full  max-w-md lg:max-w-[80%]"
           />
         </div>
       </div>
