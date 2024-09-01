@@ -1,9 +1,12 @@
 import { useState, useEffect, useRef } from 'react';
 import {images} from '../assets/asset';
- 
+import { useContext } from 'react';
+import { StoreContext } from '../context/StoreContext'; 
+
 export default function NavBar() { 
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
+  const {login,setlogin}=useContext(StoreContext);
 
   // Toggle dropdown visibility
   const toggleDropdown = () => {
@@ -42,7 +45,7 @@ export default function NavBar() {
       </div>
 
       {/* Sign Up Button (Hidden on small screens) */}
-      <button className='text-center p-2 bg-blue-800 hover:bg-blue-600 mt-1 text-white font-outfit rounded-lg hidden sm:block'>Sign Up</button>
+      <button onClick={() => setlogin(true)} className='text-center p-2 bg-blue-800 hover:bg-blue-600 mt-1 text-white font-outfit rounded-lg hidden sm:block'>Sign Up</button>
 
       {/* Dropdown for Small Screens */}
       <div className="text-left mt-5 sm:hidden" ref={dropdownRef}>

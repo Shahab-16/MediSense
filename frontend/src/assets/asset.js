@@ -16,12 +16,16 @@ import modelSectionImage from "./modelSectionImage.jpg";
 import AnasAhmed from './Doctor 01.jpg';
 import DrRobertMitchell from './Doctor 02.jpg';
 import DrGitaDevi from './Doctor 17.jpg';
+import Cancel_Icon from './cross_icon.png';
+import register from './register.png';
 
 export const images = {
   doctor1,
   appStore,
   playStore,
   modelSectionImage,
+  Cancel_Icon,
+  register
 };
 
 export const model_list = {
