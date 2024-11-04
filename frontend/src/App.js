@@ -1,26 +1,19 @@
+// App.js
 import './App.css';
-import Navbar from './components/Navbar';
-import Footer from './components/Footer';
 import Home from './pages/Home';
 import { Routes, Route } from 'react-router-dom';
-import { useContext } from 'react';
-import { StoreContext } from './context/StoreContext';
-import Login from './components/Login';
+import LoginAndSignUp from './components/LoginAndSignup/LoginAndSignup';
+import Dashboard from './pages/Dashboard';
 
 function App() {
-  const {login,setlogin}=useContext(StoreContext)
   return (
-    <>
-      {login ? (<Login/>) : (<></>)}
-      <div className='min-h-screen'>
-      <Navbar/>
+    <div className='min-h-screen'>
       <Routes>
-        <Route path='/' element={<Home/>}/>
+        <Route path='/' element={<Home />} />
+        <Route path='/login-and-signup' element={<div className="fullscreen-container"><LoginAndSignUp /></div>} />
+        <Route path='/dashboard/*' element={<Dashboard />} />
       </Routes>
-      <Footer/>
     </div>
-    </>
-    
   );
 }
 

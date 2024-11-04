@@ -18,6 +18,8 @@ import DrRobertMitchell from './Doctor 02.jpg';
 import DrGitaDevi from './Doctor 17.jpg';
 import Cancel_Icon from './cross_icon.png';
 import register from './register.png';
+import sidebarImg from './SidebarImg.png';
+import backgroundVideo from './backgroundVideo.mp4';
 
 export const images = {
   doctor1,
@@ -25,7 +27,9 @@ export const images = {
   playStore,
   modelSectionImage,
   Cancel_Icon,
-  register
+  register,
+  sidebarImg,
+  backgroundVideo,
 };
 
 export const model_list = {

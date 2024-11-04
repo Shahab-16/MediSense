@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
-import { StoreContext} from '../context/StoreContext'; 
-import { statsDescription } from '../assets/asset';
+import { StoreContext} from '../../context/StoreContext'; 
+import { statsDescription } from '../../assets/asset';
 
 const StatsCard = ({ title, value,description}) => {
     return (

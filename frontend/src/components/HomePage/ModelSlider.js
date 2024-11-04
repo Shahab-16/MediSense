@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Carousel } from "react-responsive-carousel";
-import { model_list } from "../assets/asset";
+import { model_list } from "../../assets/asset";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 
 const ModelSlider = () => {

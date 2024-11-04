@@ -1,5 +1,5 @@
 import React from "react";
-import onlineMedicineImage from "../assets/delivery.jpg";
+import onlineMedicineImage from "../../assets/delivery.jpg";
 
 const MedicineCard = () => {
   return (

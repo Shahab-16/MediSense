@@ -1,5 +1,5 @@
 import React from "react";
-import { doctor_features } from "../assets/asset";
+import { doctor_features } from "../../assets/asset";
 const DoctorCard = ({ name, specialization, address, stats, image }) => {
   return (
     <div className="bg-white shadow-xl shadow-gray-300 p-4 rounded-lg h-[100%] overflow-hidden">

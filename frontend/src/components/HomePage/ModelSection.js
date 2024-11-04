@@ -1,5 +1,5 @@
 import React from "react";
-import { images } from "../assets/asset";
+import { images } from "../../assets/asset";
 
 const ModelSection = () => {
   return (

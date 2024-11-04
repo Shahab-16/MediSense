@@ -1,5 +1,5 @@
 import React from 'react';
-import { features } from '../assets/asset';
+import { features } from '../../assets/asset';
 
 const FeatureCard = ({ title, description, image }) => {
     return (

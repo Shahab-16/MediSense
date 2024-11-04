@@ -1,5 +1,5 @@
 import React from 'react'
-import { feature_list, images} from '../assets/asset'
+import { feature_list, images} from '../../assets/asset'
 import { FaArrowRightLong } from "react-icons/fa6";
 
 const HeroSection = () => {
