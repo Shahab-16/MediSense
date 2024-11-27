@@ -22,6 +22,9 @@ const Login = () => {
             setLogin(false);
             navigate("/dashboard/home");
         }
+        else if(currState==="Signup"){
+            navigate("/otp")
+        }
     };
 
     useEffect(() => {
