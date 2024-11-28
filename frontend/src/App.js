@@ -12,7 +12,7 @@ function App() {
       <Routes>
         <Route path='/' element={<Home />} />
         <Route path='/login-and-signup' element={<div className="fullscreen-container"><LoginAndSignUp /></div>} />
-        <Route path='/otp' element={<div className="flex items-center justify-center h-screen">
+        <Route path='/otp' element={<div className="flex items-center justify-center h-screen bg-[#2c2c2cc0]">
           <Otp />
         </div>} />
         <Route path='/dashboard/*' element={<Dashboard />} />

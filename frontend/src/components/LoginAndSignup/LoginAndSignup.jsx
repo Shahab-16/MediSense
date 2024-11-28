@@ -41,7 +41,7 @@ const Login = () => {
     if (!login) return null;
 
     return (
-        <div className="bg-[#000000c0] fixed top-0 left-0 w-full h-full flex justify-center items-center">
+        <div className="bg-[#2c2c2cc0] fixed top-0 left-0 w-full h-full flex justify-center items-center">
             <div className="w-[900px] h-[550px] rounded-lg bg-white flex overflow-hidden shadow-lg relative">
                 <ImCross className="absolute top-4 right-4 cursor-pointer w-5 h-5" onClick={() => setLogin(false)} />
                 <div className="w-2/3 hidden lg:block">
