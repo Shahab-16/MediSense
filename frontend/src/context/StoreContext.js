@@ -12,6 +12,7 @@ const StoreContextProvider = ({ children }) => {
         totalModels: 10,
     });
 
+
     const contextValue = {
         stats,
         setStats,

@@ -12,7 +12,8 @@ import Footer from '../components/HomePage/Footer';
 
 const Home = () => {
   return (
-    <div className='max-w-[1400px] mx-auto'>
+    <>
+    <div className='flex flex-col max-w-[1400px] mx-auto gap-5'>
       <Navbar/>
       <HeroSection/>
       <MedisenseDescription/>
@@ -22,8 +23,9 @@ const Home = () => {
       <ModelSection/>
       <ModelSlider/>
       <AppCompnent/>
-      <Footer/>
     </div>
+    <Footer/>
+    </>
   )
 }
 

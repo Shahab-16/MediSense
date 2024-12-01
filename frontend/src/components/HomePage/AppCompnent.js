@@ -5,7 +5,7 @@ import { FaArrowRightLong } from "react-icons/fa6";
 const AppCompnent = () => {
   return (
     <div className="max-w-[1400px] mx-auto mt-[4rem]">
-    <div className="bg-slate-200 flex justify-between items-center w-[70%] rounded-lg p-12 mx-auto">
+    <div className="bg-slate-200 flex justify-between items-center w-[90%] rounded-lg p-12 mx-auto">
         <div className="flex flex-col">
           <p className="text-sm text-green-800">REVOLUTIONIZING HEALTHCARE PRACTICES</p>
           <p className="text-3xl font-semibold max-w-[450px]">"Your Health, Our Technology, Better Tomorrow"</p>

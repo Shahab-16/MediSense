@@ -20,6 +20,10 @@ import Cancel_Icon from './cross_icon.png';
 import register from './register.png';
 import sidebarImg from './SidebarImg.png';
 import backgroundVideo from './backgroundVideo.mp4';
+import medicineShopIcon from './medicineShopIcon.png';
+import medicineShop from './medicineShop.jpg';
+
+
 
 export const images = {
   doctor1,
@@ -30,6 +34,8 @@ export const images = {
   register,
   sidebarImg,
   backgroundVideo,
+  medicineShopIcon,
+  medicineShop
 };
 
 export const model_list = {
@@ -183,4 +189,28 @@ export const doctor_features = [
     stats: "",
     img: DrGitaDevi
   }
-]
+];
+
+
+export const medicine_categories = [
+  { name: "Diabetes" },
+  { name: "Hypertension" },
+  { name: "Cold" },
+  { name: "Heart Disease" },
+  { name: "Allergies" },
+  { name: "Asthma" },
+  { name: "Arthritis" },
+  { name: "Skin Conditions" },
+  { name: "Infections" },
+  { name: "Gastrointestinal Issues" },
+  { name: "Thyroid Disorders" },
+  { name: "Mental Health" },
+  { name: "Pain Management" },
+  { name: "Fever" },
+  { name: "Vitamin Deficiencies" },
+  { name: "Kidney Disorders" },
+  { name: "Liver Disorders" },
+  { name: "Neurological Disorders" },
+  { name: "Cancer" },
+  { name: "Eye Care" },
+];

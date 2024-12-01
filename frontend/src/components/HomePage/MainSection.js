@@ -4,7 +4,7 @@ import { FaArrowRightLong } from "react-icons/fa6";
 
 const HeroSection = () => {
     return (
-      <div className="flex flex-col-reverse lg:flex-row items-center justify-between px-4 lg:pr-20 lg:pl-15 py-10 gap-6">
+      <div className="flex flex-col-reverse lg:flex-row items-center justify-between px-4 lg:pr-20 lg:pl-15 py-12 gap-6 mt-[4rem]">
         
         {/* Left Section */}
         <div className="w-full lg:w-1/2 flex flex-col gap-6 items-center lg:items:start">

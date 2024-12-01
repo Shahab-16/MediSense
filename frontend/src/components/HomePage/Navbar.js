@@ -1,6 +1,5 @@
-// NavBar.js
 import { useState, useEffect, useRef, useContext } from 'react';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { useNavigate } from 'react-router-dom';
 import { images } from '../../assets/asset';
 import { StoreContext } from '../../context/StoreContext';
 
@@ -8,7 +7,7 @@ const NavBar = () => {
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef(null);
     const { login, setLogin } = useContext(StoreContext);
-    const navigate = useNavigate(); // Initialize useNavigate
+    const navigate = useNavigate();
 
     const toggleDropdown = () => {
         setIsOpen(!isOpen);
@@ -29,11 +28,11 @@ const NavBar = () => {
 
     const handleSignUpClick = () => {
         setLogin(true);
-        navigate('/login-and-signup'); // Navigate to the login-and-signup route
+        navigate('/login-and-signup');
     };
 
     return (
-        <div className="flex justify-between items-center max-w-[1600px] mx-auto px-4 lg:px-20 py-3">
+        <div className="navbar fixed top-0 left-0 w-full z-50 bg-white shadow-md flex justify-between items-center px-4 lg:px-20 py-3">
             <div className="text-3xl gap-1 tracking-wider font-bold text-blue-800 pl-[40px]">
                 MediSense
             </div>
@@ -43,9 +42,17 @@ const NavBar = () => {
                 <a href="#" className="text-black-300 p-4">Services</a>
                 <a href="#" className="text-black-300 p-4">Contact</a>
             </div>
-            <button onClick={handleSignUpClick} className="text-center p-2 bg-blue-800 hover:bg-blue-600 mt-1 text-white font-outfit rounded-lg hidden sm:block">Sign Up</button>
+            <button
+                onClick={handleSignUpClick}
+                className="text-center p-2 bg-blue-800 hover:bg-blue-600 mt-1 text-white font-outfit rounded-lg hidden sm:block"
+            >
+                Sign Up
+            </button>
             <div className="text-left mt-5 sm:hidden" ref={dropdownRef}>
-                <button onClick={toggleDropdown} className="p-2 rounded-full hover:bg-gray-200 focus:outline-none">
+                <button
+                    onClick={toggleDropdown}
+                    className="p-2 rounded-full hover:bg-gray-200 focus:outline-none"
+                >
                     <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
                         <path d="M12 8a2 2 0 110-4 2 2 0 010 4zm0 2a2 2 0 110 4 2 2 0 010-4zm0 6a2 2 0 110 4 2 2 0 010-4z" />
                     </svg>
