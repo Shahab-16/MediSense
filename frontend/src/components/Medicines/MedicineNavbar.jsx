@@ -15,7 +15,7 @@ const MedicineNavbar = () => {
         <input
           type="text"
           placeholder="Search..."
-          className="w-full py-2 px-4 pr-10 text-gray-700 bg-gray-100 rounded-full shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full py-2 px-4 pr-10 text-gray-700 bg-gray-200 rounded-full shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
         <button
           className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500 hover:text-gray-700"

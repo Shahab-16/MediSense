@@ -4,10 +4,10 @@ export default function DoctorsNavbar() {
     return (
         <div>
             {/* Navbar */}
-            <nav className="container mx-auto flex justify-between items-center p-4">
+            <nav className="container mx-auto max-w-[1300px] flex justify-between items-center p-4">
                 {/* Logo */}
                 <div className="text-[30px] font-bold text-blue-800">
-                    <a href="/">MediSense</a>
+                    <a href="/">DocSpace</a>
                 </div>
                 {/* Navigation Links */}
                 <ul className="hidden md:flex space-x-6 text-xl">

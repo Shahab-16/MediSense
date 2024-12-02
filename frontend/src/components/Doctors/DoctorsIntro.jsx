@@ -3,8 +3,8 @@ import { images } from '../../assets/asset'
 export default function DoctorsIntro() {
     return (
         <div>
-            <section className="bg-blue-600 flex items-center justify-center text-white h-[70vh] mx-auto px-4 ml-[8%] mr-[8%]">
-                <div className="text-center max-w-3xl">
+            <section className="bg-blue-600 flex items-center max-w-[1300px] rounded-md justify-center text-white h-[75vh] mx-auto px-4 ml-[8%] mr-[8%]">
+                <div className="flex flex-col items-center gap-5 text-center max-w-3xl">
                     <h1 className="text-4xl font-bold">
                         Welcome to Doctors Portal
                         <br />

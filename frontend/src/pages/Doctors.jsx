@@ -3,7 +3,7 @@ import DoctorsNavbar from '../components/Doctors/DoctorsNavbar';
 import DoctorsIntro from '../components/Doctors/DoctorsIntro';
 const Doctors = () => {
   return (
-    <div>
+    <div className='flex flex-col gap-8'>
       <DoctorsNavbar/>
       <DoctorsIntro/>
     </div>
