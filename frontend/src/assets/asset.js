@@ -32,9 +32,8 @@ import Hydrochlorothiazide from './Hydrochlorothiazide.jpg';
 import Losartan from './Losartan.jpg';
 import Metoprolol from './Metoprolol.jpeg';
 import Amlodipine from './Amlodipine.jpg';
-
-
-
+import appointment_img from './appointment_img.png';
+import group_profiles from './group_profiles.png'
 export const images = {
   doctor1,
   appStore,
@@ -45,7 +44,9 @@ export const images = {
   sidebarImg,
   backgroundVideo,
   medicineShopIcon,
-  medicineShop
+  medicineShop,
+  appointment_img,
+  group_profiles
 };
 
 export const model_list = {

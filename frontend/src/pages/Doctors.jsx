@@ -1,7 +1,13 @@
 import React from 'react';
-
+import DoctorsNavbar from '../components/Doctors/DoctorsNavbar';
+import DoctorsIntro from '../components/Doctors/DoctorsIntro';
 const Doctors = () => {
-  return <h2>Doctors Page</h2>;
+  return (
+    <div>
+      <DoctorsNavbar/>
+      <DoctorsIntro/>
+    </div>
+  )
 };
 
 export default Doctors;
