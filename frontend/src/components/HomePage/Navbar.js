@@ -28,7 +28,7 @@ const NavBar = () => {
 
     const handleSignUpClick = () => {
         setLogin(true);
-        navigate('/login-and-signup');
+        navigate('/login');
     };
 
     return (

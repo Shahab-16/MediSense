@@ -34,6 +34,15 @@ import Metoprolol from './Metoprolol.jpeg';
 import Amlodipine from './Amlodipine.jpg';
 import appointment_img from './appointment_img.png';
 import group_profiles from './group_profiles.png'
+import Cetirizine from './Cetirizine.jpg';
+import Chlorpheniramine from './Chlorpheniramine.jpg';
+import Dextromethorphan from './Dextromethorphan.jpg';
+import Phenylephrine from './Phenylephrine.jpg';
+import Paracetamol from './Paracetamol.jpg';
+import login_img from './login_image.jpg';
+import role_img from './role_image.jpg';
+
+
 export const images = {
   doctor1,
   appStore,
@@ -46,7 +55,9 @@ export const images = {
   medicineShopIcon,
   medicineShop,
   appointment_img,
-  group_profiles
+  group_profiles,
+  login_img,
+  role_img
 };
 
 export const model_list = {
@@ -307,35 +318,35 @@ export const medicines = [
       name: "Paracetamol",
       category: "Cold",
       price: 50,
-      image: "https://via.placeholder.com/150/cold/paracetamol.jpg",
+      image: Paracetamol,
       description: "Relieves fever and mild cold symptoms.",
     },
     {
       name: "Cetirizine",
       category: "Cold",
       price: 80,
-      image: "https://via.placeholder.com/150/cold/cetirizine.jpg",
+      image: Cetirizine,
       description: "Reduces allergy-related cold symptoms such as a runny nose.",
     },
     {
       name: "Phenylephrine",
       category: "Cold",
       price: 70,
-      image: "https://via.placeholder.com/150/cold/phenylephrine.jpg",
+      image: Phenylephrine,
       description: "Decongests nasal passages for cold relief.",
     },
     {
       name: "Chlorpheniramine",
       category: "Cold",
       price: 90,
-      image: "https://via.placeholder.com/150/cold/chlorpheniramine.jpg",
+      image: Chlorpheniramine,
       description: "Eases sneezing and runny nose associated with the common cold.",
     },
     {
       name: "Dextromethorphan",
       category: "Cold",
       price: 120,
-      image: "https://via.placeholder.com/150/cold/dextromethorphan.jpg",
+      image: Dextromethorphan,
       description: "Suppresses cough during colds and mild throat infections.",
     },
     // Heart Disease

@@ -1,5 +1,5 @@
 // Login.js
-import { useState, useContext, useEffect } from 'react';
+/*import { useState, useContext, useEffect } from 'react';
 import { StoreContext } from '../../context/StoreContext';
 import { images } from '../../assets/asset';
 import { ImCross } from "react-icons/im";
@@ -41,8 +41,8 @@ const Login = () => {
     if (!login) return null;
 
     return (
-        <div className="bg-[#2c2c2cc0] fixed top-0 left-0 w-full h-full flex justify-center items-center">
-            <div className="w-[900px] h-[550px] rounded-lg bg-white flex overflow-hidden shadow-lg relative">
+        <div className="bg-white fixed top-0 left-0 w-full h-full flex justify-center items-center">
+            <div className="w-[900px] h-[550px] rounded-lg bg-white shadow-2xl border-1 border-black flex overflow-hidden relative">
                 <ImCross className="absolute top-4 right-4 cursor-pointer w-5 h-5" onClick={() => setLogin(false)} />
                 <div className="w-2/3 hidden lg:block">
                     <img src={images.register} alt="Login" className="w-full h-full object-cover" />
@@ -75,3 +75,4 @@ const Login = () => {
 };
 
 export default Login;
+*/
