@@ -41,8 +41,12 @@ import Phenylephrine from './Phenylephrine.jpg';
 import Paracetamol from './Paracetamol.jpg';
 import login_img from './login_image.jpg';
 import role_img from './role_image.jpg';
-
-
+import Pediatricians from './Pediatricians.svg';
+import Neurologist from './Neurologist.svg';
+import Gynecologist from './Gynecologist.svg';
+import General_physician from './General_physician.svg';
+import Gastroenterologist from './Gastroenterologist.svg';
+import Dermatologist from './Dermatologist.svg';
 export const images = {
   doctor1,
   appStore,
@@ -57,7 +61,13 @@ export const images = {
   appointment_img,
   group_profiles,
   login_img,
-  role_img
+  role_img,
+  Pediatricians,
+  Neurologist,
+  Gynecologist,
+  General_physician,
+  Gastroenterologist,
+  Dermatologist
 };
 
 export const model_list = {
