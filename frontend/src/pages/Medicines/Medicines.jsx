@@ -1,9 +1,9 @@
 import React from "react";
-import MedicineNavbar from "../components/Medicines/MedicineNavbar";
-import MedicineMainSection from "../components/Medicines/MedicineMainSection";
-import MedicineCategory from "../components/Medicines/MedicineCategory";
+import MedicineNavbar from "../../components/Medicines/MedicineNavbar";
+import MedicineMainSection from "../../components/Medicines/MedicineMainSection";
+import MedicineCategory from "../../components/Medicines/MedicineCategory";
 import { useState } from "react";
-import MedicineSection from "../components/Medicines/MedicineSection";
+import MedicineSection from "../../components/Medicines/MedicineSection";
 
 const Medicines = () => {
   const [ category, setCategory ] = useState("All");

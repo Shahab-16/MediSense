@@ -9,7 +9,7 @@ const ModelSection = () => {
         <img
           src={images.modelSectionImage}
           alt="AI in Medicine"
-          className="rounded-lg shadow-lg w-full h-full object-cover"
+          className="rounded-lg shadow-lg w-full h-full object-fit object-center"
         />
       </div>
       {/* Right Side: Title and Description */}

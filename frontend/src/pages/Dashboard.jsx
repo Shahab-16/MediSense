@@ -3,8 +3,8 @@ import React from 'react';
 import Sidebar from '../components/Dashboard/Sidebar';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import DashboardHome from '../components/Dashboard/DashboardHome';
-import Doctors from './Doctors';
-import Medicines from './Medicines';
+import Doctors from './Doctors/HomePage';
+import Medicines from './Medicines/Medicines';
 import Models from './Models';
 
 const Dashboard = () => {

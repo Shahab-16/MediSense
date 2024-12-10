@@ -16,6 +16,11 @@ const LoginForm = () => {
         setData({ ...data, [name]: value });
     };
 
+    const crossbutton = () => {
+        setLogin(false);
+        navigate('/');
+    }
+
     const submitForm = (e) => {
         e.preventDefault();
         if (currState === "Login") {
@@ -38,7 +43,7 @@ const LoginForm = () => {
             <div className="w-[900px] h-[600px] rounded-lg bg-white shadow-2xl flex overflow-hidden relative">
                 <ImCross 
                     className="absolute top-4 right-4 cursor-pointer w-6 h-6 text-gray-500 hover:text-red-600 transition-colors" 
-                    onClick={() => setLogin(false)} 
+                    onClick={crossbutton}
                 />
                 
                 <div className="w-2/3 hidden lg:block">
