@@ -7,11 +7,9 @@ import DoctorsNavbar from '../../components/Doctors/DoctorsNavbar';
 const Doctors = () => {
   return (
     <div className='flex flex-col gap-8'>
-      <DoctorsNavbar/>
       <DoctorsIntro/>
       <Speciality/>
       <DoctorsList/>
-      <Footer/>
     </div>
   )
 };

@@ -15,16 +15,16 @@ export default function DoctorsNavbar() {
                 {/* Navigation Links */}
                 <ul className="hidden md:flex space-x-6 text-xl font-semibold">
                     <li>
-                        <a href="#home" className="hover:text-gray-300">HOME</a>
+                        <a onClick={() => navigate('/dashboard/doctors')} className="hover:text-gray-300">HOME</a>
                     </li>
                     <li>
-                        <a href="#doctors" className="hover:text-gray-300">ALL DOCTORS</a>
+                        <a onClick={() => navigate('/dashboard/doctors/alldoctors')} className="hover:text-gray-300">ALL DOCTORS</a>
                     </li>
                     <li>
-                        <a href="#about" className="hover:text-gray-300">ABOUT</a>
+                        <a className="hover:text-gray-300">ABOUT</a>
                     </li>
                     <li>
-                        <a href="#contact" className="hover:text-gray-300">CONTACT</a>
+                        <a className="hover:text-gray-300">CONTACT</a>
                     </li>
                 </ul>
                 <div>

@@ -3,7 +3,7 @@ import React from 'react';
 import Sidebar from '../components/Dashboard/Sidebar';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import DashboardHome from '../components/Dashboard/DashboardHome';
-import Doctors from './Doctors/HomePage';
+import Doctors from './Doctors/DoctorApp';
 import Medicines from './Medicines/Medicines';
 import Models from './Models';
 
@@ -21,7 +21,7 @@ const Dashboard = () => {
       >
         <Routes>
           <Route path="/home" element={<DashboardHome />} />
-          <Route path="/doctors" element={<Doctors />} />
+          <Route path="/doctors/*" element={<Doctors />} />
           <Route path="/medicines" element={<Medicines />} />
           <Route path="/models" element={<Models />} />
           <Route path="*" element={<Navigate to="/dashboard/home" />} />
