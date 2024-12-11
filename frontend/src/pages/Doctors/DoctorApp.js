@@ -4,7 +4,7 @@ import DoctorsNavbar from '../../components/Doctors/DoctorsNavbar';
 import Footer from '../../components/Doctors/Footer';
 import DoctorsListPage from './DoctorsListPage';
 import DoctorsHomePage from './HomePage';
-
+import AbouPage from './AboutPage';
 const Doctors = () => {
   return (
     <div className="min-h-screen flex flex-col">
@@ -16,6 +16,7 @@ const Doctors = () => {
         <Routes>
           <Route path="/" element={<DoctorsHomePage />} />
           <Route path="/alldoctors" element={<DoctorsListPage />} />
+          <Route path="/about" element={<AbouPage/>}/>
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </div>

@@ -47,6 +47,7 @@ import Gynecologist from './Gynecologist.svg';
 import General_physician from './General_physician.svg';
 import Gastroenterologist from './Gastroenterologist.svg';
 import Dermatologist from './Dermatologist.svg';
+import about_image from "./about_image.png";
 export const images = {
   doctor1,
   appStore,
@@ -67,7 +68,8 @@ export const images = {
   Gynecologist,
   General_physician,
   Gastroenterologist,
-  Dermatologist
+  Dermatologist,
+  about_image
 };
 
 export const model_list = {

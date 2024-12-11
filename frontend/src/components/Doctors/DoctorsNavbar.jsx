@@ -1,6 +1,6 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
-
+import { Link } from 'react-router-dom'
 
 export default function DoctorsNavbar() {
     const navigate = useNavigate()
@@ -15,16 +15,16 @@ export default function DoctorsNavbar() {
                 {/* Navigation Links */}
                 <ul className="hidden md:flex space-x-6 text-xl font-semibold">
                     <li>
-                        <a onClick={() => navigate('/dashboard/doctors')} className="hover:text-gray-300">HOME</a>
+                        <Link to='/dashboard/doctors' className="hover:text-gray-300 cursor-pointer">HOME</Link>
                     </li>
                     <li>
-                        <a onClick={() => navigate('/dashboard/doctors/alldoctors')} className="hover:text-gray-300">ALL DOCTORS</a>
+                        <Link to='/dashboard/doctors/alldoctors' className="hover:text-gray-300 cursor-pointer">ALL DOCTORS</Link>
                     </li>
                     <li>
-                        <a className="hover:text-gray-300">ABOUT</a>
+                        <Link to='/dashboard/doctors/about' className="hover:text-gray-300 cursor-pointer">ABOUT</Link>
                     </li>
                     <li>
-                        <a className="hover:text-gray-300">CONTACT</a>
+                        <a className="hover:text-gray-300 cursor-pointer">CONTACT</a>
                     </li>
                 </ul>
                 <div>

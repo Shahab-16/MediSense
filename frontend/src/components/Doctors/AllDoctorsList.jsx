@@ -1,14 +1,12 @@
 import React from 'react'
 import { images } from '../../assets/asset'
 import { doctor_features } from '../../assets/asset';
-import { useNavigate } from 'react-router-dom';
-
-const DoctorCard2 = ({ name, specialization, image }) => {
+const DoctorCard3 = ({ name, specialization, image }) => {
     return (
       <div className="bg-white shadow-xl shadow-gray-300 rounded-lg h-fit w-fit overflow-hidden p-4">
         <div className="mb-3">
           <img
-            className="w-[250px] h-[200px] rounded-lg object-cover"
+            className="w-[250px] h-[200px] rounded-lg object-cover cursor-pointer"
             src={image}
             alt={`${name}'s image`}
           />
@@ -23,35 +21,35 @@ const DoctorCard2 = ({ name, specialization, image }) => {
     );
   };
   
-export default function DoctorsList() {
-  const navigate=useNavigate();
-  const handleClick=()=>{
-    navigate("/dashboard/doctors/alldoctors");
-  }
+export default function AllDoctorsList() {
   return (
     <div>
         <div className="  grid grid-cols-4 gap-2 p-9 overflow-hidden">
         {doctor_features.map((feature, index) => (
-          <DoctorCard2
+          <DoctorCard3
             name={feature.name}
             specialization={feature.specialization}
-            address={feature.address}
-            stats={feature.stats}
             image={feature.img}
-          ></DoctorCard2>
+          ></DoctorCard3>
         ))}
       </div>
       <div className="  grid grid-cols-4 gap-2 p-9">
         {doctor_features.map((feature, index) => (
-          <DoctorCard2
+          <DoctorCard3
             name={feature.name}
             specialization={feature.specialization}
             image={feature.img}
-          ></DoctorCard2>
+          ></DoctorCard3>
         ))}
       </div>
-      <div className='flex justify-center'>
-        <button onClick={handleClick} className='bg-[#EAEFFF] text-gray-600 px-12 py-4 rounded-full mt-10'>more</button>
+      <div className="  grid grid-cols-4 gap-2 p-9">
+        {doctor_features.map((feature, index) => (
+          <DoctorCard3
+            name={feature.name}
+            specialization={feature.specialization}
+            image={feature.img}
+          ></DoctorCard3>
+        ))}
       </div>
     </div>
   )
