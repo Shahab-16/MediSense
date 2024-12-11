@@ -10,18 +10,18 @@ export default function DoctorsNavbar() {
                     <a href="/">DocSpace</a>
                 </div>
                 {/* Navigation Links */}
-                <ul className="hidden md:flex space-x-6 text-xl">
+                <ul className="hidden md:flex space-x-6 text-xl font-semibold">
                     <li>
-                        <a href="#home" className="hover:text-gray-300">Home</a>
+                        <a href="#home" className="hover:text-gray-300">HOME</a>
                     </li>
                     <li>
-                        <a href="#about" className="hover:text-gray-300">About</a>
+                        <a href="#about" className="hover:text-gray-300">ALL DOCTORS</a>
                     </li>
                     <li>
-                        <a href="#services" className="hover:text-gray-300">Services</a>
+                        <a href="#services" className="hover:text-gray-300">ABOUT</a>
                     </li>
                     <li>
-                        <a href="#contact" className="hover:text-gray-300">Contact</a>
+                        <a href="#contact" className="hover:text-gray-300">CONTACT</a>
                     </li>
                 </ul>
                 <div>
