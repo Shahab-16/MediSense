@@ -1,6 +1,9 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
+
 
 export default function DoctorsNavbar() {
+    const navigate = useNavigate()
     return (
         <div>
             {/* Navbar */}
@@ -15,10 +18,10 @@ export default function DoctorsNavbar() {
                         <a href="#home" className="hover:text-gray-300">HOME</a>
                     </li>
                     <li>
-                        <a href="#about" className="hover:text-gray-300">ALL DOCTORS</a>
+                        <a href="#doctors" className="hover:text-gray-300">ALL DOCTORS</a>
                     </li>
                     <li>
-                        <a href="#services" className="hover:text-gray-300">ABOUT</a>
+                        <a href="#about" className="hover:text-gray-300">ABOUT</a>
                     </li>
                     <li>
                         <a href="#contact" className="hover:text-gray-300">CONTACT</a>
