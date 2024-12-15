@@ -12,6 +12,24 @@ const StoreContextProvider = ({ children }) => {
         totalModels: 10,
     });
 
+    const [medicineCart,setMedicineCart] = useState([]);
+
+
+    const addToMedicineCart=async(itemId)=>{
+        if(!medicineCart[itemId]){
+            setMedicineCart(prev=>({...prev,[itemId]:1}));
+        }
+        else if(medicineCart[itemId]>=1){
+            setMedicineCart(prev=>({...prev,[itemId]:prev[itemId]+1}));
+        }
+    }
+
+    const removeFromMedicineCart=async(itemId)=>{
+        if(medicineCart[itemId]>=1){
+            setMedicineCart(prev=>({...prev,[itemId]:prev[itemId]-1}));
+        }
+    }
+
 
     const contextValue = {
         stats,

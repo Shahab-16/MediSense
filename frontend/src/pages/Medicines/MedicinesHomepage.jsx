@@ -5,11 +5,10 @@ import MedicineCategory from "../../components/Medicines/MedicineCategory";
 import { useState } from "react";
 import MedicineSection from "../../components/Medicines/MedicineSection";
 
-const Medicines = () => {
+const MedicinesHomepage = () => {
   const [ category, setCategory ] = useState("All");
   return (
     <>
-      <MedicineNavbar />
       <div className="flex flex-col gap-6">
         <MedicineMainSection />
         <MedicineCategory category={category} setCategory={setCategory} />
@@ -19,4 +18,4 @@ const Medicines = () => {
   );
 };
 
-export default Medicines;
+export default MedicinesHomepage;

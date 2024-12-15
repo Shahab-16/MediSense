@@ -2,11 +2,12 @@ import React from 'react'
 import { images } from '../../assets/asset'
 import { FiSearch } from 'react-icons/fi'
 import { FaCartPlus } from "react-icons/fa6";
-
+import { useNavigate } from 'react-router-dom';
 const MedicineNavbar = () => {
+  const navigate=useNavigate();
   return (
     <div className='flex justify-between items-center w-[90%] mx-auto'>
-    <div className='flex justify-center items-center gap-2'>
+    <div onClick={() => navigate("/dashboard/medicines")} className='flex justify-center items-center gap-2 cursor-pointer'>
       <img src={images.medicineShopIcon} alt="logo" className='w-8 h-8' />
       <p className='text-3xl text-blue-700 text-center font-bold'>Medicine Store</p>
     </div>
@@ -24,7 +25,7 @@ const MedicineNavbar = () => {
           <FiSearch className="w-5 h-5" />
         </button>
       </div>
-      <FaCartPlus className='w-8 h-8 text-blue-800'/>
+      <FaCartPlus onClick={() => navigate("/dashboard/medicines/cart")} className='w-8 h-8 text-blue-800 cursor-pointer'/>
       </div>
     </div>
   )

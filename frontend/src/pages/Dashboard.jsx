@@ -4,7 +4,7 @@ import Sidebar from '../components/Dashboard/Sidebar';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import DashboardHome from '../components/Dashboard/DashboardHome';
 import Doctors from './Doctors/DoctorApp';
-import Medicines from './Medicines/Medicines';
+import MedicinesApp from './Medicines/MedicinesApp';
 import Models from './Models';
 
 const Dashboard = () => {
@@ -22,7 +22,7 @@ const Dashboard = () => {
         <Routes>
           <Route path="/home" element={<DashboardHome />} />
           <Route path="/doctors/*" element={<Doctors />} />
-          <Route path="/medicines" element={<Medicines />} />
+          <Route path="/medicines/*" element={<MedicinesApp />} />
           <Route path="/models" element={<Models />} />
           <Route path="*" element={<Navigate to="/dashboard/home" />} />
         </Routes>

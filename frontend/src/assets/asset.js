@@ -48,6 +48,16 @@ import General_physician from './General_physician.svg';
 import Gastroenterologist from './Gastroenterologist.svg';
 import Dermatologist from './Dermatologist.svg';
 import about_image from "./about_image.png";
+
+
+
+
+
+
+
+
+
+
 export const images = {
   doctor1,
   appStore,
@@ -192,37 +202,190 @@ export const features = [
   },
 ];
 
-
-export const doctor_features = [
+export const doctors = [
   {
     name: "Anas Ahmed",
     specialization: "Heart specialist",
-    address: "",
-    stats: "",
+    address: "Delhi, India",
+    experience: 15,
+    success_rate: 98,
     img: AnasAhmed
-
   },
   {
-    name: "Dr.Robert Mitchell",
+    name: "Dr. Robert Mitchell",
     specialization: "Endocrinologist",
-    address: "",
-    stats: "",
+    address: "Mumbai, India",
+    experience: 10,
+    success_rate: 95,
     img: DrRobertMitchell
   },
   {
-    name: "Dr.Sarah Khan",
-    specialization: "oncologist",
-    address: "",
-    stats: "",
-    img:  DrRobertMitchell
+    name: "Dr. Sarah Khan",
+    specialization: "Oncologist",
+    address: "Hyderabad, India",
+    experience: 12,
+    success_rate: 93,
+    img: "https://via.placeholder.com/150/arthritis/celecoxib.jpg"
   },
   {
-    name:"Gita Devi",
+    name: "Gita Devi",
     specialization: "Dermatologist",
-    address: "",
-    stats: "",
+    address: "Chennai, India",
+    experience: 8,
+    success_rate: 90,
     img: DrGitaDevi
+  },
+  {
+    name: "Dr. Vikram Singh",
+    specialization: "Orthopedic Surgeon",
+    address: "Pune, India",
+    experience: 20,
+    success_rate: 97,
+    img: "https://via.placeholder.com/150/arthritis/celecoxib.jpg"
+  },
+  {
+    name: "Dr. Meera Sharma",
+    specialization: "Pediatrician",
+    address: "Bangalore, India",
+    experience: 10,
+    success_rate: 92,
+    img: "https://via.placeholder.com/150/arthritis/celecoxib.jpg"
+  },
+  {
+    name: "Dr. Arjun Patel",
+    specialization: "Neurologist",
+    address: "Ahmedabad, India",
+    experience: 18,
+    success_rate: 94,
+    img: "https://via.placeholder.com/150/arthritis/celecoxib.jpg"
+  },
+  {
+    name: "Dr. Kavita Nair",
+    specialization: "Gynecologist",
+    address: "Kochi, India",
+    experience: 15,
+    success_rate: 96,
+    img: "https://via.placeholder.com/150/arthritis/celecoxib.jpg"
+  },
+  {
+    name: "Dr. Rajesh Iyer",
+    specialization: "Psychiatrist",
+    address: "Jaipur, India",
+    experience: 12,
+    success_rate: 91,
+    img: "https://via.placeholder.com/150/arthritis/celecoxib.jpg"
+  },
+  {
+    name: "Dr. Pooja Verma",
+    specialization: "ENT Specialist",
+    address: "Lucknow, India",
+    experience: 9,
+    success_rate: 89,
+    img: "https://via.placeholder.com/150/arthritis/celecoxib.jpg"
+  },
+  {
+    name: "Dr. Sanjay Gupta",
+    specialization: "Cardiologist",
+    address: "Patna, India",
+    experience: 22,
+    success_rate: 98,
+    img: "https://via.placeholder.com/150/arthritis/celecoxib.jpg"
+  },
+  {
+    name: "Dr. Neha Kapoor",
+    specialization: "Radiologist",
+    address: "Indore, India",
+    experience: 11,
+    success_rate: 92,
+    img: "https://via.placeholder.com/150/arthritis/celecoxib.jpg"
+  },
+  {
+    name: "Dr. Amar Chatterjee",
+    specialization: "Gastroenterologist",
+    address: "Kolkata, India",
+    experience: 16,
+    success_rate: 94,
+    img: "https://via.placeholder.com/150/arthritis/celecoxib.jpg"
+  },
+  {
+    name: "Dr. Sunita Reddy",
+    specialization: "Pulmonologist",
+    address: "Visakhapatnam, India",
+    experience: 14,
+    success_rate: 93,
+    img: "https://via.placeholder.com/150/arthritis/celecoxib.jpg"
+  },
+  {
+    name: "Dr. Pranav Deshmukh",
+    specialization: "Urologist",
+    address: "Nagpur, India",
+    experience: 10,
+    success_rate: 90,
+    img: "https://via.placeholder.com/150/arthritis/celecoxib.jpg"
+  },
+  {
+    name: "Dr. Sushmita Roy",
+    specialization: "Ophthalmologist",
+    address: "Guwahati, India",
+    experience: 12,
+    success_rate: 92,
+    img: "https://via.placeholder.com/150/arthritis/celecoxib.jpg"
+  },
+  {
+    name: "Dr. Ramesh Chandra",
+    specialization: "Nephrologist",
+    address: "Ranchi, India",
+    experience: 15,
+    success_rate: 94,
+    img: "https://via.placeholder.com/150/arthritis/celecoxib.jpg"
+  },
+  {
+    name: "Dr. Anjali Sinha",
+    specialization: "General Physician",
+    address: "Bhopal, India",
+    experience: 7,
+    success_rate: 88,
+    img: "https://via.placeholder.com/150/arthritis/celecoxib.jpg"
+  },
+  {
+    name: "Dr. Tarun Bhardwaj",
+    specialization: "Plastic Surgeon",
+    address: "Chandigarh, India",
+    experience: 18,
+    success_rate: 96,
+    img: "https://via.placeholder.com/150/arthritis/celecoxib.jpg"
+  },
+  {
+    name: "Dr. Leena Pandey",
+    specialization: "Rheumatologist",
+    address: "Surat, India",
+    experience: 11,
+    success_rate: 89,
+    img: "https://via.placeholder.com/150/arthritis/celecoxib.jpg"
   }
+];
+
+export const doctor_specializations = [
+  { name: "Heart specialist" },
+  { name: "Endocrinologist" },
+  { name: "Oncologist" },
+  { name: "Dermatologist" },
+  { name: "Orthopedic Surgeon" },
+  { name: "Pediatrician" },
+  { name: "Neurologist" },
+  { name: "Gynecologist" },
+  { name: "Psychiatrist" },
+  { name: "ENT Specialist" },
+  { name: "Cardiologist" },
+  { name: "Radiologist" },
+  { name: "Gastroenterologist" },
+  { name: "Pulmonologist" },
+  { name: "Urologist" },
+  { name: "Ophthalmologist" },
+  { name: "Nephrologist" },
+  { name: "General Physician" },
+  { name: "Plastic Surgeon" },
+  { name: "Rheumatologist" }
 ];
 
 

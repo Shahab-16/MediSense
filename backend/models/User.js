@@ -11,7 +11,6 @@ const UserSchema = new mongoose.Schema({
         required: true,
         trim: true,
         unique: true,
-        match: [/^\S+@\S+\.\S+$/, "Invalid email format"]
     },
     password: {
         type: String,
@@ -27,9 +26,12 @@ const UserSchema = new mongoose.Schema({
         enum: ["user", "admin"],
         default: "user"
     },
-    otp: {
-        type: Number,
-        required: false 
+    token: {
+        type: String,
+        trim: true
+    },
+    tokenExpiresAt: {
+        type: Date,
     },
     medicines: [{
         type: mongoose.Schema.Types.ObjectId,

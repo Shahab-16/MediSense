@@ -2,14 +2,14 @@ import React from 'react';
 import DoctorsIntro from '../../components/Doctors/DoctorsIntro';
 import Speciality from '../../components/Doctors/Speciality';
 import DoctorsList from '../../components/Doctors/DoctorsList';
-import Footer from '../../components/Doctors/Footer';
-import DoctorsNavbar from '../../components/Doctors/DoctorsNavbar';
+import { useState } from 'react';
 const Doctors = () => {
+  const [specialization, setSpecialization] = useState('ALL');
   return (
     <div className='flex flex-col gap-8'>
       <DoctorsIntro/>
-      <Speciality/>
-      <DoctorsList/>
+      <Speciality specialization={specialization} setSpecialization={setSpecialization}/>
+      <DoctorsList specialization={specialization}/>
     </div>
   )
 };
