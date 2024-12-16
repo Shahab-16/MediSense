@@ -49,20 +49,20 @@ import Gastroenterologist from './Gastroenterologist.svg';
 import Dermatologist from './Dermatologist.svg';
 import about_image from "./about_image.png";
 import doc1 from "./doc1.png";
-import doc2 from "./doc1.png";
-import doc3 from "./doc1.png";
-import doc4 from "./doc1.png";
-import doc5 from "./doc1.png";
-import doc6 from "./doc1.png";
-import doc7 from "./doc1.png";
-import doc8 from "./doc1.png";
-import doc9 from "./doc1.png";
-import doc10 from "./doc1.png";
-import doc11 from "./doc1.png";
-import doc12 from "./doc1.png";
-import doc13 from "./doc1.png";
-import doc14 from "./doc1.png";
-import doc15 from "./doc1.png";
+import doc2 from "./doc2.png";
+import doc3 from "./doc3.png";
+import doc4 from "./doc4.png";
+import doc5 from "./doc5.png";
+import doc6 from "./doc6.png";
+import doc7 from "./doc7.png";
+import doc8 from "./doc8.png";
+import doc9 from "./doc9.png";
+import doc10 from "./doc10.png";
+import doc11 from "./doc11.png";
+import doc12 from "./doc12.png";
+import doc13 from "./doc13.png";
+import doc14 from "./doc14.png";
+import doc15 from "./doc15.png";
 import menu_icon from "./menu_icon.svg"
 export const images = {
   doctor1,
@@ -243,7 +243,7 @@ export const doctors = [
     address: "Pune, India",
     experience: 20,
     success_rate: 97,
-    img: doc2,
+    img: doc3,
     about: "Dr. Vikram Singh is a highly skilled orthopedic surgeon with two decades of experience. He specializes in joint replacement surgeries and sports injury treatments. Dr. Singh has successfully performed over 5,000 surgeries to date. His dedication to patient recovery and advanced surgical techniques have made him a trusted name. He regularly attends international conferences to stay updated. His clinic in Pune is equipped with state-of-the-art facilities.",
     fee: 200
   },
@@ -254,7 +254,7 @@ export const doctors = [
     address: "Bangalore, India",
     experience: 10,
     success_rate: 92,
-    img: doc3,
+    img: doc2,
     about: "Dr. Meera Sharma is a dedicated pediatrician with over 10 years of experience. She focuses on the overall well-being of infants, children, and adolescents. Her expertise includes preventive care, vaccinations, and managing childhood illnesses. Dr. Sharma is known for her patient-friendly approach and excellent diagnostic skills. She actively participates in community health initiatives for children. Her clinic in Bangalore provides comprehensive pediatric care.",
     fee: 120
   },
@@ -298,7 +298,7 @@ export const doctors = [
     address: "Lucknow, India",
     experience: 9,
     success_rate: 89,
-    img: doc7,
+    img: doc11,
     about: "Dr. Pooja Verma is an experienced ENT specialist with expertise in treating ear, nose, and throat conditions. She specializes in sinusitis treatments, hearing loss management, and tonsil surgeries. Dr. Verma is committed to providing accurate diagnoses and minimally invasive treatments. Her approachable nature makes her a favorite among patients. She regularly attends workshops to stay updated on the latest treatments. Her clinic in Lucknow offers advanced ENT care.",
     fee: 100
   },
@@ -340,10 +340,7 @@ export const doctors = [
 
 
 export const doctor_specializations = [
-  { name: "Heart specialist" },
-  { name: "Endocrinologist" },
   { name: "Oncologist" },
-  { name: "Dermatologist" },
   { name: "Orthopedic Surgeon" },
   { name: "Pediatrician" },
   { name: "Neurologist" },
@@ -352,15 +349,9 @@ export const doctor_specializations = [
   { name: "ENT Specialist" },
   { name: "Cardiologist" },
   { name: "Radiologist" },
-  { name: "Gastroenterologist" },
-  { name: "Pulmonologist" },
-  { name: "Urologist" },
-  { name: "Ophthalmologist" },
-  { name: "Nephrologist" },
-  { name: "General Physician" },
-  { name: "Plastic Surgeon" },
-  { name: "Rheumatologist" }
+  { name: "Gastroenterologist" }
 ];
+
 
 
 export const medicine_categories = [
