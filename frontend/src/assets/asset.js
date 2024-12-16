@@ -48,16 +48,22 @@ import General_physician from './General_physician.svg';
 import Gastroenterologist from './Gastroenterologist.svg';
 import Dermatologist from './Dermatologist.svg';
 import about_image from "./about_image.png";
-
-
-
-
-
-
-
-
-
-
+import doc1 from "./doc1.png";
+import doc2 from "./doc1.png";
+import doc3 from "./doc1.png";
+import doc4 from "./doc1.png";
+import doc5 from "./doc1.png";
+import doc6 from "./doc1.png";
+import doc7 from "./doc1.png";
+import doc8 from "./doc1.png";
+import doc9 from "./doc1.png";
+import doc10 from "./doc1.png";
+import doc11 from "./doc1.png";
+import doc12 from "./doc1.png";
+import doc13 from "./doc1.png";
+import doc14 from "./doc1.png";
+import doc15 from "./doc1.png";
+import menu_icon from "./menu_icon.svg"
 export const images = {
   doctor1,
   appStore,
@@ -79,7 +85,23 @@ export const images = {
   General_physician,
   Gastroenterologist,
   Dermatologist,
-  about_image
+  about_image,
+  doc1,
+  doc2,
+  doc3,
+  doc4,
+  doc5,
+  doc6,
+  doc7,
+  doc8,
+  doc9,
+  doc10,
+  doc11,
+  doc12,
+  doc13,
+  doc14,
+  doc15,
+  menu_icon
 };
 
 export const model_list = {
@@ -204,166 +226,118 @@ export const features = [
 
 export const doctors = [
   {
-    name: "Anas Ahmed",
-    specialization: "Heart specialist",
-    address: "Delhi, India",
-    experience: 15,
-    success_rate: 98,
-    img: AnasAhmed
-  },
-  {
-    name: "Dr. Robert Mitchell",
-    specialization: "Endocrinologist",
-    address: "Mumbai, India",
-    experience: 10,
-    success_rate: 95,
-    img: DrRobertMitchell
-  },
-  {
+    _id: "3",
     name: "Dr. Sarah Khan",
     specialization: "Oncologist",
     address: "Hyderabad, India",
     experience: 12,
     success_rate: 93,
-    img: "https://via.placeholder.com/150/arthritis/celecoxib.jpg"
+    img: doc1,
+    about: "Dr. Sarah Khan is a renowned oncologist with over a decade of experience in cancer treatment. She specializes in personalized chemotherapy and immunotherapy. Her compassionate care and innovative methods have earned her widespread recognition. Dr. Khan has worked with top hospitals and published research in oncology journals. She is passionate about educating patients on cancer awareness. Her clinic in Hyderabad serves patients from across the country.",
+    fee: 150
   },
   {
-    name: "Gita Devi",
-    specialization: "Dermatologist",
-    address: "Chennai, India",
-    experience: 8,
-    success_rate: 90,
-    img: DrGitaDevi
-  },
-  {
+    _id: "5",
     name: "Dr. Vikram Singh",
     specialization: "Orthopedic Surgeon",
     address: "Pune, India",
     experience: 20,
     success_rate: 97,
-    img: "https://via.placeholder.com/150/arthritis/celecoxib.jpg"
+    img: doc2,
+    about: "Dr. Vikram Singh is a highly skilled orthopedic surgeon with two decades of experience. He specializes in joint replacement surgeries and sports injury treatments. Dr. Singh has successfully performed over 5,000 surgeries to date. His dedication to patient recovery and advanced surgical techniques have made him a trusted name. He regularly attends international conferences to stay updated. His clinic in Pune is equipped with state-of-the-art facilities.",
+    fee: 200
   },
   {
+    _id: "6",
     name: "Dr. Meera Sharma",
     specialization: "Pediatrician",
     address: "Bangalore, India",
     experience: 10,
     success_rate: 92,
-    img: "https://via.placeholder.com/150/arthritis/celecoxib.jpg"
+    img: doc3,
+    about: "Dr. Meera Sharma is a dedicated pediatrician with over 10 years of experience. She focuses on the overall well-being of infants, children, and adolescents. Her expertise includes preventive care, vaccinations, and managing childhood illnesses. Dr. Sharma is known for her patient-friendly approach and excellent diagnostic skills. She actively participates in community health initiatives for children. Her clinic in Bangalore provides comprehensive pediatric care.",
+    fee: 120
   },
   {
+    _id: "7",
     name: "Dr. Arjun Patel",
     specialization: "Neurologist",
     address: "Ahmedabad, India",
     experience: 18,
     success_rate: 94,
-    img: "https://via.placeholder.com/150/arthritis/celecoxib.jpg"
+    img: doc4,
+    about: "Dr. Arjun Patel is a leading neurologist with 18 years of clinical experience. He specializes in treating neurological disorders such as epilepsy, stroke, and migraines. Dr. Patel is widely respected for his diagnostic precision and advanced treatment methods. He has contributed to research in neurodegenerative diseases and published numerous papers. His empathetic care ensures improved outcomes for his patients. He practices at a prominent hospital in Ahmedabad.",
+    fee: 180
   },
   {
+    _id: "8",
     name: "Dr. Kavita Nair",
     specialization: "Gynecologist",
     address: "Kochi, India",
     experience: 15,
     success_rate: 96,
-    img: "https://via.placeholder.com/150/arthritis/celecoxib.jpg"
+    img: doc5,
+    about: "Dr. Kavita Nair is a renowned gynecologist with 15 years of experience. She specializes in high-risk pregnancies, fertility treatments, and gynecological surgeries. Dr. Nair is known for her compassionate care and expertise in women's health. She has helped hundreds of women achieve healthy pregnancies. Her clinic in Kochi offers a range of services with advanced facilities. She is also actively involved in health education programs.",
+    fee: 160
   },
   {
+    _id: "9",
     name: "Dr. Rajesh Iyer",
     specialization: "Psychiatrist",
     address: "Jaipur, India",
     experience: 12,
     success_rate: 91,
-    img: "https://via.placeholder.com/150/arthritis/celecoxib.jpg"
+    img: doc6,
+    about: "Dr. Rajesh Iyer is a respected psychiatrist with 12 years of experience in mental health care. He specializes in treating anxiety, depression, and mood disorders. Dr. Iyer focuses on creating personalized treatment plans that include therapy and medication. His empathetic approach and focus on holistic well-being have improved many lives. He regularly conducts mental health awareness programs in Jaipur. His clinic provides a safe and supportive environment for patients.",
+    fee: 130
   },
   {
+    _id: "10",
     name: "Dr. Pooja Verma",
     specialization: "ENT Specialist",
     address: "Lucknow, India",
     experience: 9,
     success_rate: 89,
-    img: "https://via.placeholder.com/150/arthritis/celecoxib.jpg"
+    img: doc7,
+    about: "Dr. Pooja Verma is an experienced ENT specialist with expertise in treating ear, nose, and throat conditions. She specializes in sinusitis treatments, hearing loss management, and tonsil surgeries. Dr. Verma is committed to providing accurate diagnoses and minimally invasive treatments. Her approachable nature makes her a favorite among patients. She regularly attends workshops to stay updated on the latest treatments. Her clinic in Lucknow offers advanced ENT care.",
+    fee: 100
   },
   {
+    _id: "11",
     name: "Dr. Sanjay Gupta",
     specialization: "Cardiologist",
     address: "Patna, India",
     experience: 22,
     success_rate: 98,
-    img: "https://via.placeholder.com/150/arthritis/celecoxib.jpg"
+    img: doc8,
+    about: "Dr. Sanjay Gupta is a veteran cardiologist with over 22 years of experience. He specializes in diagnosing and treating complex heart diseases, including angioplasty and bypass surgery. Dr. Gupta is known for his precision and commitment to saving lives. He has worked in leading cardiac care centers and contributed to heart disease research. His clinic in Patna provides cutting-edge cardiac treatments. He regularly educates patients on preventive heart care.",
+    fee: 220
   },
   {
+    _id: "12",
     name: "Dr. Neha Kapoor",
     specialization: "Radiologist",
     address: "Indore, India",
     experience: 11,
     success_rate: 92,
-    img: "https://via.placeholder.com/150/arthritis/celecoxib.jpg"
+    img: doc9,
+    about: "Dr. Neha Kapoor is an expert radiologist with 11 years of experience in medical imaging. She specializes in MRI, CT scans, and ultrasound diagnostics. Dr. Kapoor is known for her accuracy in interpreting medical images and collaborating with other specialists. Her commitment to patient care ensures timely and accurate diagnoses. She has worked in leading hospitals in Indore. Her imaging center is equipped with state-of-the-art technology.",
+    fee: 140
   },
   {
+    _id: "13",
     name: "Dr. Amar Chatterjee",
     specialization: "Gastroenterologist",
     address: "Kolkata, India",
     experience: 16,
     success_rate: 94,
-    img: "https://via.placeholder.com/150/arthritis/celecoxib.jpg"
+    img: doc10,
+    about: "Dr. Amar Chatterjee is a prominent gastroenterologist with 16 years of experience. He specializes in treating digestive system disorders, including liver diseases and endoscopy procedures. Dr. Chatterjee is dedicated to providing effective and personalized care for his patients. His research on liver health has earned him recognition in medical communities. He practices at a renowned hospital in Kolkata. His focus on lifestyle-based treatment is widely appreciated.",
+    fee: 170
   },
-  {
-    name: "Dr. Sunita Reddy",
-    specialization: "Pulmonologist",
-    address: "Visakhapatnam, India",
-    experience: 14,
-    success_rate: 93,
-    img: "https://via.placeholder.com/150/arthritis/celecoxib.jpg"
-  },
-  {
-    name: "Dr. Pranav Deshmukh",
-    specialization: "Urologist",
-    address: "Nagpur, India",
-    experience: 10,
-    success_rate: 90,
-    img: "https://via.placeholder.com/150/arthritis/celecoxib.jpg"
-  },
-  {
-    name: "Dr. Sushmita Roy",
-    specialization: "Ophthalmologist",
-    address: "Guwahati, India",
-    experience: 12,
-    success_rate: 92,
-    img: "https://via.placeholder.com/150/arthritis/celecoxib.jpg"
-  },
-  {
-    name: "Dr. Ramesh Chandra",
-    specialization: "Nephrologist",
-    address: "Ranchi, India",
-    experience: 15,
-    success_rate: 94,
-    img: "https://via.placeholder.com/150/arthritis/celecoxib.jpg"
-  },
-  {
-    name: "Dr. Anjali Sinha",
-    specialization: "General Physician",
-    address: "Bhopal, India",
-    experience: 7,
-    success_rate: 88,
-    img: "https://via.placeholder.com/150/arthritis/celecoxib.jpg"
-  },
-  {
-    name: "Dr. Tarun Bhardwaj",
-    specialization: "Plastic Surgeon",
-    address: "Chandigarh, India",
-    experience: 18,
-    success_rate: 96,
-    img: "https://via.placeholder.com/150/arthritis/celecoxib.jpg"
-  },
-  {
-    name: "Dr. Leena Pandey",
-    specialization: "Rheumatologist",
-    address: "Surat, India",
-    experience: 11,
-    success_rate: 89,
-    img: "https://via.placeholder.com/150/arthritis/celecoxib.jpg"
-  }
+  // Additional doctors can follow the same format
 ];
+
 
 export const doctor_specializations = [
   { name: "Heart specialist" },

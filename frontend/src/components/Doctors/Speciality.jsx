@@ -75,10 +75,10 @@ const Speciality = ({specialization,setSpecialization}) => {
           </div>
         ))}
       </div>
-      <div className="mt-[5%]">
+      {/* <div className="mt-[5%]">
         <div className="text-[35px] font-bold">Top Doctors To Book</div>
         <p>Simply browse through our extensive list of trusted doctors.</p>
-      </div>
+      </div> */}
     </div>
   );
 };

@@ -1,6 +1,7 @@
 import React from 'react'
-
+import { useNavigate } from 'react-router-dom'
 const DoctorCard = ({name, specialization, image}) => {
+  const navigate=useNavigate();
   return (
     <div className="bg-white shadow-xl shadow-gray-300 rounded-lg h-fit w-fit overflow-hidden p-4">
         <div className="mb-3">

@@ -5,6 +5,10 @@ import Footer from '../../components/Doctors/Footer';
 import DoctorsListPage from './DoctorsListPage';
 import DoctorsHomePage from './HomePage';
 import AbouPage from './AboutPage';
+import Appointment from '../../components/Doctors/Appointment';
+import AppointmentPage from './AppointmentPage';
+import MyAppointmentPage from './MyAppointmentPage';
+import Payment from './Payment';
 const Doctors = () => {
   return (
     <div className="min-h-screen flex flex-col">
@@ -18,6 +22,9 @@ const Doctors = () => {
           <Route path="/alldoctors" element={<DoctorsListPage />} />
           <Route path="/about" element={<AbouPage/>}/>
           <Route path="*" element={<Navigate to="/" />} />
+          <Route path="/my-appointment" element={<MyAppointmentPage/>}/>
+          <Route path="/appointment/:docId" element={<AppointmentPage/>}/>
+          <Route path="/appointment/booking/:docId" element={<Payment/>}/>
         </Routes>
       </div>
 

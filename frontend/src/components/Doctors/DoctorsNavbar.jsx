@@ -1,9 +1,24 @@
-import React from 'react'
+// import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Link } from 'react-router-dom'
-
+import { images } from '../../assets/asset'
+import {React,useState,useRef,useEffect} from 'react';
 export default function DoctorsNavbar() {
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+    const [isDropdown,setIsDropdown]=useState(false);
+    const handleToggle=()=>{
+        setIsDropdown(!isDropdown);
+    }
+    const dropdownref=useRef(null);
+    useEffect(()=>{
+        const handleClickOutside=(event)=>{
+            if(dropdownref.current && !dropdownref.current.contains(event.target)){
+                setIsDropdown(false);
+            }
+        };
+            document.addEventListener('mousedown', handleClickOutside); 
+            return () => document.removeEventListener('mousedown', handleClickOutside);
+    },[]);
     return (
         <div>
             {/* Navbar */}
@@ -27,8 +42,27 @@ export default function DoctorsNavbar() {
                         <a className="hover:text-gray-300 cursor-pointer">CONTACT</a>
                     </li>
                 </ul>
-                <div>
-                    <button className='text-white bg-blue-800 rounded-xl p-2 w-[150px]'>Create Account</button>
+                <div className='relative' ref={dropdownref}>
+                    <img 
+                        className='cursor-pointer' 
+                        src={images.menu_icon} 
+                        alt="Menu" 
+                        onClick={handleToggle} 
+                    />
+                    {isDropdown && (
+                        <div className=' absolute right-0 mt-2 w-46 bg-white border shadow-lg'>
+                              <ul className="py-2">
+                                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer w-40">
+                                    <Link to="/dashboard/doctors/my-appointment">My Appointments</Link>
+                                </li>
+                                <li 
+                                    className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-red-600"
+                                >
+                                    Logout
+                                </li>
+                            </ul>
+                        </div>
+                    )}
                 </div>
             </nav>
             <div class="border-b border-gray-300"></div>
