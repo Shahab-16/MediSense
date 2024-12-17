@@ -6,13 +6,15 @@ const OTP = require("../models/OTP");
 
 exports.Signup = async (req, res) => {
   try {
-    const { name, email, password, confirmPassword } = req.body;
+    const { name, email, password, confirmPassword, otp } = req.body;
+
     if (!name || !email || !password || !confirmPassword) {
       return res.status(400).json({
         success: false,
         message: "All fields are required",
       });
     }
+
     if (password !== confirmPassword) {
       return res.status(400).json({
         success: false,
@@ -20,8 +22,8 @@ exports.Signup = async (req, res) => {
       });
     }
 
+    // Check if the user already exists
     const existingUser = await User.findOne({ email });
-
     if (existingUser) {
       return res.status(400).json({
         success: false,
@@ -29,24 +31,30 @@ exports.Signup = async (req, res) => {
       });
     }
 
+    // Fetch the most recent OTP for the given email
     const response = await OTP.find({ email }).sort({ createdAt: -1 }).limit(1);
     console.log(response);
+
     if (response.length === 0) {
-      // OTP not found for the email
-      return res.status(400).json({
-        success: false,
-        message: "The OTP is not valid",
-      });
-    } else if (otp !== response[0].otp) {
-      // Invalid OTP
       return res.status(400).json({
         success: false,
         message: "The OTP is not valid",
       });
     }
 
+    const recentOTP = response[0].OTP;
+
+    if (otp !== recentOTP) {
+      return res.status(400).json({
+        success: false,
+        message: "The OTP is not valid",
+      });
+    }
+
+    // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
 
+    // Create the user
     const user = await User.create({
       name,
       email,
@@ -141,6 +149,7 @@ exports.SendOTP = async (req, res) => {
       });
     }
 
+    // Check if the user already exists
     const existingUser = await User.findOne({ email });
 
     if (existingUser) {
@@ -149,25 +158,26 @@ exports.SendOTP = async (req, res) => {
         message: "User already exists",
       });
     }
-    var otp = otpgenerator.generate(6, {
-      upperCaseAlphabets: false,
-      lowerCaseAlphabets: false,
-      specialChars: false,
-    });
 
-    let result = await OTP.create({ email, OTP: otp });
+    // Generate a unique OTP
+    let otp;
+    let isUnique = false;
 
-    while (result) {
+    do {
       otp = otpgenerator.generate(6, {
         upperCaseAlphabets: false,
         lowerCaseAlphabets: false,
         specialChars: false,
       });
-      result = await OTP.findOne({ OTP: otp });
-    }
 
-    const otpPayload = { email, otp };
+      const existingOTP = await OTP.findOne({ OTP: otp });
+      if (!existingOTP) {
+        isUnique = true; // OTP is unique
+      }
+    } while (!isUnique);
 
+    // Save the OTP to the database
+    const otpPayload = { email, OTP: otp };
     const otpBody = await OTP.create(otpPayload);
 
     return res.status(200).json({
@@ -176,12 +186,14 @@ exports.SendOTP = async (req, res) => {
       otpBody,
     });
   } catch (error) {
+    console.error("Error in SendOTP:", error.message);
     return res.status(500).json({
       success: false,
       message: "Something went wrong in sending OTP",
     });
   }
 };
+
 
 exports.changePassword = async (req, res) => {
   try {
