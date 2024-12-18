@@ -1,7 +1,6 @@
 import React from 'react';
 import DoctorsIntro from '../../components/Doctors/DoctorsIntro';
 import Speciality from '../../components/Doctors/Speciality';
-import DoctorsList from '../../components/Doctors/DoctorsList';
 import { useState } from 'react';
 import TopDoctors from '../../components/Doctors/TopDoctors';
 const Doctors = () => {

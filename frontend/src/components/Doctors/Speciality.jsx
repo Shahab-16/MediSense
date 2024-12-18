@@ -42,10 +42,10 @@ const Speciality = ({specialization,setSpecialization}) => {
 
   return (
     <div className="flex flex-col gap-6 max-w-[1250px] mx-auto mt-4">
-      <div className="text-[50px] font-medium">
+      <div className="text-[50px] font-medium text-center">
         <h1>Find By Speciality</h1>
       </div>
-      <div className="w-[55%] mx-auto">
+      <div className="w-[55%] mx-auto text-center">
         <p>
           Simply browse through our extensive list of trusted doctors, each
           with a proven track record of excellence in their field, and schedule

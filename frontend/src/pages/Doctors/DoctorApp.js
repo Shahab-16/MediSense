@@ -24,7 +24,7 @@ const Doctors = () => {
           <Route path="*" element={<Navigate to="/" />} />
           <Route path="/my-appointment" element={<MyAppointmentPage/>}/>
           <Route path="/appointment/:docId" element={<AppointmentPage/>}/>
-          <Route path="/appointment/booking/:docId" element={<Payment/>}/>
+          <Route path="/appointment/booking/:docId" element={<MyAppointmentPage/>}/>
         </Routes>
       </div>
 
