@@ -380,6 +380,10 @@ export const medicine_categories = [
 
 
 
+
+
+
+
 export const medicines = [
     // Diabetes
     {
@@ -1115,3 +1119,35 @@ export const medicines = [
 },
 ];
 
+export const medicines_for_cart = [
+  {
+    _id: "1",
+    name: "Paracetamol",
+    image: "https://via.placeholder.com/150/heart/atorvastatin.jpg",
+    price: 5,
+  },
+  {
+    _id: "2",
+    name: "Amoxicillin",
+    image: "https://via.placeholder.com/150/heart/atorvastatin.jpg",
+    price: 12,
+  },
+  {
+    _id: "3",
+    name: "Ibuprofen",
+    image: "https://via.placeholder.com/150/heart/atorvastatin.jpg",
+    price: 8,
+  },
+  {
+    _id: "4",
+    name: "Cetirizine",
+    image: "https://via.placeholder.com/150/heart/atorvastatin.jpg",
+    price: 3,
+  },
+  {
+    _id: "5",
+    name: "Aspirin",
+    image: "https://via.placeholder.com/150/heart/atorvastatin.jpg",
+    price: 4,
+  },
+];
