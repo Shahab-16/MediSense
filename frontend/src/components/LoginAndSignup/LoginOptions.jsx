@@ -10,7 +10,7 @@ const LoginOptions = () => {
   };
 
   return (
-    <div className="bg-gradient-to-br from-blue-500 to-blue-700 fixed top-0 left-0 w-full h-full flex justify-center items-center">
+    <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center">
       <div className="w-[900px] h-[550px] rounded-lg bg-white shadow-2xl border border-gray-300 flex overflow-hidden relative">
         {/* Left Image Section */}
         <div className="w-2/3 hidden lg:block">
@@ -30,9 +30,16 @@ const LoginOptions = () => {
           
           <button
             onClick={() => handleOptionClick("admin")}
-            className="w-full py-3 bg-gradient-to-r from-green-500 to-teal-500 text-white rounded-full shadow-lg hover:scale-105 transform transition duration-300 hover:from-green-600 hover:to-teal-600 text-lg font-semibold"
+            className="w-full py-3 mb-6 bg-gradient-to-r from-green-500 to-teal-500 text-white rounded-full shadow-lg hover:scale-105 transform transition duration-300 hover:from-green-600 hover:to-teal-600 text-lg font-semibold"
           >
             Admin
+          </button>
+
+          <button
+            onClick={() => handleOptionClick("doctor")}
+            className="w-full py-3 bg-gradient-to-r from-purple-600 to-purple-800 text-white rounded-full shadow-lg hover:scale-105 transform transition duration-300 hover:from-purple-700 hover:to-purple-900 text-lg font-semibold"
+          >
+            Doctor
           </button>
           
           <p className="mt-8 text-gray-600 text-sm">

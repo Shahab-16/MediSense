@@ -65,7 +65,7 @@ const Otp = () => {
             <div className="flex justify-between w-full mt-6 text-base font-medium">
                 <button
                     className="flex items-center gap-2 text-blue-800 hover:underline hover:text-blue-500 transition duration-300"
-                    onClick={() => navigate("/login-and-signup")}
+                    onClick={() => navigate("/login")}
                 >
                     <FaArrowLeft />
                     Back to Login

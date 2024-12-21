@@ -2,11 +2,11 @@ import React, { useState, useContext, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { StoreContext } from '../../context/StoreContext';
 import { images } from '../../assets/asset';
-import { ImCross } from "react-icons/im";
+import { ImCross, ImArrowLeft2 } from "react-icons/im";
 
 const LoginForm = () => {
     const { role } = useParams();
-    const [data, setData] = useState({ name: "", email: "", password: "" });
+    const [data, setData] = useState({ name: "", email: "", password: "", doctorId: "" });
     const [currState, setCurrState] = useState("Login");
     const { login, setLogin } = useContext(StoreContext);
     const navigate = useNavigate();
@@ -21,10 +21,14 @@ const LoginForm = () => {
         navigate('/');
     }
 
+    const goBack = () => {
+        navigate('/login');
+    }
+
     const submitForm = (e) => {
         e.preventDefault();
         if (currState === "Login") {
-            navigate(role === 'admin' ? "/dashboard/admin" : "/dashboard/home");
+            navigate(role === 'admin' ? "/admin" : (role === 'doctor' ? "/doctorsection" : "/dashboard/home"));
             setLogin(false);
         } else if (currState === "Signup") {
             navigate("/otp");
@@ -39,13 +43,18 @@ const LoginForm = () => {
     if (!login) return null;
 
     return (
-        <div className="bg-gradient-to-br from-indigo-600 via-blue-700 to-purple-800 fixed top-0 left-0 w-full h-full flex justify-center items-center">
+        <div className=" fixed top-0 left-0 w-full h-full flex justify-center items-center">
             <div className="w-[900px] h-[600px] rounded-lg bg-white shadow-2xl flex overflow-hidden relative">
                 <ImCross 
                     className="absolute top-4 right-4 cursor-pointer w-6 h-6 text-gray-500 hover:text-red-600 transition-colors" 
                     onClick={crossbutton}
                 />
-                
+
+                <ImArrowLeft2 
+                    className="absolute top-4 left-4 cursor-pointer w-6 h-6 text-gray-500 hover:text-blue-600 transition-colors" 
+                    onClick={goBack}
+                />
+
                 <div className="w-2/3 hidden lg:block">
                     <img src={images.login_img} alt="Login" className="w-full h-full object-fit" />
                 </div>
@@ -79,6 +88,26 @@ const LoginForm = () => {
                                 placeholder="Your Name"
                                 name="name"
                                 value={data.name}
+                                onChange={handleInputChange}
+                                className="w-full h-[50px] border border-gray-300 rounded-lg px-4 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                            />
+                        )}
+                        {role === "doctor" && (
+                            <input
+                                type="text"
+                                placeholder="Doctor Name"
+                                name="name"
+                                value={data.name}
+                                onChange={handleInputChange}
+                                className="w-full h-[50px] border border-gray-300 rounded-lg px-4 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                            />
+                        )}
+                        {role === "doctor" && (
+                            <input
+                                type="text"
+                                placeholder="Doctor ID"
+                                name="doctorId"
+                                value={data.doctorId}
                                 onChange={handleInputChange}
                                 className="w-full h-[50px] border border-gray-300 rounded-lg px-4 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                             />
