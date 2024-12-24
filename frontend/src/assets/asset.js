@@ -63,7 +63,30 @@ import doc12 from "./doc12.png";
 import doc13 from "./doc13.png";
 import doc14 from "./doc14.png";
 import doc15 from "./doc15.png";
-import menu_icon from "./menu_icon.svg"
+import menu_icon from "./menu_icon.svg";
+import contact_img from "./contact_image.png"
+export const speciality_data=[
+  {
+    speciality:"General physician",
+    image:General_physician
+  },
+  {
+    speciality:"Gynecologist",
+    image:Gynecologist
+  },
+  {
+    speciality:"Dermatologist",
+    image:Dermatologist
+  },
+  {
+    speciality:"Pediatrician",
+    image:Pediatricians
+  },
+  {
+    speciality:"Neurologist",
+    image:Neurologist
+  }
+]
 export const images = {
   doctor1,
   appStore,
@@ -101,7 +124,8 @@ export const images = {
   doc13,
   doc14,
   doc15,
-  menu_icon
+  menu_icon,
+  contact_img
 };
 
 export const model_list = {
@@ -239,7 +263,7 @@ export const doctors = [
   {
     _id: "5",
     name: "Dr. Vikram Singh",
-    specialization: "Orthopedic Surgeon",
+    specialization: "Neurologist",
     address: "Pune, India",
     experience: 20,
     success_rate: 97,
@@ -294,7 +318,7 @@ export const doctors = [
   {
     _id: "10",
     name: "Dr. Pooja Verma",
-    specialization: "ENT Specialist",
+    specialization: "Dermatologist",
     address: "Lucknow, India",
     experience: 9,
     success_rate: 89,
@@ -305,7 +329,7 @@ export const doctors = [
   {
     _id: "11",
     name: "Dr. Sanjay Gupta",
-    specialization: "Cardiologist",
+    specialization: "Dermatologist",
     address: "Patna, India",
     experience: 22,
     success_rate: 98,
@@ -316,7 +340,7 @@ export const doctors = [
   {
     _id: "12",
     name: "Dr. Neha Kapoor",
-    specialization: "Radiologist",
+    specialization: "General physician",
     address: "Indore, India",
     experience: 11,
     success_rate: 92,

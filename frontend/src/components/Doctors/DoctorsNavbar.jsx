@@ -39,7 +39,7 @@ export default function DoctorsNavbar() {
                         <Link to='/dashboard/doctors/about' className="hover:text-gray-300 cursor-pointer">ABOUT</Link>
                     </li>
                     <li>
-                        <a className="hover:text-gray-300 cursor-pointer">CONTACT</a>
+                        <Link to='/dashboard/doctors/contactUs' className="hover:text-gray-300 cursor-pointer">Contact</Link>
                     </li>
                 </ul>
                 <div className='relative' ref={dropdownref}>

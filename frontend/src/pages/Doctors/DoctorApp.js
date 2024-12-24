@@ -8,6 +8,8 @@ import AbouPage from './AboutPage';
 import Appointment from '../../components/Doctors/Appointment';
 import AppointmentPage from './AppointmentPage';
 import MyAppointmentPage from './MyAppointmentPage';
+import ContactPage from './ContactPage';
+
 import Payment from './Payment';
 const Doctors = () => {
   return (
@@ -21,10 +23,12 @@ const Doctors = () => {
           <Route path="/" element={<DoctorsHomePage />} />
           <Route path="/alldoctors" element={<DoctorsListPage />} />
           <Route path="/about" element={<AbouPage/>}/>
+          <Route path="/alldoctors/:speciality" element={<DoctorsListPage/>}/>
           <Route path="*" element={<Navigate to="/" />} />
           <Route path="/my-appointment" element={<MyAppointmentPage/>}/>
           <Route path="/appointment/:docId" element={<AppointmentPage/>}/>
           <Route path="/appointment/booking/:docId" element={<MyAppointmentPage/>}/>
+          <Route path="/contactUs" element={<ContactPage/>}/>
         </Routes>
       </div>
 

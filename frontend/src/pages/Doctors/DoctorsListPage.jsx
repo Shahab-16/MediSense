@@ -6,7 +6,7 @@ const DoctorsListPage = () => {
   return (
     <div className="flex">
       {/* Specializations Sidebar */}
-      <div className="mt-[3%] w-1/4">
+      {/* <div className="mt-[3%] w-1/4">
         <p className="p-2 text-black font-bold">Browse through the doctors specialist.</p>
         {doctor_specializations.map((specialization, index) => (
           <p
@@ -17,9 +17,9 @@ const DoctorsListPage = () => {
           </p>
         ))}
       </div>
-      
+       */}
       {/* Doctors List */}
-      <div className="mt-[3%] w-3/4">
+      <div className="mt-[3%]">
         <AllDoctorsList />
       </div>
     </div>
