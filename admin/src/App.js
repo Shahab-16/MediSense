@@ -1,9 +1,26 @@
-import React from "react";
-
+import "./App.css";
+import { Routes, Route } from "react-router-dom";
+import Navbar from "./components/Navbar";
+import Sidebar from "./components/Sidebar";
+import AddItems from "./pages/AddItems";
+import ListItems from "./pages/ListItems";
+import Orders from "./pages/Orders";
+import {ToastContainer} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 function App() {
   return (
-    <div className="flex justify-center items-center h-screen">
-      <h1 className="text-5xl font-semibold">WELCOME TO THE ADMIN SECTION OF <span className="text-blue-600 font-extrabold">MEDISENSE</span></h1>
+    <div className="flex flex-col min-h-screen">
+      <Navbar/>
+      <ToastContainer/>
+      <hr></hr>
+      <div className="flex flex-1">
+        <Sidebar/>
+        <Routes>
+          <Route path="/additems" element={<AddItems/>}/>
+          <Route path="/listitems" element={<ListItems/>}/>
+          <Route path="/orders" element={<Orders/>}/>
+        </Routes>
+      </div>
     </div>
   );
 }
