@@ -7,11 +7,12 @@ import ListItems from "./pages/ListItems";
 import Orders from "./pages/Orders";
 import {ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import AddDoctors from "./pages/Doctors/AddDoctors";
 function App() {
   return (
     <div className="flex flex-col min-h-screen">
       <Navbar/>
-      <ToastContainer/>
+      {/* <ToastContainer/> */}
       <hr></hr>
       <div className="flex flex-1">
         <Sidebar/>
@@ -21,6 +22,7 @@ function App() {
           <Route path="/orders" element={<Orders/>}/>
         </Routes>
       </div>
+      {/* jkbaksbdvkasj */}
     </div>
   );
 }
