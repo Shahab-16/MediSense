@@ -1,78 +1,111 @@
-import React from 'react'
-import { assets } from '../assets/admin_assets/assets'
-import { NavLink } from 'react-router-dom'
-import { useState } from 'react'
+import React, { useState } from 'react';
+import { NavLink } from 'react-router-dom';
+import { FiHome, FiUser, FiChevronDown, FiChevronUp } from 'react-icons/fi';
+import { MdOutlineMedication, MdPersonAddAlt1, MdOutlineEventNote } from 'react-icons/md';
+import { BsClipboardData, BsListCheck, BsBoxArrowInDown } from 'react-icons/bs';
+import { FaRegListAlt } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
+
 const Sidebar = () => {
   const [isDoctorsDropdownOpen, setDoctorsDropdownOpen] = useState(false);
   const [isMedicinesDropdownOpen, setMedicinesDropdownOpen] = useState(false);
+  const navigate = useNavigate();
+
+  const doctorDropDownClick = () => {
+    setDoctorsDropdownOpen(!isDoctorsDropdownOpen);
+    navigate('/admin/doctors');
+  };
+
+  const medicineDropDownClick = () => {
+    setMedicinesDropdownOpen(!isMedicinesDropdownOpen);
+    navigate('/admin/medicines');
+  };
+
   return (
-    <div className=" bg-white w-full md:w-1/4 lg:max-w-[20%] p-4 flex flex-col gap-4">
+    <div className="bg-white text-gray-800 w-full md:w-1/4 lg:max-w-[20%] p-6 flex flex-col gap-4 border-r shadow-md">
       <NavLink
         to="/additems"
-        className="flex items-center gap-2 p-2 hover:bg-gray-100 transition-all duration-200"
+        className="flex items-center gap-3 p-3 hover:bg-gray-200 rounded-md transition-all duration-300"
       >
-        <img src={assets.add_icon} alt="add_icon" className="w-6 h-6" />
-        <p className="text-sm md:text-base">Dashboard</p>
+        <FiHome size={24} />
+        <p className="text-lg font-semibold">Dashboard</p>
       </NavLink>
 
+      {/* Doctors Section */}
       <div
-        onClick={() => setDoctorsDropdownOpen(!isDoctorsDropdownOpen)}
-        className="flex justify-between p-2 hover:bg-blue-600 transition-all duration-500 cursor pointer"
+        onClick={() => doctorDropDownClick()}
+        className="flex justify-between items-center p-3 hover:bg-gray-100 rounded-md cursor-pointer transition-all duration-300"
       >
-        <div className="flex items-center gap-2">
-          <img src={assets.order_icon} alt="order" className="w-6 h-6" />
-          <p className="text-sm md:text-base">Doctors</p>
+        <div className="flex items-center gap-3">
+          <FiUser size={24} />
+          <p className="text-lg font-semibold">Doctors</p>
         </div>
-        <span>{isDoctorsDropdownOpen ? '▲' : '▼'}</span>
+        {isDoctorsDropdownOpen ? <FiChevronUp size={20} /> : <FiChevronDown size={20} />}
       </div>
       {isDoctorsDropdownOpen && (
-        <div className="flex flex-col gap-2 ml-6 mt-2">
+        <div className="flex flex-col gap-3 ml-6 mt-2 border-l-2 border-gray-300 pl-4">
           <NavLink
-            to="/doctors/appointments"
-            className="text-sm md:p-2 text-base text-black-700 hover:bg-blue-600 transition-all duration-500"
+            to="/admin/doctors/appointments"
+            className="flex items-center gap-3 text-base text-gray-700 p-2 rounded-md hover:bg-gray-100 transition-all duration-300"
           >
-            Appointments
+            <MdOutlineEventNote size={18} />
+            <p>Appointments</p>
           </NavLink>
           <NavLink
-            to="/doctors/doctors-list"
-            className="text-sm md:p-2 text-base text-black-700 hover:bg-blue-600 transition-all duration-500"
+            to="/admin/doctors/doctor-list"
+            className="flex items-center gap-3 text-base text-gray-700 p-2 rounded-md hover:bg-gray-100 transition-all duration-300"
           >
-            Doctors List
+            <BsListCheck size={18} />
+            <p>Doctors List</p>
           </NavLink>
           <NavLink
-            to="/doctors/add-doctors"
-            className="text-sm md:p-2 text-base text-black-700 hover:bg-blue-600 transition-all duration-500"
+            to="/admin/doctors/add-doctors"
+            className="flex items-center gap-3 text-base text-gray-700 p-2 rounded-md hover:bg-gray-100 transition-all duration-300"
           >
-            Add Doctor
+            <MdPersonAddAlt1 size={18} />
+            <p>Add Doctor</p>
           </NavLink>
         </div>
       )}
-        <div onClick={() => setMedicinesDropdownOpen(!isMedicinesDropdownOpen)}
-          className='flex justify-between p-2  hover:bg-blue-600 transition-all duration-500 cursor-pointer'>
-          <div  className='flex items-center gap-2'>
-          <img src={assets.order_icon} alt="order" className="w-6 h-6" />
-          <p className="text-sm md:text-base">Medicines</p>
-          </div>
-          <span>{isMedicinesDropdownOpen ? '▲' : '▼'}</span>
+
+      {/* Medicines Section */}
+      <div
+        onClick={() => medicineDropDownClick()}
+        className="flex justify-between items-center p-3 hover:bg-gray-100 rounded-md cursor-pointer transition-all duration-300"
+      >
+        <div className="flex items-center gap-3">
+          <MdOutlineMedication size={24} />
+          <p className="text-lg font-semibold">Medicines</p>
         </div>
-        {isMedicinesDropdownOpen && (
-        <div className="flex flex-col gap-2 ml-6 mt-2">
+        {isMedicinesDropdownOpen ? <FiChevronUp size={20} /> : <FiChevronDown size={20} />}
+      </div>
+      {isMedicinesDropdownOpen && (
+        <div className="flex flex-col gap-3 ml-6 mt-2 border-l-2 border-gray-300 pl-4">
           <NavLink
-            to="/doctors/add-medicines"
-            className="text-sm md:p-2 text-base text-black-700 hover:bg-blue-600 transition-all duration-500"
+            to="/admin/medicines/add-medicines"
+            className="flex items-center gap-3 text-base text-gray-700 p-2 rounded-md hover:bg-gray-100 transition-all duration-300"
           >
-            Add Medicines
+            <BsBoxArrowInDown size={18} />
+            <p>Add Medicines</p>
           </NavLink>
           <NavLink
-            to="/doctors/medicines-list"
-            className="text-sm md:p-2 text-base text-black-700 hover:bg-blue-600 transition-all duration-500"
+            to="/admin/medicines/medicine-list"
+            className="flex items-center gap-3 text-base text-gray-700 p-2 rounded-md hover:bg-gray-100 transition-all duration-300"
           >
-            Medicines List
+            <FaRegListAlt size={18} />
+            <p>Medicines List</p>
+          </NavLink>
+          <NavLink
+            to="/admin/medicines/ordered-medicines"
+            className="flex items-center gap-3 text-base text-gray-700 p-2 rounded-md hover:bg-gray-100 transition-all duration-300"
+          >
+            <BsClipboardData size={18} />
+            <p>Ordered Medicines</p>
           </NavLink>
         </div>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default Sidebar
+export default Sidebar;
