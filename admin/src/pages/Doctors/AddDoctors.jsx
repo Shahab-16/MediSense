@@ -7,9 +7,10 @@ const AddDoctors = () => {
         <p className='font-semibold text-[25px] p-5 ml-2'>Add Doctors</p>
         <div className='bg-white mx-8 px-5'>
           <div className='flex pt-6 pb-6'>
-            <label>
-              <img src={assets.profile_image}></img>
+            <label for="doc-img">
+              <img className='cursor-pointer' src={assets.profile_image}></img>
             </label>
+            <input type="file" name="" id="doc-img" hidden></input>
             <p className='mx-3 flex items-center text-gray-600'>Upload Doctor <br /> Picture</p>
           </div>
           <div className='flex flex-col lg:flex-row items-center gap-10 text-gray-600'>
@@ -29,16 +30,10 @@ const AddDoctors = () => {
               <div className='flex flex-col gap-1'>
                 <p>Experience</p>
                 <select className='border rounded px-3 py-2'>
-                  <option value="1 Year">1 Year</option>
-                  <option value="2 Years"> 2 Years</option>
-                  <option value="3 Years"> 3 Years</option>
-                  <option value=" 4 Years">4 Years</option>
-                  <option value="5 Years"> 5 Years</option>
-                  <option value="6 Years">6 Years</option>
-                  <option value="7 Years">7 Years</option>
-                  <option value="8 Years">8 Years</option>
-                  <option value="9 Years">9 Years</option>
-                  <option value="10 Years">10 Years</option>
+                  <option value="1 Year">1-5 Years</option>
+                  <option value="2 Years">6-10 Years</option>
+                  <option value="3 Years">11-15 Years</option>
+                  <option value=" 4 Years">15+ Years</option>
                 </select>
               </div>
               <div className='flex flex-col gap-1'>
@@ -70,11 +65,11 @@ const AddDoctors = () => {
             </div>
             {/* about doctors */}
           </div>
-            <div>
-              <p>About Doctors</p>
-              <textarea className='w-full px-4 pt-2 border rounded' rows="5" placeholder='write about doctor'></textarea>
-            </div>
-            <button type='submit' className='bg-blue-600 px-10 py-3 mt-8 text-white rounded-full'>Add Doctor</button>
+          <div>
+            <p>About Doctors</p>
+            <textarea className='w-full px-4 pt-2 border rounded' rows="5" placeholder='write about doctor'></textarea>
+          </div>
+          <button type='submit' className='bg-blue-600 px-10 py-3 mt-8 text-white rounded-full'>Add Doctor</button>
         </div>
       </form>
     </div>
