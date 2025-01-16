@@ -1,10 +1,15 @@
 const mongoose = require("mongoose");
 
 const UserSchema = new mongoose.Schema({
-    name: {
+    firstName: {
         type: String,
         required: true,
         trim: true
+    },
+    lastName:{
+        type:String,
+        required:trusted,
+        trim:true
     },
     email: {
         type: String,
@@ -23,7 +28,7 @@ const UserSchema = new mongoose.Schema({
     },
     role: {
         type: String,
-        enum: ["user", "admin"],
+        enum: ["user","doctor","admin"],
         default: "user"
     },
     token: {
@@ -33,14 +38,6 @@ const UserSchema = new mongoose.Schema({
     tokenExpiresAt: {
         type: Date,
     },
-    medicines: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Medicines"
-    }],
-    doctors: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Doctor"
-    }]
 }, {
     timestamps: true 
 });
