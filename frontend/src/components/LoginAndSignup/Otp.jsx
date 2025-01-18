@@ -3,38 +3,54 @@ import { FaArrowLeft } from 'react-icons/fa';
 import { FiRefreshCcw } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-
+import { useLocation } from 'react-router-dom';
 
 const Otp = () => {
     const navigate = useNavigate();
-    const [otp, setOtp] = useState(Array(6).fill("")); // State to hold OTP values
+    const location = useLocation();
+
+    const { email, firstName: firstNameValue, lastName: lastNameValue, password: passwordValue, confirmPassword: confirmPasswordValue } = location.state || {};
+    const [otp, setOtp] = useState(Array(6).fill("")); 
     const inputRefs = useRef([]);
+
+    const url = 'http://localhost:5000/api/v1';
 
     // Handle OTP input
     const handleChange = (value, index) => {
-        if (!/^\d*$/.test(value)) return; // Allow only digits
+        if (!/^\d*$/.test(value)) return; 
         const newOtp = [...otp];
         newOtp[index] = value;
         setOtp(newOtp);
 
-        // Focus the next input
         if (value && index < 5) {
-            inputRefs.current[index + 1].focus();
+            inputRefs.current[index + 1]?.focus();
         }
     };
 
     // Handle backspace to focus the previous input
     const handleBackspace = (e, index) => {
         if (e.key === "Backspace" && !otp[index] && index > 0) {
-            inputRefs.current[index - 1].focus();
+            inputRefs.current[index - 1]?.focus();
         }
     };
 
     // Handle OTP submission
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         const otpValue = otp.join("");
-        //const response=axios.post(`${url}/user/verify-otp`, { email: data.email, otp: otpValue });
-        console.log("Entered OTP:", otpValue); // Replace with API call or verification logic
+        try {
+            const response = await axios.post(`${url}/user/signup`, {
+                email,
+                firstName: firstNameValue,
+                lastName: lastNameValue,
+                password: passwordValue,
+                confirmPassword: confirmPasswordValue,
+                otp: otpValue,
+            });
+            if(response.data.success) navigate('/dashboard/home');
+            console.log("Signup successful:", response.data);
+        } catch (error) {
+            console.error("Error during OTP verification:", error.response?.data || error.message);
+        }
     };
 
     return (
@@ -49,7 +65,6 @@ const Otp = () => {
                         key={index}
                         ref={(el) => (inputRefs.current[index] = el)} // Assign ref to each input
                         type="text"
-                        name={`otp-${index}`}
                         maxLength="1"
                         value={otp[index]}
                         onChange={(e) => handleChange(e.target.value, index)}

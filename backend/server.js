@@ -10,7 +10,7 @@ connectDB();
 
 app.use(
   cors({
-    origin: 'http://localhost:3000', 
+    origin: '*', 
     methods: ['GET', 'POST', 'PUT', 'DELETE'], 
     credentials: true, // Allow cookies
     allowedHeaders: ['Content-Type', 'Authorization'], // Allow headers

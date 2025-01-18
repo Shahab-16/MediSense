@@ -58,10 +58,10 @@ const LoginForm = () => {
                 }
             } else if (currState === "Signup") {
                 if(!isOtpSent) {
-                    const response=await axios.post(`${url}/user/send-otp`, { email: data.email });
+                    const response=await axios.post(`${url}/user/send-otp`, { email: data.email,firstName:data.firstName,lastName:data.lastName,password:data.password,confirmPassword:data.confirmPassword});
                     if(response.data.success) {
                         setIsOtpSent(true);
-                        navigate('/signup/verify-otp');
+                        navigate('/signup/verify-otp',{state:{email:data.email,firstName:data.firstName,lastName:data.lastName,password:data.password,confirmPassword:data.confirmPassword}});
                     }
                     else{
                         alert(response.data.message);
