@@ -2,6 +2,8 @@ import React, { useState, useRef } from 'react';
 import { FaArrowLeft } from 'react-icons/fa';
 import { FiRefreshCcw } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+
 
 const Otp = () => {
     const navigate = useNavigate();
@@ -31,6 +33,7 @@ const Otp = () => {
     // Handle OTP submission
     const handleSubmit = () => {
         const otpValue = otp.join("");
+        //const response=axios.post(`${url}/user/verify-otp`, { email: data.email, otp: otpValue });
         console.log("Entered OTP:", otpValue); // Replace with API call or verification logic
     };
 

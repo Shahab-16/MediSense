@@ -26,7 +26,7 @@ function App() {
           </div>
         } />
 
-        <Route path="/otp" element={
+        <Route path="/signup/verify-otp" element={
           <div className="flex items-center justify-center h-screen bg-[#2c2c2cc0]">
             <Otp />
           </div>

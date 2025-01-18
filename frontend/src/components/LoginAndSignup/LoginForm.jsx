@@ -1,4 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
+import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
 import { StoreContext } from '../../context/StoreContext';
 import { images } from '../../assets/asset';
@@ -6,32 +7,70 @@ import { ImCross, ImArrowLeft2 } from "react-icons/im";
 
 const LoginForm = () => {
     const { role } = useParams();
-    const [data, setData] = useState({ name: "", email: "", password: "", doctorId: "" });
+    const [data, setData] = useState({
+        firstName: "",
+        lastName: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+    });
+    const [otp, setOtp] = useState("");
     const [currState, setCurrState] = useState("Login");
     const { login, setLogin } = useContext(StoreContext);
     const navigate = useNavigate();
+    const [isOtpSent, setIsOtpSent] = useState(false);
+
+    const url = 'http://localhost:5000/api/v1';
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setData({ ...data, [name]: value });
     };
 
+    const handleOtpChange = (e) => {
+        setOtp(e.target.value);
+    };
+
     const crossbutton = () => {
         setLogin(false);
         navigate('/');
-    }
+    };
 
     const goBack = () => {
         navigate('/login');
-    }
+    };
 
-    const submitForm = (e) => {
+    const submitForm = async (e) => {
         e.preventDefault();
-        if (currState === "Login") {
-            navigate(role === 'admin' ? "/admin" : (role === 'doctor' ? "/doctorsection" : "/dashboard/home"));
-            setLogin(false);
-        } else if (currState === "Signup") {
-            navigate("/otp");
+        try {
+            if (currState === "Login") {
+                const response = await axios.post(
+                    `${url}/user/login`,
+                    { email: data.email, password: data.password },
+                    { withCredentials: true }
+                );
+                if (response.data.success) {
+                    console.log("Login success");
+                    navigate(role === 'admin' ? "/admin" : (role === 'doctor' ? "/doctorsection" : "/dashboard/home"));
+                    setLogin(false);
+                } else {
+                    alert(response.data.message);
+                }
+            } else if (currState === "Signup") {
+                if(!isOtpSent) {
+                    const response=await axios.post(`${url}/user/send-otp`, { email: data.email });
+                    if(response.data.success) {
+                        setIsOtpSent(true);
+                        navigate('/signup/verify-otp');
+                    }
+                    else{
+                        alert(response.data.message);
+                    }
+                }
+            }
+        } catch (error) {
+            console.error("Error:", error.response?.data?.message || error.message);
+            alert("An error occurred. Please try again.");
         }
     };
 
@@ -43,15 +82,15 @@ const LoginForm = () => {
     if (!login) return null;
 
     return (
-        <div className=" fixed top-0 left-0 w-full h-full flex justify-center items-center">
+        <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center">
             <div className="w-[900px] h-[600px] rounded-lg bg-white shadow-2xl flex overflow-hidden relative">
-                <ImCross 
-                    className="absolute top-4 right-4 cursor-pointer w-6 h-6 text-gray-500 hover:text-red-600 transition-colors" 
+                <ImCross
+                    className="absolute top-4 right-4 cursor-pointer w-6 h-6 text-gray-500 hover:text-red-600 transition-colors"
                     onClick={crossbutton}
                 />
 
-                <ImArrowLeft2 
-                    className="absolute top-4 left-4 cursor-pointer w-6 h-6 text-gray-500 hover:text-blue-600 transition-colors" 
+                <ImArrowLeft2
+                    className="absolute top-4 left-4 cursor-pointer w-6 h-6 text-gray-500 hover:text-blue-600 transition-colors"
                     onClick={goBack}
                 />
 
@@ -63,11 +102,23 @@ const LoginForm = () => {
                     <h2 className="text-3xl font-extrabold text-center mb-6 text-gray-800">
                         {currState === "Login" ? "Welcome Back!" : "Create an Account"}
                     </h2>
-                    
+
                     <div className="flex justify-between mb-6 gap-4">
                         <button
                             className={`w-1/2 py-2 ${currState === "Login" ? "bg-blue-600 text-white" : "bg-gray-200 text-gray-600"} hover:bg-blue-700 transition-colors rounded-lg`}
-                            onClick={() => setCurrState("Login")}
+                            onClick={() => {
+                                setCurrState("Login");
+                                setIsOtpSent(false);
+                                setData({
+                                    firstName: "",
+                                    lastName: "",
+                                    email: "",
+                                    password: "",
+                                    confirmPassword: "",
+                                    doctorId: ""
+                                });
+                                setOtp("");
+                            }}
                         >
                             Login
                         </button>
@@ -80,37 +131,27 @@ const LoginForm = () => {
                             </button>
                         )}
                     </div>
-                    
+
                     <form className="flex flex-col gap-4" onSubmit={submitForm}>
                         {currState === "Signup" && role === "user" && (
-                            <input
-                                type="text"
-                                placeholder="Your Name"
-                                name="name"
-                                value={data.name}
-                                onChange={handleInputChange}
-                                className="w-full h-[50px] border border-gray-300 rounded-lg px-4 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                            />
-                        )}
-                        {role === "doctor" && (
-                            <input
-                                type="text"
-                                placeholder="Doctor Name"
-                                name="name"
-                                value={data.name}
-                                onChange={handleInputChange}
-                                className="w-full h-[50px] border border-gray-300 rounded-lg px-4 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                            />
-                        )}
-                        {role === "doctor" && (
-                            <input
-                                type="text"
-                                placeholder="Doctor ID"
-                                name="doctorId"
-                                value={data.doctorId}
-                                onChange={handleInputChange}
-                                className="w-full h-[50px] border border-gray-300 rounded-lg px-4 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                            />
+                            <div className="flex gap-4">
+                                <input
+                                    type="text"
+                                    placeholder="First Name"
+                                    name="firstName"
+                                    value={data.firstName}
+                                    onChange={handleInputChange}
+                                    className="w-1/2 h-[50px] border border-gray-300 rounded-lg px-4 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                                />
+                                <input
+                                    type="text"
+                                    placeholder="Last Name"
+                                    name="lastName"
+                                    value={data.lastName}
+                                    onChange={handleInputChange}
+                                    className="w-1/2 h-[50px] border border-gray-300 rounded-lg px-4 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                                />
+                            </div>
                         )}
                         <input
                             type="email"
@@ -132,6 +173,18 @@ const LoginForm = () => {
                             <input
                                 type="password"
                                 placeholder="Confirm Password"
+                                name="confirmPassword"
+                                value={data.confirmPassword}
+                                onChange={handleInputChange}
+                                className="w-full h-[50px] border border-gray-300 rounded-lg px-4 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                            />
+                        )}
+                        {currState === "Signup" && role === "user" && isOtpSent && (
+                            <input
+                                type="text"
+                                placeholder="Enter OTP"
+                                value={otp}
+                                onChange={handleOtpChange}
                                 className="w-full h-[50px] border border-gray-300 rounded-lg px-4 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                             />
                         )}
@@ -139,17 +192,9 @@ const LoginForm = () => {
                             type="submit"
                             className="w-full h-[50px] mt-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors"
                         >
-                            {currState}
+                            {currState === "Signup" && isOtpSent ? "Verify OTP" : currState}
                         </button>
                     </form>
-                    
-                    <div className="flex items-center mt-4">
-                        <input type="checkbox" className="w-[15px] h-[20px] mr-2" />
-                        <p className="text-sm text-gray-600">
-                            By continuing, I agree to the <span className="text-blue-600 cursor-pointer hover:underline">Terms of Service</span> and <span className="text-blue-600 cursor-pointer hover:underline">Privacy Policy</span>.
-                        </p>
-                    </div>
-                    <p className="text-sm mt-3 text-blue-600 underline cursor-pointer text-center">Forgot Password?</p>
                 </div>
             </div>
         </div>

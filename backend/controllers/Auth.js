@@ -6,9 +6,9 @@ const OTP = require("../models/OTP");
 
 exports.Signup = async (req, res) => {
   try {
-    const { name, email, password, confirmPassword, otp } = req.body;
+    const {firstName,lastName, email, password, confirmPassword, otp } = req.body;
 
-    if (!name || !email || !password || !confirmPassword) {
+    if (!firstName || !lastName || !email || !password || !confirmPassword) {
       return res.status(400).json({
         success: false,
         message: "All fields are required",
@@ -56,7 +56,8 @@ exports.Signup = async (req, res) => {
 
     // Create the user
     const user = await User.create({
-      name,
+      firstName,
+      lastName,
       email,
       password: hashedPassword,
     });
@@ -247,3 +248,33 @@ exports.changePassword = async (req, res) => {
     });
   }
 };
+
+
+
+exports.verifyOtp = async (req, res) => {
+  try {
+      const { email, otp } = req.body;
+
+      // Fetch the most recent OTP for the given email
+      const response = await OTP.find({ email }).sort({ createdAt: -1 }).limit(1);
+      if (response.length === 0 || response[0].OTP !== otp) {
+          return res.status(400).json({
+              success: false,
+              message: "Invalid OTP",
+          });
+      }
+
+      return res.status(200).json({
+          success: true,
+          message: "OTP verified successfully",
+      });
+  } catch (error) {
+      console.error("Error during OTP verification:", error);
+      return res.status(500).json({
+          success: false,
+          message: "Something went wrong during OTP verification",
+      });
+  }
+};
+
+

@@ -1,21 +1,32 @@
-const express=require('express')
-const connectDB=require('./config/Database')
-const userRoute=require('./routes/userRoute')
-require('dotenv').config()
+const express = require('express');
+const cors = require('cors');
+const connectDB = require('./config/Database');
+const userRoute = require('./routes/userRoute');
+require('dotenv').config();
 
-
-const app=express();
+const app = express();
 
 connectDB();
 
-app.use(express.json());
-app.use('/api/v1/user',userRoute)
+app.use(
+  cors({
+    origin: 'http://localhost:3000', 
+    methods: ['GET', 'POST', 'PUT', 'DELETE'], 
+    credentials: true, // Allow cookies
+    allowedHeaders: ['Content-Type', 'Authorization'], // Allow headers
+  })
+);
 
-app.get('/',(req,res)=>{
-    res.send("hello")
+app.use(express.json());
+
+// Routes
+app.use('/api/v1/user', userRoute);
+
+app.get('/', (req, res) => {
+  res.send('Hello');
 });
 
-
-app.listen(process.env.PORT,()=>{
-    console.log(`server is running on port ${process.env.PORT}`)
-})
+// Start server
+app.listen(process.env.PORT, () => {
+  console.log(`Server is running on port ${process.env.PORT}`);
+});
