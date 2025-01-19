@@ -20,7 +20,7 @@ const LoginForm = () => {
     const navigate = useNavigate();
     const [isOtpSent, setIsOtpSent] = useState(false);
 
-    const url = 'https://medisense-backend.vercel.app/';
+    const url = 'https://medisense-backend.vercel.app';
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;

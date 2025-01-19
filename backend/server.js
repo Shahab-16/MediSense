@@ -10,7 +10,7 @@ connectDB();
 
 app.use(
   cors({
-    origin: 'https://medisense-backend.vercel.app/', 
+    origin: 'https://medisense-backend.vercel.app', 
     methods: ['GET', 'POST', 'PUT', 'DELETE'], 
     credentials: true, // Allow cookies
     allowedHeaders: ['Content-Type', 'Authorization'], // Allow headers
@@ -20,7 +20,7 @@ app.use(
 app.use(express.json());
 
 // Routes
-app.use('/api/v1/user', userRoute);
+app.use('/user', userRoute);
 
 app.get('/', (req, res) => {
   res.send('Hello');
