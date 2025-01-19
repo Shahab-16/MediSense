@@ -10,7 +10,7 @@ connectDB();
 
 app.use(
   cors({
-    origin: 'http://localhost:3000', 
+    origin: 'https://medisense-backend.vercel.app/', 
     methods: ['GET', 'POST', 'PUT', 'DELETE'], 
     credentials: true, // Allow cookies
     allowedHeaders: ['Content-Type', 'Authorization'], // Allow headers
