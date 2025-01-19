@@ -46,14 +46,24 @@ const LoginForm = () => {
             if (currState === "Login") {
                 const response = await axios.post(
                     `${url}/user/login`,
-                    { email: data.email, password: data.password },
+                    { email: data.email, password: data.password, role: role },
                     { withCredentials: true }
                 );
                 if (response.data.success) {
                     console.log("Login success");
-                    navigate(role === 'admin' ? "/admin" : (role === 'doctor' ? "/doctorsection" : "/dashboard/home"));
+                
+                    // Navigate based on role
+                    if (role === 'admin') {
+                        window.location.href = "http://localhost:3001/admin";
+                    } else if (role === 'doctor') {
+                        window.location.href = "http://localhost:3002/";
+                    } else {
+                        navigate("/dashboard/home"); // For relative paths, keep using navigate
+                    }
+                
                     setLogin(false);
-                } else {
+                }
+                 else {
                     alert(response.data.message);
                 }
             } else if (currState === "Signup") {

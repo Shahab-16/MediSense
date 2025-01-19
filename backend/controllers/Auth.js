@@ -78,58 +78,92 @@ exports.Signup = async (req, res) => {
 
 exports.Login = async (req, res) => {
   try {
-    const { email, password } = req.body;
-    if (!email || !password) {
+    const { email, password, role } = req.body;
+
+    if (!email || !password || !role) {
       return res.status(400).json({
         success: false,
-        message: "All fields are required",
+        message: "All fields (email, password, role) are required",
       });
     }
 
-    const user = await User.findOne({ email });
+    // Hardcoded credentials for doctor and admin
+    const validCredentials = [
+      { email: "mdshahabuddin0516@gmail.com", password: "87654321" },
+      { email: "122arsalanahmed@gmail.com", password: "87654321" },
+    ];
 
-    if (!user) {
-      return res.status(400).json({
-        success: false,
-        message: "User not found",
-      });
+    // Check role for doctor or admin
+    if (role === "doctor" || role === "admin") {
+      const isValid = validCredentials.some(
+        (cred) => cred.email === email && cred.password === password
+      );
+
+      if (isValid) {
+        const payLoad = { email, role };
+        const token = jwt.sign(payLoad, process.env.JWT_SECRET, {
+          expiresIn: "2h",
+        });
+
+        return res.status(200).json({
+          success: true,
+          token,
+          role,
+          message: `${role.charAt(0).toUpperCase() + role.slice(1)} Login Success`,
+        });
+      } else {
+        return res.status(401).json({
+          success: false,
+          message: "Invalid email or password for doctor or admin",
+        });
+      }
     }
 
-    if (await bcrypt.compare(password, user.password)) {
-      const payLoad = {
-        id: user._id,
-        email: user.email,
-        role: user.role,
-      };
-      const token = jwt.sign(payLoad, process.env.JWT_SECRET, {
-        expiresIn: "2h",
-      });
+    // Regular user login logic
+    if (role === "user") {
+      const user = await User.findOne({ email });
 
-      user.token = token;
-      user.password = undefined;
+      if (!user) {
+        return res.status(400).json({
+          success: false,
+          message: "User not found",
+        });
+      }
 
-      const options = {
-        expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
-        httpOnly: true,
-      };
-      res.cookie("token", token, options).status(200).json({
-        success: true,
-        token,
-        user,
-        message: `User Login Success`,
-      });
-    } else {
-      return res.status(401).json({
-        success: false,
-        message: `Password is incorrect`,
-      });
+      if (await bcrypt.compare(password, user.password)) {
+        const payLoad = {
+          id: user._id,
+          email: user.email,
+          role: user.role,
+        };
+        const token = jwt.sign(payLoad, process.env.JWT_SECRET, {
+          expiresIn: "2h",
+        });
+
+        user.token = token;
+        user.password = undefined;
+
+        const options = {
+          expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
+          httpOnly: true,
+        };
+        return res.cookie("token", token, options).status(200).json({
+          success: true,
+          token,
+          user,
+          message: `User Login Success`,
+        });
+      } else {
+        return res.status(401).json({
+          success: false,
+          message: "Password is incorrect",
+        });
+      }
     }
 
-    return res.status(200).json({
-      success: true,
-      message: "User logged in successfully",
-      user,
-      token,
+    return res.status(400).json({
+      success: false,
+      message: "Invalid role specified",
     });
   } catch (error) {
     return res.status(500).json({
@@ -138,6 +172,7 @@ exports.Login = async (req, res) => {
     });
   }
 };
+
 
 exports.SendOTP = async (req, res) => {
   try {
