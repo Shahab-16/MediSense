@@ -6,18 +6,33 @@ require('dotenv').config();
 
 const app = express();
 
+// Connect to the database
 connectDB();
+
+// Allowed origins for CORS
 const allowedOrigins = ['https://medisense-frontend.vercel.app'];
+
+// CORS Configuration
 app.use(
   cors({
-    origin: allowedOrigins, 
-    methods: ['GET', 'POST', 'PUT', 'DELETE'], 
-    credentials: true, // Allow cookies
-    allowedHeaders: ['Content-Type', 'Authorization'], // Allow headers
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+        callback(null, true); // Allow the request
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Include OPTIONS method
+    credentials: true, // Allow credentials (cookies, etc.)
+    allowedHeaders: ['Content-Type', 'Authorization'], // Allow custom headers
   })
 );
 
+// Middleware to parse JSON
 app.use(express.json());
+
+// Middleware to handle preflight requests (OPTIONS)
+app.options('*', cors());
 
 // Routes
 app.use('/user', userRoute);
@@ -26,7 +41,8 @@ app.get('/', (req, res) => {
   res.send('Hello');
 });
 
-// Start server
-app.listen(process.env.PORT, () => {
-  console.log(`Server is running on port ${process.env.PORT}`);
+// Start the server
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });
