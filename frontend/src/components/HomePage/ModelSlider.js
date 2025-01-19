@@ -58,7 +58,7 @@ const ModelSlider = () => {
             }`}
             onClick={() => setActiveIndex(index)}
           >
-            <div className="mb-4 w-full h-48 flex justify-center items-center overflow-hidden">
+            <div className="mb-4 w-full h-48 overflow-hidden">
               <img
                 src={model.img}
                 alt={model.title}

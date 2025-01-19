@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { images } from '../../assets/asset';
 import { FaHome, FaUserCircle, FaUserMd, FaPills, FaCogs, FaCube, FaStethoscope, FaTachometerAlt } from 'react-icons/fa';
-import { BsChevronLeft, BsChevronRight } from 'react-icons/bs';
+import { BsChevronLeft, BsChevronRight,BsThreeDots } from 'react-icons/bs';
 import { useNavigate } from 'react-router-dom';
 
 const Sidebar = () => {
@@ -14,38 +14,32 @@ const Sidebar = () => {
   };
 
   const handleNavigateHome = () => {
-    navigate("/");
+    navigate("/");  
   };
 
   return (
     <div className="flex h-full min-h-screen">
       {/* Fixed Blue Bar with Toggle Button */}
       <div
-        className={`fixed bg-blue-800 h-screen w-16 flex flex-col items-center gap-2 py-4 shadow-lg shadow-blue-900`}
-      >
-        <button
-          onClick={toggleSidebar}
-          className="text-white mb-4 p-2 rounded hover:bg-blue-800 flex items-center"
-        >
-          {isOpen ? <BsChevronLeft /> : <BsChevronRight />}
-        </button>
+  className={`fixed bg-blue-800 h-screen sm:h-auto w-16 flex flex-col items-center gap-2 py-4`}
+>
+  {/* Toggle Button */}
+  <button 
+    onClick={toggleSidebar}
+    className="text-white mb-4 p-2 rounded hover:bg-blue-800 flex items-center"
+  >
+    {/* Three Dots on Phone Screens */}
+    <BsThreeDots className="block sm:hidden text-2xl text-black" />
+    
+    {/* Arrow Icons on Larger Screens */}
+    {isOpen ? (
+      <BsChevronLeft className="hidden sm:block text-2xl h-screen mt-0" />
+    ) : (
+      <BsChevronRight className="hidden sm:block text-2xl h-screen" />
+    )}
+  </button>
+</div>  
 
-        <button className="">
-          <FaUserCircle className="text-white text-3xl" />
-        </button>
-
-        <button onClick={handleNavigateHome} className="mt-4">
-          <FaHome className="text-white text-3xl mb-6" />
-        </button>
-
-        <button className="">
-          <FaCogs className="text-white text-3xl" />
-        </button>
-
-        <button className="mt-4">
-          <FaTachometerAlt className="text-white text-3xl mb-6" />
-        </button>
-      </div>
 
       {/* Sidebar Content */}
       {isOpen && (
@@ -75,6 +69,12 @@ const Sidebar = () => {
               <button onClick={() => navigate('/dashboard/models')} className="w-full py-2 flex items-center rounded hover:bg-blue-700 px-4">
                 <FaCube className="mr-3" />
                 Models
+              </button>
+              <button
+                onClick={() => console.log('Logout clicked')} // Replace with your logout logic
+                className="w-full py-2 flex items-center justify-center rounded bg-red-500 text-white font-semibold hover:bg-red-700 transition duration-300"
+              >
+                Logout
               </button>
             </div>
           </div>
