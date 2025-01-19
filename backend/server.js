@@ -7,10 +7,10 @@ require('dotenv').config();
 const app = express();
 
 connectDB();
-
+const allowedOrigins = ['https://medisense-frontend.vercel.app'];
 app.use(
   cors({
-    origin: '*', 
+    origin: allowedOrigins, 
     methods: ['GET', 'POST', 'PUT', 'DELETE'], 
     credentials: true, // Allow cookies
     allowedHeaders: ['Content-Type', 'Authorization'], // Allow headers
