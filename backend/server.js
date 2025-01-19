@@ -9,6 +9,7 @@ const app = express();
 // Connect to the database
 connectDB();
 
+console.log("Backend is running");
 // Allowed origins for CORS
 const allowedOrigins = ['https://medisense-frontend.vercel.app'];
 
