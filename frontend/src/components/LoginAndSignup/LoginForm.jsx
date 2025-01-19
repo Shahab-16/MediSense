@@ -51,29 +51,41 @@ const LoginForm = () => {
                 );
                 if (response.data.success) {
                     console.log("Login success");
-                
+
                     // Navigate based on role
                     if (role === 'admin') {
-                        window.location.href = "http://localhost:3001/admin";
+                        window.location.href = "https://medisense-admin-section.vercel.app/admin";
                     } else if (role === 'doctor') {
-                        window.location.href = "http://localhost:3002/";
+                        window.location.href = "https://medisense-doctor-section.vercel.app/";
                     } else {
                         navigate("/dashboard/home"); // For relative paths, keep using navigate
                     }
-                
+
                     setLogin(false);
-                }
-                 else {
+                } else {
                     alert(response.data.message);
                 }
             } else if (currState === "Signup") {
-                if(!isOtpSent) {
-                    const response=await axios.post(`${url}/user/send-otp`, { email: data.email,firstName:data.firstName,lastName:data.lastName,password:data.password,confirmPassword:data.confirmPassword});
-                    if(response.data.success) {
+                if (!isOtpSent) {
+                    const response = await axios.post(`${url}/user/send-otp`, {
+                        email: data.email,
+                        firstName: data.firstName,
+                        lastName: data.lastName,
+                        password: data.password,
+                        confirmPassword: data.confirmPassword
+                    });
+                    if (response.data.success) {
                         setIsOtpSent(true);
-                        navigate('/signup/verify-otp',{state:{email:data.email,firstName:data.firstName,lastName:data.lastName,password:data.password,confirmPassword:data.confirmPassword}});
-                    }
-                    else{
+                        navigate('/signup/verify-otp', {
+                            state: {
+                                email: data.email,
+                                firstName: data.firstName,
+                                lastName: data.lastName,
+                                password: data.password,
+                                confirmPassword: data.confirmPassword
+                            }
+                        });
+                    } else {
                         alert(response.data.message);
                     }
                 }
