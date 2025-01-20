@@ -13,8 +13,9 @@ console.log("Connected to the database");
 
 // Allowed origins for CORS
 const allowedOrigins = [
-    'https://medisense-frontend.vercel.app', // Frontend deployment URL
-    'http://localhost:3000'                 // Local development URL
+    'https://medisense-frontend.vercel.app',
+    'https://medisense-doctor-section.vercel.app',
+    'https://medisense-admin-section.vercel.app/admin',
 ];
 
 const corsOptions = {
