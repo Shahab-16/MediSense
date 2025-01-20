@@ -5,35 +5,18 @@ const userRoute = require('./routes/userRoute');
 require('dotenv').config();
 
 const app = express();
-
+console.log("Backend is running");
 // Connect to the database
 connectDB();
 
 console.log("Backend is running");
 // Allowed origins for CORS
-const allowedOrigins = ['https://medisense-frontend.vercel.app'];
 
-// CORS Configuration
-app.use(
-  cors({
-    origin: function (origin, callback) {
-      if (!origin || allowedOrigins.indexOf(origin) !== -1) {
-        callback(null, true); // Allow the request
-      } else {
-        callback(new Error('Not allowed by CORS'));
-      }
-    },
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Include OPTIONS method
-    credentials: true, // Allow credentials (cookies, etc.)
-    allowedHeaders: ['Content-Type', 'Authorization'], // Allow custom headers
-  })
-);
+app.use(cors());
 
 // Middleware to parse JSON
 app.use(express.json());
 
-// Middleware to handle preflight requests (OPTIONS)
-app.options('*', cors());
 
 // Routes
 app.use('/user', userRoute);
