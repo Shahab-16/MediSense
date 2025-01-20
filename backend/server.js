@@ -18,7 +18,7 @@ const allowedOrigins = [
     'https://medisense-admin-section.vercel.app/admin',
 ];
 
-/*const corsOptions = {
+const corsOptions = {
     origin: function (origin, callback) {
         if (!origin || allowedOrigins.includes(origin)) {
             callback(null, true); // Allow request
@@ -31,11 +31,7 @@ const allowedOrigins = [
 };
 
 // Use CORS with the specified options
-app.use(cors(corsOptions));*/
-
-const cors = require('cors');
-app.use(cors());
-
+app.use(cors(corsOptions));
 
 // Middleware to parse JSON
 app.use(express.json());
