@@ -4,7 +4,7 @@ import { statsDescription } from '../../assets/asset';
 
 const StatsCard = ({ title, value,description}) => {
     return (
-        <div className="bg-white shadow-xl rounded-lg p-6 m-4 text-center">
+        <div className="bg-white shadow-xl rounded-lg p-6 m-4 text-center" id='about'>
             <h2 className="text-2xl font-semibold text-gray-800 mb-2">{title}</h2>
             <p className="text-5xl font-bold text-blue-600">{value}+</p>
             <p className="text-gray-600">{description}</p>

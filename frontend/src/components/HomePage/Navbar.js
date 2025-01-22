@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { images } from '../../assets/asset';
 import { StoreContext } from '../../context/StoreContext';
 
 const NavBar = () => {
@@ -38,9 +37,9 @@ const NavBar = () => {
             </div>
             <div className="hidden space-x-9 sm:block">
                 <a href="#" className="text-black-300 p-4">Home</a>
-                <a href="#" className="text-black-300 p-4">About</a>
-                <a href="#" className="text-black-300 p-4">Services</a>
-                <a href="#" className="text-black-300 p-4">Contact</a>
+                <a href="#about" className="text-black-300 p-4">About</a>
+                <a href="#medisenseDescription" className="text-black-300 p-4">Services</a>
+                <a href="#contact" className="text-black-300 p-4">Contact</a>
             </div>
             <button
                 onClick={handleSignUpClick}
@@ -61,9 +60,16 @@ const NavBar = () => {
                     <div className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
                         <div className="py-1">
                             <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Home</a>
-                            <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">About</a>
-                            <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Services</a>
-                            <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Contact</a>
+                            <a href="#about" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">About</a>
+                            <a href='#medisenseDescription' className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Services</a>
+                            <a href="#contact" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Contact</a>
+                            <div className="border-t border-gray-200"></div> {/* Divider */}
+                            <button
+                                onClick={handleSignUpClick}
+                                className="w-36 mt-1 py-3 px-3 bg-blue-800 hover:bg-blue-600 text-white font-bold rounded-md text-center text-xs"
+                            >
+                                Sign Up
+                            </button>
                         </div>
                     </div>
                 )}

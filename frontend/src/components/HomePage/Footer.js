@@ -2,7 +2,7 @@ import React from 'react';
 
 const Footer = () => {
     return (
-        <footer className="bg-gray-900 text-white py-8">
+        <footer className="bg-gray-900 text-white py-8" id='contact'>
             <div className="container mx-auto px-4">
                 <div className="grid grid-cols-2 md:grid grid-cols-4 gap-4">
                     {/* Left Side */}
