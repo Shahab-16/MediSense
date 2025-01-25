@@ -8,7 +8,7 @@ const Sidebar = () => {
   const logoutHandler=()=>{
     localStorage.removeItem("token");
     console.log("Logout done successfully");
-    navigate("/");
+    window.location.href = "https://medisense-frontend.vercel.app/";
   }
   return (
     <div className="w-64 bg-blue-800 text-white min-h-screen p-6 shadow-lg">

@@ -28,7 +28,7 @@ const Sidebar = () => {
   const logoutHandler=()=>{
     localStorage.removeItem("token");
     console.log("Logout done successfully");
-    navigate("/");
+    window.location.href = "https://medisense-frontend.vercel.app/";
   }
 
   return (
@@ -122,12 +122,15 @@ const Sidebar = () => {
           </NavLink>
         </div>
       )}
+      <div className="flex justify-center">
       <button
         onClick={() => logoutHandler()}
-        className="w-full py-2 flex items-center justify-center rounded bg-red-500 text-white font-semibold hover:bg-red-700 transition duration-300"
+        className="w-[80%] py-2 flex items-center justify-center rounded bg-red-500 text-white text-xl font-semibold hover:bg-red-700 transition duration-300"
       >
         Logout
       </button>
+      </div>
+      
     </div>
   );
 };
