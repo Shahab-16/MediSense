@@ -9,6 +9,7 @@ import {
 import { BsClipboardData, BsListCheck, BsBoxArrowInDown } from "react-icons/bs";
 import { FaRegListAlt } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const Sidebar = () => {
   const [isDoctorsDropdownOpen, setDoctorsDropdownOpen] = useState(false);
@@ -25,11 +26,13 @@ const Sidebar = () => {
     navigate("/admin/medicines");
   };
 
-  const logoutHandler=()=>{
+const logoutHandler = () => {
     localStorage.removeItem("token");
-    console.log("Logout done successfully");
-    window.location.href = "https://medisense-frontend.vercel.app/";
-  }
+    toast.success("Logout done successfully");
+    setTimeout(() => {
+      window.location.href = "https://medisense-frontend.vercel.app/";
+    }, 2000);
+  };
 
   return (
     <div className="bg-white text-gray-800 w-full md:w-1/4 lg:max-w-[20%] p-6 flex flex-col gap-4 border-r shadow-md">

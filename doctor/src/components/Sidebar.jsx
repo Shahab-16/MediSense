@@ -2,14 +2,17 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { FaTachometerAlt, FaUsers, FaVideo, FaCalendar, FaSignOutAlt } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
-
+import {toast} from "react-toastify";
 const Sidebar = () => {
   const navigate = useNavigate();
-  const logoutHandler=()=>{
+  const logoutHandler = () => {
     localStorage.removeItem("token");
-    console.log("Logout done successfully");
-    window.location.href = "https://medisense-frontend.vercel.app/";
-  }
+    toast.success("Logout done successfully");
+    setTimeout(() => {
+      window.location.href = "https://medisense-frontend.vercel.app/";
+    }, 2000);
+  };
+  
   return (
     <div className="w-64 bg-blue-800 text-white min-h-screen p-6 shadow-lg">
       <div className="text-center mb-8">

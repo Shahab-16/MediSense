@@ -4,6 +4,7 @@ import { FiRefreshCcw } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useLocation } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const Otp = () => {
     const navigate = useNavigate();
@@ -47,9 +48,11 @@ const Otp = () => {
                 otp: otpValue,
             });
             if(response.data.success) navigate('/dashboard/home');
+            toast.success("User created successfully");
             console.log("Signup successful:", response.data);
         } catch (error) {
             console.error("Error during OTP verification:", error.response?.data || error.message);
+            toast.error("Wrong OTP");
         }
     };
 

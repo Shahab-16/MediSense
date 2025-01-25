@@ -4,6 +4,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { StoreContext } from '../../context/StoreContext';
 import { images } from '../../assets/asset';
 import { ImCross, ImArrowLeft2 } from "react-icons/im";
+import { toast } from 'react-toastify';
 
 const LoginForm = () => {
     const { role } = useParams();
@@ -51,6 +52,7 @@ const LoginForm = () => {
                 );
                 if (response.data.success) {
                     console.log("Login success");
+                    toast.success("Login success");
                     localStorage.setItem("token", response.data.token);
                     // Navigate based on role
                     if (role === 'admin') {
@@ -64,6 +66,8 @@ const LoginForm = () => {
                     setLogin(false);
                 } else {
                     alert(response.data.message);
+                    console.log(response.data.message);
+                    toast.error(response.data.message);
                 }
             } else if (currState === "Signup") {
                 if (!isOtpSent) {
@@ -75,6 +79,7 @@ const LoginForm = () => {
                         confirmPassword: data.confirmPassword
                     });
                     if (response.data.success) {
+                        toast.success("OTP sent successfully");
                         setIsOtpSent(true);
                         navigate('/signup/verify-otp', {
                             state: {
@@ -87,6 +92,8 @@ const LoginForm = () => {
                         });
                     } else {
                         alert(response.data.message);
+                        console.log(response.data.message);
+                        toast.error(response.data.message);
                     }
                 }
             }
