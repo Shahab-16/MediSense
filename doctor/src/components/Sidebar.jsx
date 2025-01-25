@@ -7,6 +7,7 @@ const Sidebar = () => {
   const navigate = useNavigate();
   const logoutHandler=()=>{
     localStorage.removeItem("token");
+    console.log("Logout done successfully");
     navigate("/");
   }
   return (
