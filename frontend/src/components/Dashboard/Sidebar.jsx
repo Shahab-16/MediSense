@@ -17,10 +17,12 @@ const Sidebar = () => {
     navigate("/");  
   };
 
-  const logoutHandler = () => {
+const logoutHandler = () => {
     localStorage.removeItem("token");
-    navigate("/");
-    
+    toast.success("Logout done successfully");
+    setTimeout(() => {
+      navigate("/");
+    }, 2000);
   };
 
   return (
