@@ -1,8 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { FaTachometerAlt, FaUsers, FaVideo, FaCalendar, FaSignOutAlt } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 
 const Sidebar = () => {
+  const navigate = useNavigate();
+  const logoutHandler=()=>{
+    localStorage.removeItem("token");
+    navigate("/");
+  }
   return (
     <div className="w-64 bg-blue-800 text-white min-h-screen p-6 shadow-lg">
       <div className="text-center mb-8">
@@ -42,7 +48,7 @@ const Sidebar = () => {
         </li>
         {/* Logout Button */}
         <li className="mt-auto">
-          <button 
+          <button onClick={()=>logoutHandler()}
             className="flex items-center text-lg text-white hover:bg-blue-700 py-2 px-4 rounded-lg w-full transition-all ease-in-out duration-300">
             <FaSignOutAlt className="mr-3 text-xl" /> Logout
           </button>

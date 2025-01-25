@@ -1,10 +1,14 @@
-import React, { useState } from 'react';
-import { NavLink } from 'react-router-dom';
-import { FiHome, FiUser, FiChevronDown, FiChevronUp } from 'react-icons/fi';
-import { MdOutlineMedication, MdPersonAddAlt1, MdOutlineEventNote } from 'react-icons/md';
-import { BsClipboardData, BsListCheck, BsBoxArrowInDown } from 'react-icons/bs';
-import { FaRegListAlt } from 'react-icons/fa';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import { NavLink } from "react-router-dom";
+import { FiHome, FiUser, FiChevronDown, FiChevronUp } from "react-icons/fi";
+import {
+  MdOutlineMedication,
+  MdPersonAddAlt1,
+  MdOutlineEventNote,
+} from "react-icons/md";
+import { BsClipboardData, BsListCheck, BsBoxArrowInDown } from "react-icons/bs";
+import { FaRegListAlt } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 const Sidebar = () => {
   const [isDoctorsDropdownOpen, setDoctorsDropdownOpen] = useState(false);
@@ -13,13 +17,18 @@ const Sidebar = () => {
 
   const doctorDropDownClick = () => {
     setDoctorsDropdownOpen(!isDoctorsDropdownOpen);
-    navigate('/admin/doctors');
+    navigate("/admin/doctors");
   };
 
   const medicineDropDownClick = () => {
     setMedicinesDropdownOpen(!isMedicinesDropdownOpen);
-    navigate('/admin/medicines');
+    navigate("/admin/medicines");
   };
+
+  const logoutHandler=()=>{
+    localStorage.removeItem("token");
+    navigate("/");
+  }
 
   return (
     <div className="bg-white text-gray-800 w-full md:w-1/4 lg:max-w-[20%] p-6 flex flex-col gap-4 border-r shadow-md">
@@ -40,7 +49,11 @@ const Sidebar = () => {
           <FiUser size={24} />
           <p className="text-lg font-semibold">Doctors</p>
         </div>
-        {isDoctorsDropdownOpen ? <FiChevronUp size={20} /> : <FiChevronDown size={20} />}
+        {isDoctorsDropdownOpen ? (
+          <FiChevronUp size={20} />
+        ) : (
+          <FiChevronDown size={20} />
+        )}
       </div>
       {isDoctorsDropdownOpen && (
         <div className="flex flex-col gap-3 ml-6 mt-2 border-l-2 border-gray-300 pl-4">
@@ -77,7 +90,11 @@ const Sidebar = () => {
           <MdOutlineMedication size={24} />
           <p className="text-lg font-semibold">Medicines</p>
         </div>
-        {isMedicinesDropdownOpen ? <FiChevronUp size={20} /> : <FiChevronDown size={20} />}
+        {isMedicinesDropdownOpen ? (
+          <FiChevronUp size={20} />
+        ) : (
+          <FiChevronDown size={20} />
+        )}
       </div>
       {isMedicinesDropdownOpen && (
         <div className="flex flex-col gap-3 ml-6 mt-2 border-l-2 border-gray-300 pl-4">
@@ -104,6 +121,12 @@ const Sidebar = () => {
           </NavLink>
         </div>
       )}
+      <button
+        onClick={() => logoutHandler()}
+        className="w-full py-2 flex items-center justify-center rounded bg-red-500 text-white font-semibold hover:bg-red-700 transition duration-300"
+      >
+        Logout
+      </button>
     </div>
   );
 };
