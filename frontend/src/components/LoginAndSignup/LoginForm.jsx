@@ -51,7 +51,7 @@ const LoginForm = () => {
                 );
                 if (response.data.success) {
                     console.log("Login success");
-
+                    localStorage.setItem("token", response.data.token);
                     // Navigate based on role
                     if (role === 'admin') {
                         window.location.href = "https://medisense-admin-section.vercel.app/admin";

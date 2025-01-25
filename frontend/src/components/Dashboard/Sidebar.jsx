@@ -17,6 +17,11 @@ const Sidebar = () => {
     navigate("/");  
   };
 
+  const logoutHandler = () => {
+    localStorage.removeItem("token");
+    navigate("/");
+  };
+
   return (
     <div className="flex h-full min-h-screen">
       {/* Fixed Blue Bar with Toggle Button */}
@@ -71,7 +76,7 @@ const Sidebar = () => {
                 Models
               </button>
               <button
-                onClick={() => console.log('Logout clicked')} // Replace with your logout logic
+                onClick={() => logoutHandler() } // Replace with your logout logic
                 className="w-full py-2 flex items-center justify-center rounded bg-red-500 text-white font-semibold hover:bg-red-700 transition duration-300"
               >
                 Logout
