@@ -7,6 +7,8 @@ const StoreContextProvider = ({ children }) => {
     
     const [login, setLogin] = useState(false);
 
+    const [loading, setLoading] = useState(false);
+
     const [stats, setStats] = useState({
         doctorsAvailable: 120,
         totalMedicines: 2500,

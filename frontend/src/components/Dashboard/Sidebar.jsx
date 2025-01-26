@@ -22,7 +22,7 @@ const logoutHandler = () => {
     toast.success("Logout done successfully");
     setTimeout(() => {
       navigate("/");
-    }, 2000);
+    }, 3000);
   };
 
   return (

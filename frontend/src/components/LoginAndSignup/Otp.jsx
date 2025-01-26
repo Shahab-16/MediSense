@@ -48,7 +48,7 @@ const Otp = () => {
                 otp: otpValue,
             });
             if(response.data.success) navigate('/dashboard/home');
-            toast.success("User created successfully");
+            toast.success("Signup successfull");
             console.log("Signup successful:", response.data);
         } catch (error) {
             console.error("Error during OTP verification:", error.response?.data || error.message);
