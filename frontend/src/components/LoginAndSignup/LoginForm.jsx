@@ -5,12 +5,11 @@ import { StoreContext } from "../../context/StoreContext";
 import { images } from "../../assets/asset";
 import { ImCross, ImArrowLeft2 } from "react-icons/im";
 import { toast } from "react-toastify";
-import { Spinner } from "../spinner/Spinner";
+import Spinner from "../spinner/spinner";
 
 const LoginForm = () => {
   const { role } = useParams();
-  const { login, setLogin } = useContext(StoreContext);
-  const navigate = useNavigate();
+  const [ loading, setloading ] = useState(false);
   const [data, setData] = useState({
     firstName: "",
     lastName: "",
@@ -20,8 +19,9 @@ const LoginForm = () => {
   });
   const [otp, setOtp] = useState("");
   const [currState, setCurrState] = useState("Login");
+  const { login, setLogin } = useContext(StoreContext);
+  const navigate = useNavigate();
   const [isOtpSent, setIsOtpSent] = useState(false);
-  const [loading, setLoading] = useState(false);
 
   const url = "https://medisense-backend.vercel.app";
 
@@ -45,7 +45,7 @@ const LoginForm = () => {
 
   const submitForm = async (e) => {
     e.preventDefault();
-    setLoading(true); // Start the loader
+    setloading(true);
     try {
       if (currState === "Login") {
         const response = await axios.post(
@@ -54,19 +54,24 @@ const LoginForm = () => {
           { withCredentials: true }
         );
         if (response.data.success) {
-          toast.success("Login successful");
+          console.log("Login success");
+          toast.success("Login success");
           localStorage.setItem("token", response.data.token);
-
+          // Navigate based on role
           if (role === "admin") {
-            window.location.href = "https://medisense-admin-section.vercel.app/admin";
+            window.location.href =
+              "https://medisense-admin-section.vercel.app/admin";
           } else if (role === "doctor") {
-            window.location.href = "https://medisense-doctor-section.vercel.app/";
+            window.location.href =
+              "https://medisense-doctor-section.vercel.app/";
           } else {
-            navigate("/dashboard/home");
+            navigate("/dashboard/home"); // For relative paths, keep using navigate
           }
 
           setLogin(false);
         } else {
+          alert(response.data.message);
+          console.log(response.data.message);
           toast.error(response.data.message);
         }
       } else if (currState === "Signup") {
@@ -91,15 +96,17 @@ const LoginForm = () => {
               },
             });
           } else {
+            alert(response.data.message);
+            console.log(response.data.message);
             toast.error(response.data.message);
           }
         }
       }
     } catch (error) {
       console.error("Error:", error.response?.data?.message || error.message);
-      toast.error("An error occurred. Please try again.");
+      alert("An error occurred. Please try again.");
     } finally {
-      setLoading(false); // Stop the loader
+      setloading(false);
     }
   };
 
@@ -127,7 +134,7 @@ const LoginForm = () => {
           <img
             src={images.login_img}
             alt="Login"
-            className="w-full h-full object-cover"
+            className="w-full h-full object-fit"
           />
         </div>
 
@@ -152,6 +159,7 @@ const LoginForm = () => {
                   email: "",
                   password: "",
                   confirmPassword: "",
+                  doctorId: "",
                 });
                 setOtp("");
               }}
@@ -233,7 +241,13 @@ const LoginForm = () => {
               className="w-full py-3 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700 transition-colors"
               disabled={loading}
             >
-              {loading ? <Spinner /> : currState === "Login" ? "Login" : "Signup"}
+              {loading ? (
+                <Spinner />
+              ) : currState === "Login" ? (
+                "Login"
+              ) : (
+                "Signup"
+              )}
             </button>
           </form>
         </div>

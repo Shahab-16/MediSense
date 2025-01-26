@@ -4,6 +4,7 @@ import { images } from '../../assets/asset';
 import { FaHome, FaUserCircle, FaUserMd, FaPills, FaCogs, FaCube, FaStethoscope, FaTachometerAlt } from 'react-icons/fa';
 import { BsChevronLeft, BsChevronRight,BsThreeDots } from 'react-icons/bs';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(true);

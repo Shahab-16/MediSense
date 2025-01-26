@@ -5,10 +5,12 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useLocation } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import Spinner from '../spinner/spinner';
 
 const Otp = () => {
     const navigate = useNavigate();
     const location = useLocation();
+    const [loading,setloading]=useState(false);
 
     const { email, firstName: firstNameValue, lastName: lastNameValue, password: passwordValue, confirmPassword: confirmPasswordValue } = location.state || {};
     const [otp, setOtp] = useState(Array(6).fill("")); 
@@ -38,6 +40,7 @@ const Otp = () => {
     // Handle OTP submission
     const handleSubmit = async () => {
         const otpValue = otp.join("");
+        setloading(true);
         try {
             const response = await axios.post(`${url}/user/signup`, {
                 email,
@@ -53,6 +56,9 @@ const Otp = () => {
         } catch (error) {
             console.error("Error during OTP verification:", error.response?.data || error.message);
             toast.error("Wrong OTP");
+        }
+        finally{
+            setloading(false);
         }
     };
 
@@ -79,8 +85,9 @@ const Otp = () => {
             <button
                 onClick={handleSubmit}
                 className="w-full bg-blue-800 text-white font-bold text-lg py-3 rounded-md hover:bg-blue-600 transition duration-300"
+                disabled={loading}
             >
-                Verify and Register
+                {loading ? (<Spinner/>) : ("Verify and Register")}
             </button>
 
             <div className="flex justify-between w-full mt-6 text-base font-medium">
