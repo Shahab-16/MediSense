@@ -90,7 +90,7 @@ const MedicinesCart = () => {
         </div>
   
         <button
-          onClick={() => navigate("/dashboard/medicines/placeorder")}
+          onClick={() => navigate("/dashboard/medicines/checkout")}
           className="bg-blue-600 hover:bg-blue-700 text-white font-semibold w-full h-[50px] text-center rounded-lg mt-4"
         >
           Proceed to Checkout
