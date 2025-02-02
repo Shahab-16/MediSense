@@ -46,69 +46,69 @@ const LoginForm = () => {
   const submitForm = async (e) => {
     e.preventDefault();
     navigate('/dashboard');
-    // setloading(true);
-    // try {
-    //   if (currState === "Login") {
-    //     const response = await axios.post(
-    //       `${url}/user/login`,
-    //       { email: data.email, password: data.password, role: role },
-    //       { withCredentials: true }
-    //     );
-    //     if (response.data.success) {
-    //       console.log("Login success");
-    //       toast.success("Login success");
-    //       localStorage.setItem("token", response.data.token);
-    //       // Navigate based on role
-    //       if (role === "admin") {
-    //         window.location.href =
-    //           "https://medisense-admin-section.vercel.app/admin";
-    //       } else if (role === "doctor") {
-    //         window.location.href =
-    //           "https://medisense-doctor-section.vercel.app/";
-    //       } else {
-    //         navigate("/dashboard/home"); // For relative paths, keep using navigate
-    //       }
+    setloading(true);
+    try {
+      if (currState === "Login") {
+        const response = await axios.post(
+          `${url}/user/login`,
+          { email: data.email, password: data.password, role: role },
+          { withCredentials: true }
+        );
+        if (response.data.success) {
+          console.log("Login success");
+          toast.success("Login success");
+          localStorage.setItem("token", response.data.token);
+          // Navigate based on role
+          if (role === "admin") {
+            window.location.href =
+              "https://medisense-admin-section.vercel.app/admin";
+          } else if (role === "doctor") {
+            window.location.href =
+              "https://medisense-doctor-section.vercel.app/";
+          } else {
+            navigate("/dashboard/home"); // For relative paths, keep using navigate
+          }
 
-    //       setLogin(false);
-    //     } else {
-    //       alert(response.data.message);
-    //       console.log(response.data.message);
-    //       toast.error(response.data.message);
-    //     }
-    //   } else if (currState === "Signup") {
-    //     if (!isOtpSent) {
-    //       const response = await axios.post(`${url}/user/send-otp`, {
-    //         email: data.email,
-    //         firstName: data.firstName,
-    //         lastName: data.lastName,
-    //         password: data.password,
-    //         confirmPassword: data.confirmPassword,
-    //       });
-    //       if (response.data.success) {
-    //         toast.success("OTP sent successfully");
-    //         setIsOtpSent(true);
-    //         navigate("/signup/verify-otp", {
-    //           state: {
-    //             email: data.email,
-    //             firstName: data.firstName,
-    //             lastName: data.lastName,
-    //             password: data.password,
-    //             confirmPassword: data.confirmPassword,
-    //           },
-    //         });
-    //       } else {
-    //         alert(response.data.message);
-    //         console.log(response.data.message);
-    //         toast.error(response.data.message);
-    //       }
-    //     }
-    //   }
-    // } catch (error) {
-    //   console.error("Error:", error.response?.data?.message || error.message);
-    //   alert("An error occurred. Please try again.");
-    // } finally {
-    //   setloading(false);
-    // }
+          setLogin(false);
+        } else {
+          alert(response.data.message);
+          console.log(response.data.message);
+          toast.error(response.data.message);
+        }
+      } else if (currState === "Signup") {
+        if (!isOtpSent) {
+          const response = await axios.post(`${url}/user/send-otp`, {
+            email: data.email,
+            firstName: data.firstName,
+            lastName: data.lastName,
+            password: data.password,
+            confirmPassword: data.confirmPassword,
+          });
+          if (response.data.success) {
+            toast.success("OTP sent successfully");
+            setIsOtpSent(true);
+            navigate("/signup/verify-otp", {
+              state: {
+                email: data.email,
+                firstName: data.firstName,
+                lastName: data.lastName,
+                password: data.password,
+                confirmPassword: data.confirmPassword,
+              },
+            });
+          } else {
+            alert(response.data.message);
+            console.log(response.data.message);
+            toast.error(response.data.message);
+          }
+        }
+      }
+    } catch (error) {
+      console.error("Error:", error.response?.data?.message || error.message);
+      alert("An error occurred. Please try again.");
+    } finally {
+      setloading(false);
+    }
   };
   
   useEffect(() => {
