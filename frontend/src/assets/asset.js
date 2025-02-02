@@ -65,6 +65,9 @@ import doc14 from "./doc14.png";
 import doc15 from "./doc15.png";
 import menu_icon from "./menu_icon.svg";
 import contact_img from "./contact_image.png"
+import hospital from "./hospital.jpg"
+import healthcare_logo from "./healthcare_logo.png";
+import health_logo from "./health_logo.jpg"
 export const speciality_data=[
   {
     speciality:"General physician",
@@ -125,7 +128,10 @@ export const images = {
   doc14,
   doc15,
   menu_icon,
-  contact_img
+  contact_img,
+  hospital,
+  healthcare_logo,
+  health_logo
 };
 
 export const model_list = {
