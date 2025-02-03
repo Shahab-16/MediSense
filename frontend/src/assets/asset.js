@@ -264,7 +264,100 @@ export const doctors = [
     success_rate: 93,
     img: doc1,
     about: "Dr. Sarah Khan is a renowned oncologist with over a decade of experience in cancer treatment. She specializes in personalized chemotherapy and immunotherapy. Her compassionate care and innovative methods have earned her widespread recognition. Dr. Khan has worked with top hospitals and published research in oncology journals. She is passionate about educating patients on cancer awareness. Her clinic in Hyderabad serves patients from across the country.",
-    fee: 150
+    fee: 150,
+    hospitalId: 1,
+    hospitalName: "Shanti Multispeciality Hospital"
+  },
+  {
+    _id: "3",
+    name: "Dr. Sarah Khan",
+    specialization: "Oncologist",
+    address: "Hyderabad, India",
+    experience: 12,
+    success_rate: 93,
+    img: doc1,
+    about: "Dr. Sarah Khan is a renowned oncologist with over a decade of experience in cancer treatment. She specializes in personalized chemotherapy and immunotherapy. Her compassionate care and innovative methods have earned her widespread recognition. Dr. Khan has worked with top hospitals and published research in oncology journals. She is passionate about educating patients on cancer awareness. Her clinic in Hyderabad serves patients from across the country.",
+    fee: 150,
+    hospitalId: 1,
+    hospitalName: "Shanti Multispeciality Hospital"
+  },
+  {
+    _id: "3",
+    name: "Dr. Sarah Khan",
+    specialization: "Oncologist",
+    address: "Hyderabad, India",
+    experience: 12,
+    success_rate: 93,
+    img: doc1,
+    about: "Dr. Sarah Khan is a renowned oncologist with over a decade of experience in cancer treatment. She specializes in personalized chemotherapy and immunotherapy. Her compassionate care and innovative methods have earned her widespread recognition. Dr. Khan has worked with top hospitals and published research in oncology journals. She is passionate about educating patients on cancer awareness. Her clinic in Hyderabad serves patients from across the country.",
+    fee: 150,
+    hospitalId: 1,
+    hospitalName: "Shanti Multispeciality Hospital"
+  },
+  {
+    _id: "3",
+    name: "Dr. Sarah Khan",
+    specialization: "Oncologist",
+    address: "Hyderabad, India",
+    experience: 12,
+    success_rate: 93,
+    img: doc1,
+    about: "Dr. Sarah Khan is a renowned oncologist with over a decade of experience in cancer treatment. She specializes in personalized chemotherapy and immunotherapy. Her compassionate care and innovative methods have earned her widespread recognition. Dr. Khan has worked with top hospitals and published research in oncology journals. She is passionate about educating patients on cancer awareness. Her clinic in Hyderabad serves patients from across the country.",
+    fee: 150,
+    hospitalId: 1,
+    hospitalName: "Shanti Multispeciality Hospital"
+  },
+  {
+    _id: "3",
+    name: "Dr. Sarah Khan",
+    specialization: "Oncologist",
+    address: "Hyderabad, India",
+    experience: 12,
+    success_rate: 93,
+    img: doc1,
+    about: "Dr. Sarah Khan is a renowned oncologist with over a decade of experience in cancer treatment. She specializes in personalized chemotherapy and immunotherapy. Her compassionate care and innovative methods have earned her widespread recognition. Dr. Khan has worked with top hospitals and published research in oncology journals. She is passionate about educating patients on cancer awareness. Her clinic in Hyderabad serves patients from across the country.",
+    fee: 150,
+    hospitalId: 1,
+    hospitalName: "Shanti Multispeciality Hospital"
+  },
+  {
+    _id: "3",
+    name: "Dr. Sarah Khan",
+    specialization: "Oncologist",
+    address: "Hyderabad, India",
+    experience: 12,
+    success_rate: 93,
+    img: doc1,
+    about: "Dr. Sarah Khan is a renowned oncologist with over a decade of experience in cancer treatment. She specializes in personalized chemotherapy and immunotherapy. Her compassionate care and innovative methods have earned her widespread recognition. Dr. Khan has worked with top hospitals and published research in oncology journals. She is passionate about educating patients on cancer awareness. Her clinic in Hyderabad serves patients from across the country.",
+    fee: 150,
+    hospitalId: 1,
+    hospitalName: "Shanti Multispeciality Hospital"
+  },
+  {
+    _id: "3",
+    name: "Dr. Sarah Khan",
+    specialization: "Oncologist",
+    address: "Hyderabad, India",
+    experience: 12,
+    success_rate: 93,
+    img: doc1,
+    about: "Dr. Sarah Khan is a renowned oncologist with over a decade of experience in cancer treatment. She specializes in personalized chemotherapy and immunotherapy. Her compassionate care and innovative methods have earned her widespread recognition. Dr. Khan has worked with top hospitals and published research in oncology journals. She is passionate about educating patients on cancer awareness. Her clinic in Hyderabad serves patients from across the country.",
+    fee: 150,
+    hospitalId: 1,
+    hospitalName: "Shanti Multispeciality Hospital"
+  },
+  {
+    _id: "3",
+    name: "Dr. Sarah Khan",
+    specialization: "Oncologist",
+    address: "Hyderabad, India",
+    experience: 12,
+    success_rate: 93,
+    img: doc1,
+    about: "Dr. Sarah Khan is a renowned oncologist with over a decade of experience in cancer treatment. She specializes in personalized chemotherapy and immunotherapy. Her compassionate care and innovative methods have earned her widespread recognition. Dr. Khan has worked with top hospitals and published research in oncology journals. She is passionate about educating patients on cancer awareness. Her clinic in Hyderabad serves patients from across the country.",
+    fee: 150,
+    hospitalId: 1,
+    hospitalName: "Shanti Multispeciality Hospital"
   },
   {
     _id: "5",
@@ -275,7 +368,22 @@ export const doctors = [
     success_rate: 97,
     img: doc3,
     about: "Dr. Vikram Singh is a highly skilled orthopedic surgeon with two decades of experience. He specializes in joint replacement surgeries and sports injury treatments. Dr. Singh has successfully performed over 5,000 surgeries to date. His dedication to patient recovery and advanced surgical techniques have made him a trusted name. He regularly attends international conferences to stay updated. His clinic in Pune is equipped with state-of-the-art facilities.",
-    fee: 200
+    fee: 200,
+    hospitalId: 2,
+    hospitalName: "Vivekanand Medical Centre"
+  },
+  {
+    _id: "5",
+    name: "Dr. Vikram Singh",
+    specialization: "Neurologist",
+    address: "Pune, India",
+    experience: 20,
+    success_rate: 97,
+    img: doc3,
+    about: "Dr. Vikram Singh is a highly skilled orthopedic surgeon with two decades of experience. He specializes in joint replacement surgeries and sports injury treatments. Dr. Singh has successfully performed over 5,000 surgeries to date. His dedication to patient recovery and advanced surgical techniques have made him a trusted name. He regularly attends international conferences to stay updated. His clinic in Pune is equipped with state-of-the-art facilities.",
+    fee: 200,
+    hospitalId: 2,
+    hospitalName: "Vivekanand Medical Centre"
   },
   {
     _id: "6",
@@ -286,7 +394,61 @@ export const doctors = [
     success_rate: 92,
     img: doc2,
     about: "Dr. Meera Sharma is a dedicated pediatrician with over 10 years of experience. She focuses on the overall well-being of infants, children, and adolescents. Her expertise includes preventive care, vaccinations, and managing childhood illnesses. Dr. Sharma is known for her patient-friendly approach and excellent diagnostic skills. She actively participates in community health initiatives for children. Her clinic in Bangalore provides comprehensive pediatric care.",
-    fee: 120
+    fee: 120,
+    hospitalId: 3,
+    hospitalName: "Little Steps Children's Hospital"
+  },
+  {
+    _id: "5",
+    name: "Dr. Vikram Singh",
+    specialization: "Neurologist",
+    address: "Pune, India",
+    experience: 20,
+    success_rate: 97,
+    img: doc3,
+    about: "Dr. Vikram Singh is a highly skilled orthopedic surgeon with two decades of experience. He specializes in joint replacement surgeries and sports injury treatments. Dr. Singh has successfully performed over 5,000 surgeries to date. His dedication to patient recovery and advanced surgical techniques have made him a trusted name. He regularly attends international conferences to stay updated. His clinic in Pune is equipped with state-of-the-art facilities.",
+    fee: 200,
+    hospitalId: 2,
+    hospitalName: "Vivekanand Medical Centre"
+  },
+  {
+    _id: "5",
+    name: "Dr. Vikram Singh",
+    specialization: "Neurologist",
+    address: "Pune, India",
+    experience: 20,
+    success_rate: 97,
+    img: doc3,
+    about: "Dr. Vikram Singh is a highly skilled orthopedic surgeon with two decades of experience. He specializes in joint replacement surgeries and sports injury treatments. Dr. Singh has successfully performed over 5,000 surgeries to date. His dedication to patient recovery and advanced surgical techniques have made him a trusted name. He regularly attends international conferences to stay updated. His clinic in Pune is equipped with state-of-the-art facilities.",
+    fee: 200,
+    hospitalId: 2,
+    hospitalName: "Vivekanand Medical Centre"
+  },
+  {
+    _id: "5",
+    name: "Dr. Vikram Singh",
+    specialization: "Neurologist",
+    address: "Pune, India",
+    experience: 20,
+    success_rate: 97,
+    img: doc3,
+    about: "Dr. Vikram Singh is a highly skilled orthopedic surgeon with two decades of experience. He specializes in joint replacement surgeries and sports injury treatments. Dr. Singh has successfully performed over 5,000 surgeries to date. His dedication to patient recovery and advanced surgical techniques have made him a trusted name. He regularly attends international conferences to stay updated. His clinic in Pune is equipped with state-of-the-art facilities.",
+    fee: 200,
+    hospitalId: 2,
+    hospitalName: "Vivekanand Medical Centre"
+  },
+  {
+    _id: "5",
+    name: "Dr. Vikram Singh",
+    specialization: "Neurologist",
+    address: "Pune, India",
+    experience: 20,
+    success_rate: 97,
+    img: doc3,
+    about: "Dr. Vikram Singh is a highly skilled orthopedic surgeon with two decades of experience. He specializes in joint replacement surgeries and sports injury treatments. Dr. Singh has successfully performed over 5,000 surgeries to date. His dedication to patient recovery and advanced surgical techniques have made him a trusted name. He regularly attends international conferences to stay updated. His clinic in Pune is equipped with state-of-the-art facilities.",
+    fee: 200,
+    hospitalId: 2,
+    hospitalName: "Vivekanand Medical Centre"
   },
   {
     _id: "7",
@@ -297,7 +459,87 @@ export const doctors = [
     success_rate: 94,
     img: doc4,
     about: "Dr. Arjun Patel is a leading neurologist with 18 years of clinical experience. He specializes in treating neurological disorders such as epilepsy, stroke, and migraines. Dr. Patel is widely respected for his diagnostic precision and advanced treatment methods. He has contributed to research in neurodegenerative diseases and published numerous papers. His empathetic care ensures improved outcomes for his patients. He practices at a prominent hospital in Ahmedabad.",
-    fee: 180
+    fee: 180,
+    hospitalId: 4,
+    hospitalName: "Sudarshan Neurocare Clinic"
+  },
+  {
+    _id: "7",
+    name: "Dr. Arjun Patel",
+    specialization: "Neurologist",
+    address: "Ahmedabad, India",
+    experience: 18,
+    success_rate: 94,
+    img: doc4,
+    about: "Dr. Arjun Patel is a leading neurologist with 18 years of clinical experience. He specializes in treating neurological disorders such as epilepsy, stroke, and migraines. Dr. Patel is widely respected for his diagnostic precision and advanced treatment methods. He has contributed to research in neurodegenerative diseases and published numerous papers. His empathetic care ensures improved outcomes for his patients. He practices at a prominent hospital in Ahmedabad.",
+    fee: 180,
+    hospitalId: 4,
+    hospitalName: "Sudarshan Neurocare Clinic"
+  },
+  {
+    _id: "7",
+    name: "Dr. Arjun Patel",
+    specialization: "Neurologist",
+    address: "Ahmedabad, India",
+    experience: 18,
+    success_rate: 94,
+    img: doc4,
+    about: "Dr. Arjun Patel is a leading neurologist with 18 years of clinical experience. He specializes in treating neurological disorders such as epilepsy, stroke, and migraines. Dr. Patel is widely respected for his diagnostic precision and advanced treatment methods. He has contributed to research in neurodegenerative diseases and published numerous papers. His empathetic care ensures improved outcomes for his patients. He practices at a prominent hospital in Ahmedabad.",
+    fee: 180,
+    hospitalId: 4,
+    hospitalName: "Sudarshan Neurocare Clinic"
+  },
+  {
+    _id: "7",
+    name: "Dr. Arjun Patel",
+    specialization: "Neurologist",
+    address: "Ahmedabad, India",
+    experience: 18,
+    success_rate: 94,
+    img: doc4,
+    about: "Dr. Arjun Patel is a leading neurologist with 18 years of clinical experience. He specializes in treating neurological disorders such as epilepsy, stroke, and migraines. Dr. Patel is widely respected for his diagnostic precision and advanced treatment methods. He has contributed to research in neurodegenerative diseases and published numerous papers. His empathetic care ensures improved outcomes for his patients. He practices at a prominent hospital in Ahmedabad.",
+    fee: 180,
+    hospitalId: 4,
+    hospitalName: "Sudarshan Neurocare Clinic"
+  },
+  {
+    _id: "7",
+    name: "Dr. Arjun Patel",
+    specialization: "Neurologist",
+    address: "Ahmedabad, India",
+    experience: 18,
+    success_rate: 94,
+    img: doc4,
+    about: "Dr. Arjun Patel is a leading neurologist with 18 years of clinical experience. He specializes in treating neurological disorders such as epilepsy, stroke, and migraines. Dr. Patel is widely respected for his diagnostic precision and advanced treatment methods. He has contributed to research in neurodegenerative diseases and published numerous papers. His empathetic care ensures improved outcomes for his patients. He practices at a prominent hospital in Ahmedabad.",
+    fee: 180,
+    hospitalId: 4,
+    hospitalName: "Sudarshan Neurocare Clinic"
+  },
+  {
+    _id: "7",
+    name: "Dr. Arjun Patel",
+    specialization: "Neurologist",
+    address: "Ahmedabad, India",
+    experience: 18,
+    success_rate: 94,
+    img: doc4,
+    about: "Dr. Arjun Patel is a leading neurologist with 18 years of clinical experience. He specializes in treating neurological disorders such as epilepsy, stroke, and migraines. Dr. Patel is widely respected for his diagnostic precision and advanced treatment methods. He has contributed to research in neurodegenerative diseases and published numerous papers. His empathetic care ensures improved outcomes for his patients. He practices at a prominent hospital in Ahmedabad.",
+    fee: 180,
+    hospitalId: 4,
+    hospitalName: "Sudarshan Neurocare Clinic"
+  },
+  {
+    _id: "7",
+    name: "Dr. Arjun Patel",
+    specialization: "Neurologist",
+    address: "Ahmedabad, India",
+    experience: 18,
+    success_rate: 94,
+    img: doc4,
+    about: "Dr. Arjun Patel is a leading neurologist with 18 years of clinical experience. He specializes in treating neurological disorders such as epilepsy, stroke, and migraines. Dr. Patel is widely respected for his diagnostic precision and advanced treatment methods. He has contributed to research in neurodegenerative diseases and published numerous papers. His empathetic care ensures improved outcomes for his patients. He practices at a prominent hospital in Ahmedabad.",
+    fee: 180,
+    hospitalId: 4,
+    hospitalName: "Sudarshan Neurocare Clinic"
   },
   {
     _id: "8",
@@ -308,7 +550,48 @@ export const doctors = [
     success_rate: 96,
     img: doc5,
     about: "Dr. Kavita Nair is a renowned gynecologist with 15 years of experience. She specializes in high-risk pregnancies, fertility treatments, and gynecological surgeries. Dr. Nair is known for her compassionate care and expertise in women's health. She has helped hundreds of women achieve healthy pregnancies. Her clinic in Kochi offers a range of services with advanced facilities. She is also actively involved in health education programs.",
-    fee: 160
+    fee: 160,
+    hospitalId: 5,
+    hospitalName: "Sree Devi Women's Hospital"
+  },
+  {
+    _id: "8",
+    name: "Dr. Kavita Nair",
+    specialization: "Gynecologist",
+    address: "Kochi, India",
+    experience: 15,
+    success_rate: 96,
+    img: doc5,
+    about: "Dr. Kavita Nair is a renowned gynecologist with 15 years of experience. She specializes in high-risk pregnancies, fertility treatments, and gynecological surgeries. Dr. Nair is known for her compassionate care and expertise in women's health. She has helped hundreds of women achieve healthy pregnancies. Her clinic in Kochi offers a range of services with advanced facilities. She is also actively involved in health education programs.",
+    fee: 160,
+    hospitalId: 5,
+    hospitalName: "Sree Devi Women's Hospital"
+  },
+  {
+    _id: "8",
+    name: "Dr. Kavita Nair",
+    specialization: "Gynecologist",
+    address: "Kochi, India",
+    experience: 15,
+    success_rate: 96,
+    img: doc5,
+    about: "Dr. Kavita Nair is a renowned gynecologist with 15 years of experience. She specializes in high-risk pregnancies, fertility treatments, and gynecological surgeries. Dr. Nair is known for her compassionate care and expertise in women's health. She has helped hundreds of women achieve healthy pregnancies. Her clinic in Kochi offers a range of services with advanced facilities. She is also actively involved in health education programs.",
+    fee: 160,
+    hospitalId: 5,
+    hospitalName: "Sree Devi Women's Hospital"
+  },
+  {
+    _id: "8",
+    name: "Dr. Kavita Nair",
+    specialization: "Gynecologist",
+    address: "Kochi, India",
+    experience: 15,
+    success_rate: 96,
+    img: doc5,
+    about: "Dr. Kavita Nair is a renowned gynecologist with 15 years of experience. She specializes in high-risk pregnancies, fertility treatments, and gynecological surgeries. Dr. Nair is known for her compassionate care and expertise in women's health. She has helped hundreds of women achieve healthy pregnancies. Her clinic in Kochi offers a range of services with advanced facilities. She is also actively involved in health education programs.",
+    fee: 160,
+    hospitalId: 5,
+    hospitalName: "Sree Devi Women's Hospital"
   },
   {
     _id: "9",
@@ -319,7 +602,9 @@ export const doctors = [
     success_rate: 91,
     img: doc6,
     about: "Dr. Rajesh Iyer is a respected psychiatrist with 12 years of experience in mental health care. He specializes in treating anxiety, depression, and mood disorders. Dr. Iyer focuses on creating personalized treatment plans that include therapy and medication. His empathetic approach and focus on holistic well-being have improved many lives. He regularly conducts mental health awareness programs in Jaipur. His clinic provides a safe and supportive environment for patients.",
-    fee: 130
+    fee: 130,
+    hospitalId: 6,
+    hospitalName: "MindCare Mental Health Centre"
   },
   {
     _id: "10",
@@ -330,7 +615,9 @@ export const doctors = [
     success_rate: 89,
     img: doc11,
     about: "Dr. Pooja Verma is an experienced ENT specialist with expertise in treating ear, nose, and throat conditions. She specializes in sinusitis treatments, hearing loss management, and tonsil surgeries. Dr. Verma is committed to providing accurate diagnoses and minimally invasive treatments. Her approachable nature makes her a favorite among patients. She regularly attends workshops to stay updated on the latest treatments. Her clinic in Lucknow offers advanced ENT care.",
-    fee: 100
+    fee: 100,
+    hospitalId: 7,
+    hospitalName: "ClearEars ENT Hospital"
   },
   {
     _id: "11",
@@ -341,7 +628,9 @@ export const doctors = [
     success_rate: 98,
     img: doc8,
     about: "Dr. Sanjay Gupta is a veteran cardiologist with over 22 years of experience. He specializes in diagnosing and treating complex heart diseases, including angioplasty and bypass surgery. Dr. Gupta is known for his precision and commitment to saving lives. He has worked in leading cardiac care centers and contributed to heart disease research. His clinic in Patna provides cutting-edge cardiac treatments. He regularly educates patients on preventive heart care.",
-    fee: 220
+    fee: 220,
+    hospitalId: 8,
+    hospitalName: "CardioPlus Heart Institute"
   },
   {
     _id: "12",
@@ -352,7 +641,9 @@ export const doctors = [
     success_rate: 92,
     img: doc9,
     about: "Dr. Neha Kapoor is an expert radiologist with 11 years of experience in medical imaging. She specializes in MRI, CT scans, and ultrasound diagnostics. Dr. Kapoor is known for her accuracy in interpreting medical images and collaborating with other specialists. Her commitment to patient care ensures timely and accurate diagnoses. She has worked in leading hospitals in Indore. Her imaging center is equipped with state-of-the-art technology.",
-    fee: 140
+    fee: 140,
+    hospitalId: 9,
+    hospitalName: "ClearView Imaging Centre"
   },
   {
     _id: "13",
@@ -363,10 +654,91 @@ export const doctors = [
     success_rate: 94,
     img: doc10,
     about: "Dr. Amar Chatterjee is a prominent gastroenterologist with 16 years of experience. He specializes in treating digestive system disorders, including liver diseases and endoscopy procedures. Dr. Chatterjee is dedicated to providing effective and personalized care for his patients. His research on liver health has earned him recognition in medical communities. He practices at a renowned hospital in Kolkata. His focus on lifestyle-based treatment is widely appreciated.",
-    fee: 170
+    fee: 170,
+    hospitalId: 10,
+    hospitalName: "GastroCare Clinic"
   },
-  // Additional doctors can follow the same format
+  {
+    _id: "13",
+    name: "Dr. Amar Chatterjee",
+    specialization: "Gastroenterologist",
+    address: "Kolkata, India",
+    experience: 16,
+    success_rate: 94,
+    img: doc10,
+    about: "Dr. Amar Chatterjee is a prominent gastroenterologist with 16 years of experience. He specializes in treating digestive system disorders, including liver diseases and endoscopy procedures. Dr. Chatterjee is dedicated to providing effective and personalized care for his patients. His research on liver health has earned him recognition in medical communities. He practices at a renowned hospital in Kolkata. His focus on lifestyle-based treatment is widely appreciated.",
+    fee: 170,
+    hospitalId: 10,
+    hospitalName: "GastroCare Clinic"
+  },
+  {
+    _id: "13",
+    name: "Dr. Amar Chatterjee",
+    specialization: "Gastroenterologist",
+    address: "Kolkata, India",
+    experience: 16,
+    success_rate: 94,
+    img: doc10,
+    about: "Dr. Amar Chatterjee is a prominent gastroenterologist with 16 years of experience. He specializes in treating digestive system disorders, including liver diseases and endoscopy procedures. Dr. Chatterjee is dedicated to providing effective and personalized care for his patients. His research on liver health has earned him recognition in medical communities. He practices at a renowned hospital in Kolkata. His focus on lifestyle-based treatment is widely appreciated.",
+    fee: 170,
+    hospitalId: 10,
+    hospitalName: "GastroCare Clinic"
+  },
+  {
+    _id: "13",
+    name: "Dr. Amar Chatterjee",
+    specialization: "Gastroenterologist",
+    address: "Kolkata, India",
+    experience: 16,
+    success_rate: 94,
+    img: doc10,
+    about: "Dr. Amar Chatterjee is a prominent gastroenterologist with 16 years of experience. He specializes in treating digestive system disorders, including liver diseases and endoscopy procedures. Dr. Chatterjee is dedicated to providing effective and personalized care for his patients. His research on liver health has earned him recognition in medical communities. He practices at a renowned hospital in Kolkata. His focus on lifestyle-based treatment is widely appreciated.",
+    fee: 170,
+    hospitalId: 10,
+    hospitalName: "GastroCare Clinic"
+  },
+  {
+    _id: "13",
+    name: "Dr. Amar Chatterjee",
+    specialization: "Gastroenterologist",
+    address: "Kolkata, India",
+    experience: 16,
+    success_rate: 94,
+    img: doc10,
+    about: "Dr. Amar Chatterjee is a prominent gastroenterologist with 16 years of experience. He specializes in treating digestive system disorders, including liver diseases and endoscopy procedures. Dr. Chatterjee is dedicated to providing effective and personalized care for his patients. His research on liver health has earned him recognition in medical communities. He practices at a renowned hospital in Kolkata. His focus on lifestyle-based treatment is widely appreciated.",
+    fee: 170,
+    hospitalId: 10,
+    hospitalName: "GastroCare Clinic"
+  },
+  {
+    _id: "13",
+    name: "Dr. Amar Chatterjee",
+    specialization: "Gastroenterologist",
+    address: "Kolkata, India",
+    experience: 16,
+    success_rate: 94,
+    img: doc10,
+    about: "Dr. Amar Chatterjee is a prominent gastroenterologist with 16 years of experience. He specializes in treating digestive system disorders, including liver diseases and endoscopy procedures. Dr. Chatterjee is dedicated to providing effective and personalized care for his patients. His research on liver health has earned him recognition in medical communities. He practices at a renowned hospital in Kolkata. His focus on lifestyle-based treatment is widely appreciated.",
+    fee: 170,
+    hospitalId: 10,
+    hospitalName: "GastroCare Clinic"
+  },
+  {
+    _id: "13",
+    name: "Dr. Amar Chatterjee",
+    specialization: "Gastroenterologist",
+    address: "Kolkata, India",
+    experience: 16,
+    success_rate: 94,
+    img: doc10,
+    about: "Dr. Amar Chatterjee is a prominent gastroenterologist with 16 years of experience. He specializes in treating digestive system disorders, including liver diseases and endoscopy procedures. Dr. Chatterjee is dedicated to providing effective and personalized care for his patients. His research on liver health has earned him recognition in medical communities. He practices at a renowned hospital in Kolkata. His focus on lifestyle-based treatment is widely appreciated.",
+    fee: 170,
+    hospitalId: 10,
+    hospitalName: "GastroCare Clinic"
+  }
 ];
+
+
 
 
 export const doctor_specializations = [

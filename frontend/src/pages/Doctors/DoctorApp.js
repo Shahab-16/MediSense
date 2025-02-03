@@ -9,7 +9,8 @@ import Appointment from '../../components/Doctors/Appointment';
 import AppointmentPage from './AppointmentPage';
 import MyAppointmentPage from './MyAppointmentPage';
 import ContactPage from './ContactPage';
-
+import InsideHospital from '../../components/Doctors/InsideHospital';
+import HospitalPage from './HospitalPage';
 import Payment from './Payment';
 const Doctors = () => {
   return (
@@ -29,6 +30,7 @@ const Doctors = () => {
           <Route path="/appointment/:docId" element={<AppointmentPage/>}/>
           <Route path="/appointment/booking/:docId" element={<MyAppointmentPage/>}/>
           <Route path="/contactUs" element={<ContactPage/>}/>
+          <Route path="/hospital/:hospitalId" element={<HospitalPage/>}/>
         </Routes>
       </div>
 

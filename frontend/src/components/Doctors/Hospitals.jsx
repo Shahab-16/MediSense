@@ -1,6 +1,7 @@
 import React from 'react'
 import { FaHospital } from "react-icons/fa";
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { images } from '../../assets/asset';
 
 const hospitals = [
@@ -17,19 +18,20 @@ const hospitals = [
   { id: 11, name: "Hospital 11", image: images.hospital, address: "Kochi, India", contact: "+91 2134567890", rating: 4.7 },
   { id: 12, name: "Hospital 12", image: images.hospital, address: "Chandigarh, India", contact: "+91 3245678901", rating: 4.0 },
 ];
-
 export default function Hospitals() {
+  const navigate=useNavigate();
   return (
     <div className="container mx-auto px-8 py-8 max-w-screen-xl">
       <div className='flex flex-col items-center text-center'>
         <img className='w-40 mb-4' src={images.health_logo} alt="Health Logo" />
         <p className='text-3xl font-bold text-blacl'>Find the Best Hospitals Near You</p>
       </div>
-      
       <div className='mt-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8'>
         {hospitals.map((hospital) => (
-          <div key={hospital.id} className='bg-white shadow-lg rounded-xl overflow-hidden transform transition-all hover:scale-105 hover:shadow-xl'>
-            <img src={hospital.image} alt={hospital.name} className="h-48 w-full object-cover" />
+          <div key={hospital.id} className='bg-white shadow-lg rounded-xl overflow-hidden transform transition-all hover:scale-105 hover:shadow-xl hover:cursor-pointer'>
+            <Link to={`/dashboard/doctors/hospital/${hospital.id}`}>
+            <img  src={hospital.image} alt={hospital.name} className="h-48 w-full object-cover " />
+            </Link>
             <div className='p-4'>
               <h2 className='text-xl font-bold text-gray-800'>{hospital.name}</h2>
               <p className='text-gray-600'>{hospital.address}</p>
