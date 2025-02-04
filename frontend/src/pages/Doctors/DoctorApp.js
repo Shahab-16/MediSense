@@ -12,6 +12,7 @@ import ContactPage from './ContactPage';
 import InsideHospital from '../../components/Doctors/InsideHospital';
 import HospitalPage from './HospitalPage';
 import Payment from './Payment';
+import AllHosptalsPage from './AllHospitalsPage';
 const Doctors = () => {
   return (
     <div className="min-h-screen flex flex-col">
@@ -31,6 +32,7 @@ const Doctors = () => {
           <Route path="/appointment/booking/:docId" element={<MyAppointmentPage/>}/>
           <Route path="/contactUs" element={<ContactPage/>}/>
           <Route path="/hospital/:hospitalId" element={<HospitalPage/>}/>
+          <Route path="/allhospitals" element={<AllHosptalsPage/>}/>
         </Routes>
       </div>
 
