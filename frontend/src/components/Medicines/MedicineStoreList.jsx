@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { FaClinicMedical, FaPills, FaStar, FaMapMarkerAlt, FaPhoneAlt } from 'react-icons/fa';
 
 const MedicineStoreList = () => {
-  // Hardcoded dummy data
   const stores = [
     { 
       id: 1, 
