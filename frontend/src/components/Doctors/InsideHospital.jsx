@@ -20,8 +20,18 @@ export default function InsideHospital() {
         findDoctor();
     }, [doctors, hospitalId])
     return (
-        <div className='container mx-auto px-8 py-8'>
-            <div className='w-full grid grid-cols-4 gap-4 gap-y-6'>
+        <div className='container mx-auto px-8 py-8  flex ml-2'>
+            {/* for finding doctors by specilaity */}
+            <div className='flex flex-col'>
+                <div className='flex flex-col text-gray gap-4'>
+                <p className='border w-[170px] px-2 py-2'>General Physician</p>
+                <p className='border w-[170px] px-2 py-2'>Gynecologist</p>
+                <p className='border w-[170px] px-2 py-2'>Dermatologist</p>
+                <p className='border w-[170px] px-2 py-2'>Pediatricians</p>
+                <p className='border w-[170px] px-2 py-2'>Neurologist</p>
+                </div>
+            </div>
+            <div className='w-full grid grid-cols-4 gap-4 gap-y-6 ml-8'>
                 {filterDoc
                     .map((item, index) => (
                         <div
@@ -30,7 +40,7 @@ export default function InsideHospital() {
                         >
                             <img
                                 onClick={() => navigate(`/dashboard/doctors/appointment/${item._id}`)}
-                                className='bg-blue-100 w-full h-48 object-cover'
+                                className='bg-blue-100 w-full object-cover overflow-hidden'
                                 src={item.img}
                                 alt={item.name}
                             />

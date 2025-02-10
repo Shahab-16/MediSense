@@ -6,7 +6,6 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { useEffect } from 'react';
 export default function AllDoctorsList() {
     const {speciality}=useParams();
-    console.log(speciality);
     const navigate=useNavigate();
     const [filterDoc,setFilterDoc]=useState([]);
     const applyFilter=()=> {
@@ -27,7 +26,7 @@ export default function AllDoctorsList() {
       </p>
       <div className='flex flex-col sm:flex-row items-start gap-5 mt-5'>
         <div className='flex flex-col text-gray-500 text-lg gap-4'>
-          <p onClick={()=>speciality==='General physician' ? navigate('/dashboard/doctors/alldoctors') : navigate('/dashboard/doctors/alldoctors/General physician')} className={`border w-[170px] p-1 cursor-pointer  ${speciality==="General physician" ? "bg-indigo-50" :""}`}>General Physician</p>
+          <p onClick={()=>speciality==='General physician'   ? navigate('/dashboard/doctors/alldoctors') : navigate('/dashboard/doctors/alldoctors/General physician')} className={`border w-[170px] p-1 cursor-pointer  ${speciality==="General physician" ? "bg-indigo-50" :""}`}>General Physician</p>
           <p onClick={()=>speciality==='Gynecologist' ?navigate('/dashboard/doctors/alldoctors') : navigate('/dashboard/doctors/alldoctors/Gynecologist')} className={`border w-[170px] p-1 cursor-pointer  ${speciality==="Gynecologist" ? "bg-indigo-50" :""}`}>Gynecologist</p>
           <p onClick={()=>speciality==='Dermatologist' ?navigate('/dashboard/doctors/alldoctors') : navigate('/dashboard/doctors/alldoctors/Dermatologist')} className={`border w-[170px] p-1 cursor-pointer ${speciality==="Dermatologist" ? "bg-indigo-50" :""} `}>Dermatologist</p>
           <p onClick={()=>speciality==='Pediatrician' ?navigate('/dashboard/doctors/alldoctors') : navigate('/dashboard/doctors/alldoctors/Pediatrician')} className={`border w-[170px] p-1 cursor-pointer  ${speciality==="Pediatrician" ? "bg-indigo-50" :""}`}>Pediatricians</p>

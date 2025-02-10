@@ -46,6 +46,7 @@ const LoginForm = () => {
   const submitForm = async (e) => {
     e.preventDefault();
     navigate('/dashboard');
+    
     setloading(true);
     try {
       if (currState === "Login") {
