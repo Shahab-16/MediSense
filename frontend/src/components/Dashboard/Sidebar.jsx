@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { images } from '../../assets/asset';
 import { FaHome, FaUserCircle, FaUserMd, FaPills, FaCogs, FaCube, FaStethoscope, FaTachometerAlt } from 'react-icons/fa';
-import { BsChevronLeft, BsChevronRight,BsThreeDots } from 'react-icons/bs';
+import { BsChevronLeft, BsChevronRight, BsThreeDots } from 'react-icons/bs';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
@@ -15,10 +15,10 @@ const Sidebar = () => {
   };
 
   const handleNavigateHome = () => {
-    navigate("/");  
+    navigate("/");
   };
 
-const logoutHandler = () => {
+  const logoutHandler = () => {
     localStorage.removeItem("token");
     toast.success("Logout done successfully");
     setTimeout(() => {
@@ -28,27 +28,21 @@ const logoutHandler = () => {
 
   return (
     <div className="flex h-full min-h-screen">
-      {/* Fixed Blue Bar with Toggle Button */}
-      <div
-  className={`fixed bg-blue-800 h-screen sm:h-auto w-16 flex flex-col items-center gap-2 py-4`}
->
-  {/* Toggle Button */}
-  <button 
-    onClick={toggleSidebar}
-    className="text-white mb-4 p-2 rounded hover:bg-blue-800 flex items-center"
-  >
-    {/* Three Dots on Phone Screens */}
-    <BsThreeDots className="block sm:hidden text-2xl text-black" />
-    
-    {/* Arrow Icons on Larger Screens */}
-    {isOpen ? (
-      <BsChevronLeft className="hidden sm:block text-2xl h-screen mt-0" />
-    ) : (
-      <BsChevronRight className="hidden sm:block text-2xl h-screen" />
-    )}
-  </button>
-</div>  
+      <div className={`fixed bg-blue-800 h-screen sm:h-auto w-16 flex flex-col items-center gap-2 py-4 relative`}>
+        <button
+          onClick={toggleSidebar}
+          className="absolute top-4 left-1/2 transform -translate-x-1/2 text-white p-2 rounded flex items-center"
+        >
+          {isOpen ? (
+            <BsChevronLeft className="hidden sm:block text-2xl" />
+          ) : (
+            <BsChevronRight className="hidden sm:block text-2xl" />
+          )}
+        </button>
 
+        {/* Profile Icon */}
+        <FaUserCircle onClick={()=>navigate('/dashboard/userInfo')} className="text-white text-4xl mt-12 cursor-pointer" />
+      </div>
 
       {/* Sidebar Content */}
       {isOpen && (
@@ -80,7 +74,7 @@ const logoutHandler = () => {
                 Models
               </button>
               <button
-                onClick={() => logoutHandler() } // Replace with your logout logic
+                onClick={() => logoutHandler()}
                 className="w-full py-2 flex items-center justify-center rounded bg-red-500 text-white font-semibold hover:bg-red-700 transition duration-300"
               >
                 Logout

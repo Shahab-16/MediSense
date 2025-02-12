@@ -20,6 +20,8 @@ const TopDoctors = () => {
                 </div>
                 <p className='text-[#262626] text-lg font-medium px-4'>{item.name}</p>
                 <p className='text-[#262626] text-lg font-medium px-4'>{item.specialization}</p>
+                <p className='text-[#262626] text-lg font-medium px-4'>{item.hospitalName}</p>
+                <p className='text-[#262626] text-lg font-medium px-4'>{item.rating}</p>
             </div>
         ))}
       </div>
