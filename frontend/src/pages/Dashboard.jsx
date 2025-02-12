@@ -6,8 +6,7 @@ import DashboardHome from '../components/Dashboard/DashboardHome';
 import Doctors from './Doctors/DoctorApp';
 import MedicinesApp from './Medicines/MedicinesApp';
 import Models from './Models';
-import ProfilePage from './UserInfoPage';
-import UserInfoPage from './UserInfoPage';
+import UserInfoApp from './UserInfo/UserInfoApp';
 const Dashboard = () => {
   const [isSidebarOpen, setIsSidebarOpen] = React.useState(true);
 
@@ -25,7 +24,7 @@ const Dashboard = () => {
           <Route path="/doctors/*" element={<Doctors />} />
           <Route path="/medicines/*" element={<MedicinesApp />} />
           <Route path="/models" element={<Models />} />
-          <Route path="/userInfo" element={<UserInfoPage/>}/>
+          <Route path="/userInfo/*" element={<UserInfoApp/>}/>
           <Route path="*" element={<Navigate to="/dashboard/home" />} />
         </Routes>
       </div>
