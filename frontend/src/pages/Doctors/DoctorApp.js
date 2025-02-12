@@ -32,6 +32,7 @@ const Doctors = () => {
           <Route path="/appointment/booking/:docId" element={<MyAppointmentPage/>}/>
           <Route path="/contactUs" element={<ContactPage/>}/>
           <Route path="/hospital/:hospitalId" element={<HospitalPage/>}/>
+          <Route path="/hospital/:hospitalId/:speciality" element={<HospitalPage/>}/>
           <Route path="/allhospitals" element={<AllHosptalsPage/>}/>
         </Routes>
       </div>

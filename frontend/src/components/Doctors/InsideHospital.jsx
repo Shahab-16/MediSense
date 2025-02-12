@@ -8,27 +8,32 @@ import { AllHospitals } from '../../assets/asset';
 export default function InsideHospital() {
     const navigate = useNavigate();
     const { hospitalId } = useParams();
+    const {speciality}=useParams();
     const [filterDoc, setFilter] = useState([]);
     const [hosInfo, setHos] = useState(null);
     useEffect(() => {
-        setHos(AllHospitals.find(hos => hos.hospitalId == hospitalId));
+        setHos(AllHospitals.find(hos => hos.hospitalId ==hospitalId));
     }, [AllHospitals, hospitalId]);
     const findDoctor = () => {
-        setFilter(doctors.filter(doc => doc.hospitalId == hospitalId));
+        if(speciality)
+        setFilter(doctors.filter(doc => (doc.hospitalId == hospitalId ) && ( doc.specialization==speciality)));
+        else{
+            setFilter(doctors.filter(doc=>(doc.hospitalId==hospitalId)));
+        }
     }
     useEffect(() => {
         findDoctor();
-    }, [doctors, hospitalId])
+    }, [doctors, hospitalId,speciality])
     return (
         <div className='container mx-auto px-8 py-8  flex ml-2'>
             {/* for finding doctors by specilaity */}
             <div className='flex flex-col'>
                 <div className='flex flex-col text-gray gap-4'>
-                <p className='border w-[170px] px-2 py-2'>General Physician</p>
-                <p className='border w-[170px] px-2 py-2'>Gynecologist</p>
-                <p className='border w-[170px] px-2 py-2'>Dermatologist</p>
-                <p className='border w-[170px] px-2 py-2'>Pediatricians</p>
-                <p className='border w-[170px] px-2 py-2'>Neurologist</p>
+                <p onClick={()=>speciality==='General physician'?navigate(`/dashboard/doctors/hospital/${hospitalId}`): navigate(`/dashboard/doctors/hospital/${hospitalId}/General physician`)} className={`border w-[175px] p-2 cursor-pointer  ${speciality==="General physician" ? "bg-indigo-50" :""}`}>General Physician</p>
+                <p onClick={()=>speciality==='Gynecologist'?navigate(`/dashboard/doctors/hospital/${hospitalId}`): navigate(`/dashboard/doctors/hospital/${hospitalId}/Gynecologist`)}className={`border w-[175px] p-2 cursor-pointer  ${speciality==="Gynecologist" ? "bg-indigo-50" :""}`} >Gynecologist</p>
+                <p onClick={()=>speciality==='Dermatologis'?navigate(`/dashboard/doctors/hospital/${hospitalId}`): navigate(`/dashboard/doctors/hospital/${hospitalId}/Dermatologist`)}className={`border w-[175px] p-2 cursor-pointer  ${speciality==="Dermatologist" ? "bg-indigo-50" :""}`}>Dermatologist</p>
+                <p onClick={()=>speciality==='Pediatricians'?navigate(`/dashboard/doctors/hospital/${hospitalId}`): navigate(`/dashboard/doctors/hospital/${hospitalId}/Pediatricians`)} className={`border w-[175px] p-2 cursor-pointer  ${speciality==="Pediatricians" ? "bg-indigo-50" :""}`}>Pediatricians</p>
+                <p onClick={()=>speciality==='Neurologist'?navigate(`/dashboard/doctors/hospital/${hospitalId}`): navigate(`/dashboard/doctors/hospital/${hospitalId}/Neurologist`)}className={`border w-[175px] p-2 cursor-pointer  ${speciality==="Neurologist" ? "bg-indigo-50" :""}`}>Neurologist</p>
                 </div>
             </div>
             <div className='w-full grid grid-cols-4 gap-4 gap-y-6 ml-8'>
