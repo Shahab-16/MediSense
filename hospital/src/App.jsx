@@ -3,7 +3,7 @@ import React from 'react'
 const App = () => {
   return (
     <div className='min-h-screen bg-blue-500 text-black'>
-      <h1>Hello Shahab</h1>
+      <h1>Hello</h1>
     </div>
   )
 }
