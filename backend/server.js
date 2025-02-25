@@ -16,6 +16,8 @@ const allowedOrigins = [
     'https://medisense-frontend.vercel.app',
     'https://medisense-doctor-section.vercel.app',
     'https://medisense-admin-section.vercel.app/admin',
+    'https://medisense-pharmacy.vercel.app',
+    'https://medisense-hospital.vercel.app',
 ];
 
 const corsOptions = {
