@@ -66,21 +66,21 @@ const logoutHandler = () => {
             className="flex items-center gap-3 text-base text-gray-700 p-2 rounded-md hover:bg-gray-100 transition-all duration-300"
           >
             <MdOutlineEventNote size={18} />
-            <p>Appointments</p>
+            <p>Hospital Info</p>
           </NavLink>
           <NavLink
             to="/admin/doctors/doctor-list"
             className="flex items-center gap-3 text-base text-gray-700 p-2 rounded-md hover:bg-gray-100 transition-all duration-300"
           >
             <BsListCheck size={18} />
-            <p>Doctors List</p>
+            <p>Hospital List</p>
           </NavLink>
           <NavLink
             to="/admin/doctors/add-doctors"
             className="flex items-center gap-3 text-base text-gray-700 p-2 rounded-md hover:bg-gray-100 transition-all duration-300"
           >
             <MdPersonAddAlt1 size={18} />
-            <p>Add Doctor</p>
+            <p>Add Hospital</p>
           </NavLink>
         </div>
       )}

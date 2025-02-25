@@ -34,6 +34,7 @@ import Metoprolol from './Metoprolol.jpeg';
 // import Dextromethorphan from './Dextromethorphan.jpg';
 import Phenylephrine from './Phenylephrine.jpg';
 import Paracetamol from './Paracetamol.jpg';
+import hospital from './hospital.jpg';
 export const assets ={
     logo,
     add_icon,
@@ -42,7 +43,136 @@ export const assets ={
     upload_area,
     parcel_icon,
     doc1,
+    hospital
 }
+export const AllHospitals = [
+  {
+    hospitalId: 1,
+    name: "Shanti Multispeciality Hospital",
+    address: "123 MG Road, Hyderabad, India",
+    contact: "+91 98765 43210",
+    rating: 4.7
+  },
+  {
+    hospitalId: 2,
+    name: "Vivekanand Medical Centre",
+    address: "45 FC Road, Pune, India",
+    contact: "+91 91234 56789",
+    rating: 4.6
+  },
+  {
+    hospitalId: 3,
+    name: "Little Steps Children's Hospital",
+    address: "78 Whitefield, Bangalore, India",
+    contact: "+91 87654 32109",
+    rating: 4.8
+  },
+  {
+    hospitalId: 4,
+    name: "Metro Care Hospital",
+    address: "56 Park Street, Kolkata, India",
+    contact: "+91 99887 77665",
+    rating: 4.5
+  },
+  {
+    hospitalId: 5,
+    name: "Sunrise Super Speciality Hospital",
+    address: "32 Green Avenue, Mumbai, India",
+    contact: "+91 88992 55441",
+    rating: 4.6
+  },
+  {
+    hospitalId: 6,
+    name: "Apollo Health City",
+    address: "Apollo Road, Chennai, India",
+    contact: "+91 90001 22334",
+    rating: 4.9
+  },
+  {
+    hospitalId: 7,
+    name: "City Heart Institute",
+    address: "90 Nehru Nagar, Delhi, India",
+    contact: "+91 77665 44332",
+    rating: 4.8
+  },
+  {
+    hospitalId: 8,
+    name: "Harmony General Hospital",
+    address: "23 MG Road, Jaipur, India",
+    contact: "+91 99887 66754",
+    rating: 4.5
+  },
+  {
+    hospitalId: 9,
+    name: "Care & Cure Medical Centre",
+    address: "45 Old Town, Lucknow, India",
+    contact: "+91 88990 55442",
+    rating: 4.4
+  },
+  {
+    hospitalId: 10,
+    name: "Tranquil Mind Psychiatric Hospital",
+    address: "12 Peace Street, Chandigarh, India",
+    contact: "+91 77665 43210",
+    rating: 4.7
+  },
+  {
+    hospitalId: 11,
+    name: "Green Life Orthopedic Hospital",
+    address: "66 West Avenue, Ahmedabad, India",
+    contact: "+91 66554 99887",
+    rating: 4.6
+  },
+  {
+    hospitalId: 12,
+    name: "Lotus Women’s Care Hospital",
+    address: "19 Lotus Lane, Bengaluru, India",
+    contact: "+91 77662 33211",
+    rating: 4.9
+  },
+  {
+    hospitalId: 13,
+    name: "Serenity Skin & Aesthetic Clinic",
+    address: "7A Fashion Street, Surat, India",
+    contact: "+91 66554 44321",
+    rating: 4.5
+  },
+  {
+    hospitalId: 14,
+    name: "Elite Eye Care Hospital",
+    address: "5 Vision Road, Nagpur, India",
+    contact: "+91 77889 33221",
+    rating: 4.7
+  },
+  {
+    hospitalId: 15,
+    name: "Golden Age Geriatric Hospital",
+    address: "88 Retirement Lane, Coimbatore, India",
+    contact: "+91 99880 55677",
+    rating: 4.6
+  },
+  {
+    hospitalId: 16,
+    name: "Nova Kidney & Urology Centre",
+    address: "102 Kidney Lane, Bhopal, India",
+    contact: "+91 90909 88776",
+    rating: 4.8
+  },
+  {
+    hospitalId: 17,
+    name: "Healing Touch Rehabilitation Centre",
+    address: "22 Wellness Avenue, Indore, India",
+    contact: "+91 77766 55443",
+    rating: 4.5
+  },
+  {
+    hospitalId: 18,
+    name: "Summit Trauma & Emergency Hospital",
+    address: "67 Rescue Road, Patna, India",
+    contact: "+91 88899 11223",
+    rating: 4.7
+  }
+];
 export const doctors = [
   {
     _id: "3",
