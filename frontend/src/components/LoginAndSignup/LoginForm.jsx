@@ -45,7 +45,7 @@ const LoginForm = () => {
 
   const submitForm = async (e) => {
     e.preventDefault();
-    navigate('/dashboard');
+    //navigate('/dashboard');
     setloading(true);
     try {
       if (currState === "Login") {
@@ -64,8 +64,16 @@ const LoginForm = () => {
               "https://medisense-admin-section.vercel.app/admin";
           } else if (role === "doctor") {
             window.location.href =
-              "https://medisense-doctor-section.vercel.app/";
-          } else {
+              "https://medisense-doctor.vercel.app/";
+          } else if(role === "pharmacy"){
+            window.location.href =
+            "https://medisense-pharmacy.vercel.app/";
+          }
+          else if(role === "hospital"){
+            window.location.href =
+            "https://medisense-hospital.vercel.app/";
+          }
+          else{
             navigate("/dashboard/home"); // For relative paths, keep using navigate
           }
 

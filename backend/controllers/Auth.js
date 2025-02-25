@@ -94,7 +94,7 @@ exports.Login = async (req, res) => {
     ];
 
     // Check role for doctor or admin
-    if (role === "doctor" || role === "admin") {
+    if (role === "doctor" || role === "admin" || role === "pharmacy" || role === "hospital") {
       const isValid = validCredentials.some(
         (cred) => cred.email === email && cred.password === password
       );

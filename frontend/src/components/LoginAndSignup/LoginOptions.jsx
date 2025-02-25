@@ -50,7 +50,7 @@ const LoginOptions = () => {
           </button>
 
           <button
-            onClick={() => handleOptionClick("pharmacist")}
+            onClick={() => handleOptionClick("pharmacy")}
             className="w-full py-3 bg-gradient-to-r from-orange-500 to-yellow-500 text-white rounded-lg shadow-md hover:scale-105 transform transition duration-300 hover:from-orange-600 hover:to-yellow-600 text-lg font-semibold"
           >
             Medicine Stores
