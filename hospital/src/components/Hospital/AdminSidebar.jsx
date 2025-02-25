@@ -30,13 +30,14 @@ const HospitalSidebar = () => {
   };
 
   const logoutHandler = () => {
-    localStorage.removeItem("token");
-    toast.success("Logout done successfully");
-    setTimeout(() => {
-      window.location.href = "https://hospital-frontend.vercel.app/";
-    }, 2000);
-  };
+      localStorage.removeItem("token");
+      toast.success("Logout done successfully");
+      setTimeout(() => {
+        window.location.href = "https://medisense-frontend.vercel.app/";
+      }, 2000);
+    };
 
+    
   return (
     <div className="bg-white text-gray-800 w-full md:w-1/4 lg:max-w-[20%] p-6 flex flex-col gap-4 border-r shadow-md">
       <NavLink

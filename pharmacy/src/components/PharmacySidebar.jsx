@@ -29,11 +29,11 @@ const PharmacySidebar = () => {
     navigate("/hospital/profile");
   };
 
-  const logoutHandler = () => {
+const logoutHandler = () => {
     localStorage.removeItem("token");
     toast.success("Logout done successfully");
     setTimeout(() => {
-      window.location.href = "https://hospital-frontend.vercel.app/";
+      window.location.href = "https://medisense-frontend.vercel.app/";
     }, 2000);
   };
 
