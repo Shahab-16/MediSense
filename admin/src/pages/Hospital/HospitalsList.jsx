@@ -4,7 +4,7 @@ import { assets } from "../../assets/admin_assets/assets";
 import { AllHospitals } from "../../assets/admin_assets/assets";
 import { useNavigate } from "react-router-dom";
 
-const DoctorsList = () => {
+const HospitalsList = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
 
@@ -110,4 +110,4 @@ const DoctorsList = () => {
   );
 };
 
-export default DoctorsList;
+export default HospitalsList;

@@ -1,7 +1,7 @@
 import React from 'react'
 import { assets } from '../../assets/admin_assets/assets'
 
-const AddHospital = () => {
+const AddPharmacy = () => {
   return (
     <div className='h-full-screen w-full bg-gradient-to-r from-blue-100 to-blue-300 min-h-screen flex items-center justify-center overflow-hidden'>
       <form className='m-5 w-full max-w-4xl bg-white rounded-2xl shadow-lg p-8'>
@@ -51,4 +51,4 @@ const AddHospital = () => {
   )
 }
 
-export default AddHospital;
+export default AddPharmacy;

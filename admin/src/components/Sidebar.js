@@ -16,14 +16,14 @@ const Sidebar = () => {
   const [isMedicinesDropdownOpen, setMedicinesDropdownOpen] = useState(false);
   const navigate = useNavigate();
 
-  const doctorDropDownClick = () => {
+  const hospitalDropDownClick = () => {
     setDoctorsDropdownOpen(!isDoctorsDropdownOpen);
-    navigate("/admin/doctors");
+    navigate("/admin/hospital");
   };
 
-  const medicineDropDownClick = () => {
+  const pharmacyDropDownClick = () => {
     setMedicinesDropdownOpen(!isMedicinesDropdownOpen);
-    navigate("/admin/medicines");
+    navigate("/admin/pharmacy");
   };
 
 const logoutHandler = () => {
@@ -46,7 +46,7 @@ const logoutHandler = () => {
 
       {/* Doctors Section */}
       <div
-        onClick={() => doctorDropDownClick()}
+        onClick={() => hospitalDropDownClick()}
         className="flex justify-between items-center p-3 hover:bg-gray-100 rounded-md cursor-pointer transition-all duration-300"
       >
         <div className="flex items-center gap-3">
@@ -62,21 +62,21 @@ const logoutHandler = () => {
       {isDoctorsDropdownOpen && (
         <div className="flex flex-col gap-3 ml-6 mt-2 border-l-2 border-gray-300 pl-4">
           <NavLink
-            to="/admin/doctors/appointments"
+            to="/admin/hospital/total-hospitals-info"
             className="flex items-center gap-3 text-base text-gray-700 p-2 rounded-md hover:bg-gray-100 transition-all duration-300"
           >
             <MdOutlineEventNote size={18} />
             <p>Hospital Info</p>
           </NavLink>
           <NavLink
-            to="/admin/doctors/doctor-list"
+            to="/admin/hospital/list-hospitals"
             className="flex items-center gap-3 text-base text-gray-700 p-2 rounded-md hover:bg-gray-100 transition-all duration-300"
           >
             <BsListCheck size={18} />
             <p>Hospital List</p>
           </NavLink>
           <NavLink
-            to="/admin/doctors/add-doctors"
+            to="/admin/hospital/add-hospital"
             className="flex items-center gap-3 text-base text-gray-700 p-2 rounded-md hover:bg-gray-100 transition-all duration-300"
           >
             <MdPersonAddAlt1 size={18} />
@@ -87,7 +87,7 @@ const logoutHandler = () => {
 
       {/* Medicines Section */}
       <div
-        onClick={() => medicineDropDownClick()}
+        onClick={() => pharmacyDropDownClick()}
         className="flex justify-between items-center p-3 hover:bg-gray-100 rounded-md cursor-pointer transition-all duration-300"
       >
         <div className="flex items-center gap-3">
@@ -103,21 +103,21 @@ const logoutHandler = () => {
       {isMedicinesDropdownOpen && (
         <div className="flex flex-col gap-3 ml-6 mt-2 border-l-2 border-gray-300 pl-4">
           <NavLink
-            to="/admin/medicines/add-medicines"
+            to="/admin/pharmacy/add-pharmacy"
             className="flex items-center gap-3 text-base text-gray-700 p-2 rounded-md hover:bg-gray-100 transition-all duration-300"
           >
             <BsBoxArrowInDown size={18} />
             <p>Add Pharmacy</p>
           </NavLink>
           <NavLink
-            to="/admin/medicines/medicine-list"
+            to="/admin/pharmacy/list-all-pharmacies"
             className="flex items-center gap-3 text-base text-gray-700 p-2 rounded-md hover:bg-gray-100 transition-all duration-300"
           >
             <FaRegListAlt size={18} />
             <p>Pharmacy List</p>
           </NavLink>
           <NavLink
-            to="/admin/medicines/ordered-medicines"
+            to="/admin/pharmacy/total-pharmacies-info"
             className="flex items-center gap-3 text-base text-gray-700 p-2 rounded-md hover:bg-gray-100 transition-all duration-300"
           >
             <BsClipboardData size={18} />

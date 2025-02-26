@@ -4,7 +4,7 @@ import { AiOutlineDelete, AiOutlineSearch } from "react-icons/ai";
 import { assets } from "../../assets/admin_assets/assets";
 import { pharmacyList } from "../../assets/admin_assets/assets";
 import { useNavigate } from "react-router";
-const ListMedicines = () => {
+const ListAllPharmacy = () => {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
   const filteredPharmacy = pharmacyList.filter((pharmacy) =>
@@ -82,4 +82,4 @@ const ListMedicines = () => {
   );
 };
 
-export default ListMedicines;
+export default ListAllPharmacy;
