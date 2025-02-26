@@ -35,6 +35,7 @@ import Metoprolol from './Metoprolol.jpeg';
 import Phenylephrine from './Phenylephrine.jpg';
 import Paracetamol from './Paracetamol.jpg';
 import hospital from './hospital.jpg';
+import medical_store from './medical_store.jpg';
 export const assets ={
     logo,
     add_icon,
@@ -43,8 +44,32 @@ export const assets ={
     upload_area,
     parcel_icon,
     doc1,
-    hospital
+    hospital,
+    medical_store
 }
+export const pharmacyList = [
+  { name: "Healthy Life Pharmacy", location: "123 Main Street, City Center", status: "Open" },
+  { name: "MediCare Store", location: "45 Park Avenue, Downtown", status: "Closed" },
+  { name: "Wellness Drug Mart", location: "78 Greenway Road, Suburb", status: "Open" },
+  { name: "Quick Meds", location: "56 Market Street, Near Hospital", status: "Closed" },
+  { name: "Care Plus Pharmacy", location: "22 Elm Street, Residential Area", status: "Open" },
+  { name: "Good Health Pharmacy", location: "90 Broadway, Central Plaza", status: "Closed" },
+  { name: "MediFast Store", location: "10 Oak Avenue, Medical District", status: "Open" },
+  { name: "Vital Care Pharmacy", location: "33 Maple Street, West Side", status: "Closed" },
+  { name: "PharmaWorld", location: "77 Willow Lane, Near University", status: "Open" },
+  { name: "TrustMed Pharmacy", location: "88 Pine Road, Business Hub", status: "Open" },
+  { name: "SureCure Pharmacy", location: "150 Sunset Boulevard, East End", status: "Closed" },
+  { name: "Green Cross Pharmacy", location: "42 Hill Street, Uptown", status: "Open" },
+  { name: "MediTrust", location: "37 Forest Lane, Downtown", status: "Closed" },
+  { name: "Health First Pharmacy", location: "101 Riverbank Road, Near Park", status: "Open" },
+  { name: "LifeSaver Drugs", location: "58 Ocean Drive, Coastal Area", status: "Closed" },
+  { name: "Rapid Relief Pharmacy", location: "67 Valley Road, Countryside", status: "Open" },
+  { name: "Family Care Pharmacy", location: "79 Birch Avenue, Suburban Zone", status: "Closed" },
+  { name: "WellCure Meds", location: "25 Spring Street, Metro Station", status: "Open" },
+  { name: "CityMed Pharmacy", location: "31 Grand Avenue, Downtown", status: "Closed" },
+  { name: "EzyMeds Pharmacy", location: "14 Blossom Lane, Residential Area", status: "Open" }
+];
+
 export const AllHospitals = [
   {
     hospitalId: 1,

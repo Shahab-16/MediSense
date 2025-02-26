@@ -102,8 +102,7 @@ const DoctorsList = () => {
                 </button>
               </div>
             </div>
-          ))
-        ) : (
+          ))) : (
           <p className="text-center text-gray-600">No hospitals found.</p>
         )}
       </div>

@@ -51,7 +51,7 @@ const logoutHandler = () => {
       >
         <div className="flex items-center gap-3">
           <FiUser size={24} />
-          <p className="text-lg font-semibold">Doctors</p>
+          <p className="text-lg font-semibold">Hospital</p>
         </div>
         {isDoctorsDropdownOpen ? (
           <FiChevronUp size={20} />
@@ -92,7 +92,7 @@ const logoutHandler = () => {
       >
         <div className="flex items-center gap-3">
           <MdOutlineMedication size={24} />
-          <p className="text-lg font-semibold">Medicines</p>
+          <p className="text-lg font-semibold">Pharmacy</p>
         </div>
         {isMedicinesDropdownOpen ? (
           <FiChevronUp size={20} />
@@ -107,21 +107,21 @@ const logoutHandler = () => {
             className="flex items-center gap-3 text-base text-gray-700 p-2 rounded-md hover:bg-gray-100 transition-all duration-300"
           >
             <BsBoxArrowInDown size={18} />
-            <p>Add Medicines</p>
+            <p>Add Pharmacy</p>
           </NavLink>
           <NavLink
             to="/admin/medicines/medicine-list"
             className="flex items-center gap-3 text-base text-gray-700 p-2 rounded-md hover:bg-gray-100 transition-all duration-300"
           >
             <FaRegListAlt size={18} />
-            <p>Medicines List</p>
+            <p>Pharmacy List</p>
           </NavLink>
           <NavLink
             to="/admin/medicines/ordered-medicines"
             className="flex items-center gap-3 text-base text-gray-700 p-2 rounded-md hover:bg-gray-100 transition-all duration-300"
           >
             <BsClipboardData size={18} />
-            <p>Ordered Medicines</p>
+            <p>Pharmacy Info</p>
           </NavLink>
         </div>
       )}
