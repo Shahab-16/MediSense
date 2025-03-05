@@ -2,6 +2,10 @@ const express = require('express');
 const cors = require('cors');
 const connectDB = require('./config/Database');
 const userRoute = require('./routes/userRoute');
+//const adminRoute = require('./routes/admin');
+//const hospitalRoute = require('./routes/hospital');
+//const pharmacyRoute = require('./routes/pharmacy');
+
 require('dotenv').config();
 
 const app = express();
@@ -9,10 +13,13 @@ console.log("Backend is running");
 
 // Connect to the database
 connectDB()
-  .then(() => console.log("Connected to the database"))
-  .catch(err => console.error("Database connection error:", err));
+  .then(() => console.log("✅ Connected to the database"))
+  .catch(err => {
+    console.error("❌ Database connection error:", err);
+    process.exit(1); // Exit if database connection fails
+  });
 
-// Allowed origins for CORS (only domains are used, not paths)
+// Allowed origins for CORS
 const allowedOrigins = [
   'https://medisense-frontend.vercel.app',
   'https://medisense-doctor-section.vercel.app',
@@ -23,10 +30,8 @@ const allowedOrigins = [
 
 const corsOptions = {
   origin: function (origin, callback) {
-    // Allow requests with no origin (like mobile apps or curl requests)
-    if (!origin) return callback(null, true);
-    if (allowedOrigins.indexOf(origin) !== -1) {
-      return callback(null, true);
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
     } else {
       callback(new Error('Not allowed by CORS'));
     }
@@ -35,24 +40,27 @@ const corsOptions = {
   credentials: true
 };
 
-// Use CORS middleware
 app.use(cors(corsOptions));
-
-// Optionally, handle preflight OPTIONS requests explicitly
-app.options('*', cors(corsOptions));
-
-// Middleware to parse JSON
 app.use(express.json());
 
 // Routes
 app.use('/user', userRoute);
+//app.use('/admin', adminRoute);
+//app.use('/hospital', hospitalRoute);
+//app.use('/pharmacy', pharmacyRoute);
 
 app.get('/', (req, res) => {
-  res.send('Hello');
+  res.send('Hello, MediSense Backend is Running!');
+});
+
+// Global Error Handler (for better debugging)
+app.use((err, req, res, next) => {
+  console.error("❌ Error:", err.message);
+  res.status(500).json({ error: err.message });
 });
 
 // Start the server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+  console.log(`🚀 Server is running on port ${PORT}`);
 });

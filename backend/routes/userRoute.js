@@ -3,7 +3,7 @@ const router=express.Router()
 
 
 const {Signup,Login,SendOTP}=require('../controllers/Auth')
-const {authMiddleware,isUserMiddleware,isAdminMiddleware}=require('../middlewares/auth')
+const {authMiddleware,isUserMiddleware}=require('../middlewares/auth')
 
 
 router.post('/signup',Signup)

@@ -74,3 +74,60 @@ exports.isAdminMiddleware = async (req, res, next) => {
         })
     }
 }
+
+
+exports.isPharmacyMiddleware = async (req, res, next) => {
+    try{
+        if(req.user.role!=="pharmacy"){
+            return res.status(401).json({
+                success: false,
+                message: "You are not a pharmacy",
+            });
+        }
+        next();
+    }
+    catch(err){
+        return res.status(401).json({
+            success: false,
+            message: "You are not a pharmacy",
+        })
+    }
+}
+
+
+exports.isHospitalMiddleware = async (req, res, next) => {
+    try{
+        if(req.user.role!=="hospital"){
+            return res.status(401).json({
+                success: false,
+                message: "You are not a hospital",
+            });
+        }
+        next();
+    }
+    catch(err){
+        return res.status(401).json({
+            success: false,
+            message: "You are not a hospital",
+        })
+    }
+}
+
+
+exports.isDoctorMiddleware = async (req, res, next) => {
+    try{
+        if(req.user.role!=="doctor"){
+            return res.status(401).json({
+                success: false,
+                message: "You are not a doctor",
+            });
+        }
+        next();
+    }
+    catch(err){
+        return res.status(401).json({
+            success: false,
+            message: "You are not a doctor",
+        })
+    }
+}
