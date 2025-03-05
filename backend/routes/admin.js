@@ -2,17 +2,18 @@ const express = require("express");
 const router = express.Router();
 
 const { addHospital, listHospitals, removeHospital } = require("../controllers/admin/Hospital");
-const { addPharmacy, listAllPharmacies, removePharmacy } = require("../controllers/admin/Pharmacy");
+const { addMedicineStore, listAllMedicineStores, removeMedicineStore } = require("../controllers/admin/Pharmacy");
 
-//const { authMiddleware, isAdminMiddleware } = require("../middlewares/auth");
+const { authMiddleware, isAdminMiddleware } = require("../middlewares/auth");
 
+// Routes for Hospitals
+router.post('/hospital/add-hospital', addHospital);
+router.get('/hospital/list-hospital', listHospitals);
+router.delete('/hospital/remove-hospital', removeHospital);
 
-router.post("/hospital/add-hospital",addHospital);
-router.get("/hospital/list-hospital",listHospitals);
-router.delete("/hospital/remove-hospital",removeHospital);
-
-router.post("/pharmacy/add-pharmacy",addPharmacy);
-router.get("/pharmacy/list-all-pharmacies",listAllPharmacies);
-router.delete("/pharmacy/remove-pharmacy",removePharmacy);
+// Routes for Pharmacies
+router.post('/pharmacy/add-pharmacy', addMedicineStore);
+router.post('/pharmacy/list-all-pharmacies', listAllMedicineStores);
+router.delete('/pharmacy/remove-pharmacy', removeMedicineStore);
 
 module.exports = router;

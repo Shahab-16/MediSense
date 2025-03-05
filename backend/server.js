@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const connectDB = require('./config/Database');
 const userRoute = require('./routes/userRoute');
-//const adminRoute = require('./routes/admin');
+const adminRoute = require('./routes/admin');
 //const hospitalRoute = require('./routes/hospital');
 //const pharmacyRoute = require('./routes/pharmacy');
 
@@ -45,7 +45,7 @@ app.use(express.json());
 
 // Routes
 app.use('/user', userRoute);
-//app.use('/admin', adminRoute);
+app.use('/admin', adminRoute);
 //app.use('/hospital', hospitalRoute);
 //app.use('/pharmacy', pharmacyRoute);
 
