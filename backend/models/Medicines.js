@@ -11,7 +11,7 @@ const MedicineSchema = new mongoose.Schema({
     required: true,
     trim: true,
   },
-  manufacturer: { type: String },
+  manufacturerBrand: { type: String, required: true },
   medicalStoreId: { type: mongoose.Schema.Types.ObjectId, ref: "MedicalStore" },
   description: {
     type: String,
@@ -32,6 +32,23 @@ const MedicineSchema = new mongoose.Schema({
       trim: true,
     },
   ],
+  expiryDate: { type: Date, required: true },
+  dosageForm: {
+    type: String,
+    enum: ["Tablet", "Capsule", "Syrup", "Injection", "Ointment", "Drops"],
+    required: true,
+  },
+  strength: { type: String, required: true, trim: true },
+  usageInstructions: {
+    type: String,
+    default: "Refer to packaging or consult a doctor",
+  },
+  sideEffects: [{ type: String }],
+  storageInstructions: {
+    type: String,
+    default: "Store in a cool, dry place away from sunlight",
+  },
+  discount: { type: Number, default: 0 },
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
 });

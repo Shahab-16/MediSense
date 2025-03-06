@@ -2,15 +2,46 @@ const Hospital = require("../../models/Hospitals");
 
 exports.addHospital = async (req, res) => {
   try {
-    const { name, address, phone, email, doctors, facilities } = req.body;
+    const {
+      name,
+      address,
+      contact,
+      email,
+      doctors,
+      facilities,
+      ambulance,
+      beds,
+      establishedYear,
+      deparments,
+      type,
+      status,
+      aboutHospital,
+      acheivements,
+      emergencyFacility,
+      emergencyContact,
+      icuBeds,
+      advancedFacilities,
+      visitingHours,
+      maxConsultancyTime
+    } = req.body;
 
-    if (!name || !address || !phone || !email || !doctors || !facilities) {
+    // Check for required fields
+    if (
+      !name ||
+      !address ||
+      !contact ||
+      !email ||
+      !ambulance ||
+      !beds ||
+      !type
+    ) {
       return res.status(400).json({
         success: false,
-        message: "All fields are required",
+        message: "All required fields must be provided",
       });
     }
 
+    // Check if the hospital already exists
     const existingHospital = await Hospital.findOne({ email });
 
     if (existingHospital) {
@@ -20,25 +51,43 @@ exports.addHospital = async (req, res) => {
       });
     }
 
+    // Create a new hospital instance
     const newHospital = new Hospital({
       name,
       address,
-      phone,
+      contact,
       email,
-      doctors,
-      facilities,
+      doctors: doctors || [], // Default to an empty array if not provided
+      facilities: facilities || [], // Default to an empty array if not provided
+      ambulance,
+      beds,
+      establishedYear: establishedYear || null, // Default to null if not provided
+      deparments: deparments || [], // Default to an empty array if not provided
+      type,
+      acheivements:acheivements || [],
+      status: status || "open", // Default to 'open' if not provided
+      aboutHospital: aboutHospital || "", // Default to an empty string if not provided
+      emergencyFacility: emergencyFacility || false,
+      emergencyContact: emergencyContact || "911-222-3333",
+      icuBeds: icuBeds || 0,
+      advancedFacilities: advancedFacilities || [],
+      visitingHours: visitingHours || "9:00 AM - 8:00 PM",
+      maxConsultancyTime: maxConsultancyTime || 30
     });
 
+    // Save the new hospital to the database
     await newHospital.save();
 
     return res.status(200).json({
       success: true,
       message: "Hospital added successfully",
+      data: newHospital,
     });
   } catch (err) {
-    return res.status(400).json({
+    return res.status(500).json({
       success: false,
       message: "Error in adding hospital",
+      error: err.message,
     });
   }
 };
@@ -84,4 +133,3 @@ exports.removeHospital = async (req, res) => {
     });
   }
 };
-

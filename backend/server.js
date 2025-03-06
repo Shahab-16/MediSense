@@ -3,8 +3,8 @@ const cors = require('cors');
 const connectDB = require('./config/Database');
 const userRoute = require('./routes/userRoute');
 const adminRoute = require('./routes/admin');
-//const hospitalRoute = require('./routes/hospital');
-//const pharmacyRoute = require('./routes/pharmacy');
+const hospitalRoute = require('./routes/hospital');
+const pharmacyRoute = require('./routes/pharmacy');
 
 require('dotenv').config();
 
@@ -46,8 +46,8 @@ app.use(express.json());
 // Routes
 app.use('/user', userRoute);
 app.use('/admin', adminRoute);
-//app.use('/hospital', hospitalRoute);
-//app.use('/pharmacy', pharmacyRoute);
+app.use('/hospital-id', hospitalRoute);
+app.use('/pharmacy', pharmacyRoute);
 
 app.get('/', (req, res) => {
   res.send('Hello, MediSense Backend is Running!');

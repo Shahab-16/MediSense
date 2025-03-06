@@ -1,49 +1,73 @@
 const Pharmacy = require("../../models/MedicalStore");
 
+exports.addMedicineStore = async (req, res) => {
+  try {
+    const {
+      name,
+      ownerName,
+      LicenseNumber,
+      address,
+      contact,
+      email,
+      medicines,
+      deliveryAvailable,
+      establishedYear,
+      status,
+      aboutPharmacy,
+      acheivements,
+      openHour
+    } = req.body;
 
-
-exports.addMedicineStore=async(req,res)=>{
-    try{
-        const {name,address,phone,email,medicines,deliveryAvailable}=req.body;
-
-        if(!name||!address||!phone||!email||!medicines||!deliveryAvailable){
-            return res.status(400).json({
-                success:false,
-                message:"All fields are required",
-            })
-        }
-
-        const existingPharmacy=await Pharmacy.findOne({email});
-
-        if(existingPharmacy){
-            return res.status(400).json({
-                success:false,
-                message:"Pharmacy already exists",
-            })
-        }
-
-        const newPharmacy=new Pharmacy({
-            name,
-            address,
-            phone,
-            email,
-            medicines,
-            deliveryAvailable,
-        });
-
-        await newPharmacy.save();
-        res.status(200).json({
-            success:true,
-            message:"Pharmacy added successfully",
-        })
+   
+    if (!name || !ownerName || !LicenseNumber || !address || !contact || !email) {
+      return res.status(400).json({
+        success: false,
+        message: "All required fields must be provided",
+      });
     }
-    catch(err){
-        return res.status(400).json({
-            success:false,
-            message:"Error in adding pharmacy",
-        })
+
+    
+    const existingPharmacy = await Pharmacy.findOne({ email });
+
+    if (existingPharmacy) {
+      return res.status(400).json({
+        success: false,
+        message: "Pharmacy already exists",
+      });
     }
-}
+
+
+    const newPharmacy = new Pharmacy({
+      name,
+      ownerName,
+      LicenseNumber,
+      address,
+      contact,
+      email,
+      medicines: medicines || [],
+      deliveryAvailable: deliveryAvailable || false, 
+      establishedYear: establishedYear || null, 
+      status: status || "open", 
+      aboutPharmacy: aboutPharmacy || "", 
+      acheivements: acheivements || [], 
+      openHour: openHour || "9:00 AM - 10:00 PM", 
+    });
+
+    await newPharmacy.save();
+
+    return res.status(200).json({
+      success: true,
+      message: "Pharmacy added successfully",
+      data: newPharmacy,
+    });
+  } catch (err) {
+    return res.status(500).json({
+      success: false,
+      message: "Error in adding pharmacy",
+      error: err.message,
+    });
+  }
+};
 
 
 

@@ -2,14 +2,11 @@ const express = require("express");
 const router = express.Router();
 
 
-const {addMedicine,listAllMedicines,removeMedicine}=require('../controllers/pharmacy/MedicineStore')
-const {authMiddleware,isPharmacyMiddleware}=require('../middlewares/auth')
-
-const URL=process.env.Main_Url
+const {addMedicine,listAllMedicines,deleteMedicine}=require('../controllers/pharmacy/MedicineStore')
 
 
-router.post(`${URL}/pharmacy-name/add-medicine`,authMiddleware,isPharmacyMiddleware,addMedicine)
-router.get(`${URL}/pharmacy-name/list-all-medicines`,authMiddleware,isPharmacyMiddleware,listAllMedicines)
-router.delete(`${URL}/pharmacy-name/remove-medicine`,authMiddleware,isPharmacyMiddleware,removeMedicine)
+router.post(`/add-medicine`,addMedicine)
+router.get(`/list-all-medicines`,listAllMedicines)
+router.delete(`/delete-medicine`,deleteMedicine)
 
 module.exports=router;
