@@ -87,21 +87,48 @@ exports.deleteDoctor = async (req, res) => {
 
 exports.listAllDoctors = async (req, res) => {
   try {
-    const { hospitalId } = req.body;
+      const { hospitalId } = req.body;
 
-    const doctors = await Doctor.find({ hospitalId })
-      .populate("hospitalId", "name")
-      .populate("currentPatients", "name email")
-      .populate("pastPatients", "name email")
-      .select(
-        "name email phone specialization experience consultationFee availability ratings languagesSpoken profileImage"
-      );
+      // Check if hospitalId is provided
+      if (!hospitalId) {
+          return res.status(400).json({
+              success: false,
+              message: "Hospital ID is required",
+          });
+      }
 
-    res.status(200).json({
-      message: "Doctors retrieved successfully",
-      doctors,
-    });
+      // Check if the hospital exists
+      const existingHospital = await Hospital.findById(hospitalId);
+      if (!existingHospital) {
+          return res.status(404).json({
+              success: false,
+              message: "Hospital not found",
+          });
+      }
+
+      // Fetch doctors associated with the hospital
+      const doctors = await Doctor.find({ hospitalId }).populate("hospitalId");
+
+      // Check if any doctors are found
+      if (doctors.length === 0) {
+          return res.status(404).json({
+              success: false,
+              message: "There are no doctors in this hospital",
+          });
+      }
+
+      // Success response
+      return res.status(200).json({
+          success: true,
+          message: "Doctors list retrieved successfully",
+          doctors,
+      });
+
   } catch (error) {
-    res.status(500).json({ message: "Error fetching doctors", error: error.message });
+      res.status(500).json({ 
+          success: false,
+          message: "Internal server error",
+          error: error.message 
+      });
   }
 };

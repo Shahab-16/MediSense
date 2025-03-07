@@ -117,9 +117,18 @@ exports.listHospitals = async (req, res) => {
 
 exports.removeHospital = async (req, res) => {
   try {
-    const { hospitalId } = req.body;
+    const { id } = req.body;
 
-    const removedHospital = await Hospital.findByIdAndDelete(hospitalId);
+    const existingHospital = await Hospital.findById(id);
+
+    if (!existingHospital) {
+      return res.status(404).json({
+        success: false,
+        message: "Hospital not found",
+      });
+    }
+
+    const removedHospital = await Hospital.findByIdAndDelete(id);
 
     return res.status(200).json({
       success: true,

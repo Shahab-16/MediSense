@@ -47,7 +47,7 @@ app.use(express.json());
 app.use('/user', userRoute);
 app.use('/admin', adminRoute);
 app.use('/hospital-id', hospitalRoute);
-app.use('/pharmacy', pharmacyRoute);
+app.use('/pharmacy-id', pharmacyRoute);
 
 app.get('/', (req, res) => {
   res.send('Hello, MediSense Backend is Running!');

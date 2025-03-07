@@ -8,7 +8,7 @@ const DoctorSchema = new mongoose.Schema({
   profileImage: { type: String, trim: true }, // New Field
   education: [{ type: String, trim: true }], // New Field
   experience: { type: Number, required: true, trim: true },
-  hospitalId: { type: mongoose.Schema.Types.ObjectId, ref: "Hospital" },
+  hospitalId: { type: mongoose.Schema.Types.ObjectId, ref: "Hospitals" },
   consultationFee: { type: Number, required: true },
   availability: [
     {
