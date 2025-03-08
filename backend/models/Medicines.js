@@ -20,10 +20,9 @@ const MedicineSchema = new mongoose.Schema({
   },
   prescriptionRequired: { type: Boolean, default: false },
   stock: { type: Number, default: 0 },
-  image: {
+  medicineImage: {
     type: String,
-    required: true,
-    trim: true,
+    required: true
   },
   category: [
     {

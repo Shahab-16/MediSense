@@ -1,47 +1,258 @@
-import React from 'react'
-import { assets } from '../../assets/admin_assets/assets'
+import React, { useState } from 'react';
+import { FaCloudUploadAlt } from 'react-icons/fa'; // Importing a React icon for upload
+
 const AddMedicine = () => {
+  const [formData, setFormData] = useState({
+    name: '',
+    price: 0,
+    manufacturerBrand: '',
+    medicalStoreId: '',
+    description: '',
+    prescriptionRequired: false,
+    stock: 0,
+    medicineImage: '',
+    category: [],
+    expiryDate: '',
+    dosageForm: '',
+    strength: '',
+    usageInstructions: 'Refer to packaging or consult a doctor',
+    sideEffects: [],
+    storageInstructions: 'Store in a cool, dry place away from sunlight',
+    discount: 0,
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setFormData({
+        ...formData,
+        medicineImage: file.name, // You can handle file upload logic here
+      });
+    }
+  };
+
+  const handleCategoryChange = (e) => {
+    const { value } = e.target;
+    setFormData({
+      ...formData,
+      category: value.split(',').map((item) => item.trim()), // Convert comma-separated string to array
+    });
+  };
+
+  const handleSideEffectsChange = (e) => {
+    const { value } = e.target;
+    setFormData({
+      ...formData,
+      sideEffects: value.split(',').map((item) => item.trim()), // Convert comma-separated string to array
+    });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Handle form submission, e.g., send data to an API
+    console.log(formData);
+  };
+
   return (
-    <div className=' h-full-screen w-full bg-blue-50'>
-      <form className='m-5'>
-        <p className='font-semibold text-[25px] p-5 ml-2'>Add Medicines</p>
+    <div className='h-full-screen w-full bg-blue-50'>
+      <form onSubmit={handleSubmit} className='m-5 w-full'>
+        <p className='font-semibold text-[25px] p-5 ml-2'>Add Medicine</p>
         <div className='bg-white mx-8 px-5'>
+          {/* Upload Medicine Image */}
           <div className='flex pt-6 pb-6'>
-            <label for="doc-img">
-              <img className='cursor-pointer' src={assets.profile_image}></img>
+            <label htmlFor='med-img' className='cursor-pointer'>
+              <div className='w-28 h-28 rounded-full bg-gray-200 flex items-center justify-center shadow-lg hover:shadow-xl transition duration-300'>
+                <FaCloudUploadAlt className='text-4xl text-gray-500' />
+              </div>
             </label>
-            <input type="file" name="" id="doc-img" hidden></input>
+            <input
+              type='file'
+              id='med-img'
+              name='medicineImage'
+              onChange={handleFileChange}
+              hidden
+            />
             <p className='mx-3 flex items-center text-gray-600'>Upload Medicine <br /> Picture</p>
           </div>
+
+          {/* Medicine Details */}
           <div className='flex flex-col lg:flex-row items-center gap-10 text-gray-600'>
-            <div className='w-full lg:flex-1 flex flex-col gap-4 bordee'>
+            <div className='w-full lg:flex-1 flex flex-col gap-4'>
               <div className='flex-1 flex flex-col gap-1'>
                 <p>Medicine Name</p>
-                <input className='border rounded px-3 py-2' type="text" placeholder="Medicine Name"></input>
+                <input
+                  className='border rounded px-3 py-2'
+                  type='text'
+                  name='name'
+                  placeholder='Medicine Name'
+                  value={formData.name}
+                  onChange={handleChange}
+                  required
+                />
               </div>
               <div className='flex flex-col gap-1'>
-                <p>Category</p>
-                <input className='border rounded px-3 py-2' type="text" placeholder="Category"></input>
+                <p>Price in Rs.</p>
+                <input
+                  className='border rounded px-3 py-2'
+                  type='number'
+                  placeholder='Price in Rs.'
+                  name='price'
+                  min={0}
+                  value={formData.price}
+                  onChange={handleChange}
+                  required
+                />
               </div>
               <div className='flex flex-col gap-1'>
-                <p>Price</p>
-                <input className='border rounded px-3 py-2' type='text' placeholder='Price'></input>
+                <p>Manufacturer Brand</p>
+                <input
+                  className='border rounded px-3 py-2'
+                  type='text'
+                  name='manufacturerBrand'
+                  placeholder='Manufacturer Brand'
+                  value={formData.manufacturerBrand}
+                  onChange={handleChange}
+                  required
+                />
               </div>
               <div className='flex flex-col gap-1'>
-                <p>Composition</p>
-                <input className='border rounded px-3 py-2' type='text' placeholder='composition'></input>
+                <p>Description</p>
+                <textarea
+                  className='border rounded px-3 py-2'
+                  rows='3'
+                  name='description'
+                  placeholder='Description'
+                  value={formData.description}
+                  onChange={handleChange}
+                  required
+                ></textarea>
+              </div>
+              <div className='flex flex-col gap-1'>
+                <p>Prescription Required</p>
+                <select
+                  className='border rounded px-3 py-2'
+                  name='prescriptionRequired'
+                  value={formData.prescriptionRequired}
+                  onChange={handleChange}
+                  required
+                >
+                  <option value={false}>No</option>
+                  <option value={true}>Yes</option>
+                </select>
+              </div>
+              <div className='flex flex-col gap-1'>
+                <p>Stock</p>
+                <input
+                  className='border rounded px-3 py-2'
+                  type='number'
+                  name='stock'
+                  placeholder='Stock'
+                  min={1}
+                  value={formData.stock}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+            </div>
+            <div className='w-full lg:flex-1 flex flex-col gap-4'>
+              <div className='flex flex-col gap-1'>
+                <p>Category (Comma Separated)</p>
+                <input
+                  className='border rounded px-3 py-2'
+                  type='text'
+                  name='category'
+                  placeholder='Category'
+                  value={formData.category.join(', ')}
+                  onChange={handleCategoryChange}
+                  required
+                />
+              </div>
+              <div className='flex flex-col gap-1'>
+                <p>Expiry Date</p>
+                <input
+                  className='border rounded px-3 py-2'
+                  type='date'
+                  name='expiryDate'
+                  value={formData.expiryDate}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div className='flex flex-col gap-1'>
+                <p>Dosage Form</p>
+                <select
+                  className='border rounded px-3 py-2'
+                  name='dosageForm'
+                  value={formData.dosageForm}
+                  onChange={handleChange}
+                  required
+                >
+                  <option value=''>Select Dosage Form</option>
+                  <option value='Tablet'>Tablet</option>
+                  <option value='Capsule'>Capsule</option>
+                  <option value='Syrup'>Syrup</option>
+                  <option value='Injection'>Injection</option>
+                  <option value='Ointment'>Ointment</option>
+                  <option value='Drops'>Drops</option>
+                </select>
+              </div>
+              <div className='flex flex-col gap-1'>
+                <p>Strength</p>
+                <input
+                  className='border rounded px-3 py-2'
+                  type='text'
+                  name='strength'
+                  placeholder='Strength'
+                  value={formData.strength}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div className='flex flex-col gap-1'>
+                <p>Side Effects (Comma Separated)</p>
+                <input
+                  className='border rounded px-3 py-2'
+                  type='text'
+                  name='sideEffects'
+                  placeholder='Side Effects'
+                  value={formData.sideEffects.join(', ')}
+                  onChange={handleSideEffectsChange}
+                />
+              </div>
+              <div className='flex flex-col gap-1'>
+                <p>Discount (%)</p>
+                <input
+                  className='border rounded px-3 py-2'
+                  type='number'
+                  name='discount'
+                  min={0}
+                  placeholder='Discount in percentage'
+                  value={formData.discount}
+                  onChange={handleChange}
+                />
               </div>
             </div>
           </div>
-            <div>
-              <p>Description</p>
-              <textarea className='w-full px-4 pt-2 border rounded' rows="5" placeholder='write about medicine'></textarea>
-            </div>
-            <button type='submit' className='bg-blue-600 px-10 py-3 mt-8 text-white rounded-full'>Add Medicine</button>
+
+          {/* Submit Button */}
+          <button
+            type='submit'
+            className='bg-blue-600 px-10 py-3 mt-8 text-white rounded-full'
+          >
+            Add Medicine
+          </button>
         </div>
       </form>
     </div>
-  )
-}
+  );
+};
 
-export default AddMedicine
+export default AddMedicine;

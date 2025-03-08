@@ -1,4 +1,5 @@
 const Hospital = require("../../models/Hospitals");
+const cloudinary = require("cloudinary").v2;
 
 exports.addHospital = async (req, res) => {
   try {
@@ -22,7 +23,7 @@ exports.addHospital = async (req, res) => {
       icuBeds,
       advancedFacilities,
       visitingHours,
-      maxConsultancyTime
+      maxConsultancyTime,
     } = req.body;
 
     // Check for required fields
@@ -51,28 +52,39 @@ exports.addHospital = async (req, res) => {
       });
     }
 
+    let hospitalImage =
+      "https://static.vecteezy.com/system/resources/previews/011/098/092/original/hospital-clinic-building-3d-icon-illustration-png.png";
+
+    if (req.file) {
+      const result = await cloudinary.uploader.upload(req.file.path, {
+        folder: "MEDISENSE/Hospital_Images",
+      });
+      hospitalImage = result.secure_url;
+    }
+
     // Create a new hospital instance
     const newHospital = new Hospital({
       name,
       address,
       contact,
       email,
-      doctors: doctors || [], // Default to an empty array if not provided
-      facilities: facilities || [], // Default to an empty array if not provided
+      doctors: doctors || [],
+      facilities: facilities || [],
       ambulance,
       beds,
-      establishedYear: establishedYear || null, // Default to null if not provided
-      deparments: deparments || [], // Default to an empty array if not provided
+      establishedYear: establishedYear || null,
+      deparments: deparments || [],
       type,
-      acheivements:acheivements || [],
-      status: status || "open", // Default to 'open' if not provided
-      aboutHospital: aboutHospital || "", // Default to an empty string if not provided
+      acheivements: acheivements || [],
+      status: status || "open",
+      aboutHospital: aboutHospital || "",
       emergencyFacility: emergencyFacility || false,
       emergencyContact: emergencyContact || "911-222-3333",
       icuBeds: icuBeds || 0,
       advancedFacilities: advancedFacilities || [],
       visitingHours: visitingHours || "9:00 AM - 8:00 PM",
-      maxConsultancyTime: maxConsultancyTime || 30
+      maxConsultancyTime: maxConsultancyTime || 30,
+      hospitalImage,
     });
 
     // Save the new hospital to the database
@@ -119,8 +131,8 @@ exports.removeHospital = async (req, res) => {
   try {
     const { id } = req.body;
 
+    // Check if hospital exists
     const existingHospital = await Hospital.findById(id);
-
     if (!existingHospital) {
       return res.status(404).json({
         success: false,
@@ -128,20 +140,32 @@ exports.removeHospital = async (req, res) => {
       });
     }
 
-    const removedHospital = await Hospital.findByIdAndDelete(id);
+    const hospitalImageUrl = existingHospital.hospitalImage;
+
+    // Delete image from Cloudinary if it's not the default one
+    if (
+      hospitalImageUrl &&
+      !hospitalImageUrl.includes("vecteezy.com") // Ensure it's not the default image
+    ) {
+      const publicId = hospitalImageUrl.split("/").pop().split(".")[0];
+
+      await cloudinary.uploader.destroy(
+        `MEDISENSE/Hospital_Images/${publicId}`
+      );
+    }
+
+    // Delete the hospital from the database
+    await Hospital.findByIdAndDelete(id);
 
     return res.status(200).json({
       success: true,
       message: "Hospital removed successfully",
-      removedHospital,
     });
   } catch (err) {
     return res.status(400).json({
       success: false,
       message: "Error in removing hospital",
+      error: err.message,
     });
   }
 };
-
-
-
