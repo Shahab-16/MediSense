@@ -1,5 +1,6 @@
 const MedicalStore = require("../../models/MedicalStore");
 const Medicine = require("../../models/Medicines");
+const cloudinary=require("cloudinary").v2;
 
 exports.addMedicine = async (req, res) => {
   try {
@@ -25,6 +26,13 @@ exports.addMedicine = async (req, res) => {
     // ✅ First, validate required fields
     if (!name || !price || !manufacturerBrand || !medicalStoreId) {
       return res.status(400).json({ message: "All required fields must be filled" });
+    }
+
+    let medicineImage="https://cdn.pixabay.com/photo/2014/03/25/16/59/medicine-297778_1280.png";
+
+    if(req.file){
+      const result=await cloudinary.uploader.upload(req.file.path);
+      medicineImage=result.secure_url;
     }
 
     // ✅ Check if the medical store exists
@@ -65,6 +73,7 @@ exports.addMedicine = async (req, res) => {
       sideEffects,
       storageInstructions,
       discount,
+      medicineImage
     });
 
     // ✅ Save the new medicine
@@ -93,21 +102,34 @@ exports.deleteMedicine = async (req, res) => {
     }
 
     if (medicine.stock > quantity) {
+      // ✅ Reduce stock if quantity is available
       medicine.stock -= quantity;
       await medicine.save();
       return res.status(200).json({ message: "Stock reduced successfully", medicine });
     } else {
+      // ✅ Delete Medicine from Database
       await Medicine.findByIdAndDelete(medicineId);
+
+      // ✅ Remove Medicine from Medical Store
       await MedicalStore.updateOne(
         { _id: medicine.medicalStoreId },
         { $pull: { medicines: medicineId } }
       );
+
+      // ✅ Delete the Medicine Image from Cloudinary (if it's not the default image)
+      if (medicine.image && !medicine.image.includes("pixabay.com")) {
+        // Extract Cloudinary public_id from URL
+        const publicId = medicine.image.split("/").pop().split(".")[0]; // Extract ID from URL
+        await cloudinary.uploader.destroy(`MEDISENSE/Medicine_Images/${publicId}`);
+      }
+
       return res.status(200).json({ message: "Medicine removed as stock reached zero" });
     }
   } catch (err) {
     res.status(500).json({ message: "Server error", error: err.message });
   }
 };
+
 
 // List All Medicines in a Store
 exports.listAllMedicines = async (req, res) => {

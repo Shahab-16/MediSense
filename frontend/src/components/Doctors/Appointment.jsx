@@ -4,11 +4,35 @@ import { doctors } from '../../assets/asset';
 const Appointment = () => {
     const {docId}=useParams();
     const [docInfo,setDocInfo]=useState(null);
+    const [slotIndex,setSlotIndex]=useState(0);
+    const [docSlots,setDocSlots]=useState([]);
+    const [slotTime,setSlotTime]=useState(' ');
     const fetchDocInfo= async ()=>{
         const docInfo=doctors.find(doc=>doc._id==docId);
         setDocInfo(docInfo);
         console.log(docInfo);
     }
+    const getAvailableSlots=async()=>{
+        let today=new Date();
+        for(let i=0;i<7;i++){
+            let currDate=new Date(today);
+            currDate.setDate(today.getDate()+i);
+            let endTime=new Date();
+            endTime.setDate(today.getDate()+1);
+            endTime.setHours(21,0,0,0);
+            if(currDate.getDate()===today.getDate()){
+                currDate.setHours(currDate.getHours()>10 ? currDate.getHours()+1:10 );
+                currDate.setMinutes(currDate.getMinutes()>30 ? 30 :0);
+            }
+            else{
+                currDate.setHours(10);
+                currDate.setMinutes(0);
+            }
+        }
+    }
+    useEffect(()=>{
+        getAvailableSlots();
+    },[docInfo])
     useEffect(()=>{
         fetchDocInfo();
     },[doctors,docId]);

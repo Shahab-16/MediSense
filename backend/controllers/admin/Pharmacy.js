@@ -1,4 +1,5 @@
 const Pharmacy = require("../../models/MedicalStore");
+const cloudinary=require("cloudinary").v2;
 
 exports.addMedicineStore = async (req, res) => {
   try {
@@ -18,13 +19,16 @@ exports.addMedicineStore = async (req, res) => {
       openHour
     } = req.body;
 
-   
+    
+    let pharmacyStoreImage="https://static.vecteezy.com/system/resources/previews/002/172/389/large_2x/pharmacy-store-front-on-city-background-commercial-property-medicine-building-illustration-in-flat-style-vector.jpg";
+
     if (!name || !ownerName || !LicenseNumber || !address || !contact || !email) {
       return res.status(400).json({
         success: false,
         message: "All required fields must be provided",
       });
     }
+
 
     
     const existingPharmacy = await Pharmacy.findOne({ email });
@@ -36,6 +40,15 @@ exports.addMedicineStore = async (req, res) => {
       });
     }
 
+
+    if(req.file){
+      await cloudinary.uploader.upload(req.file.path, {
+        folder: "MEDISENSE/Pharmacy_Images",
+      }).then((result) => {
+        pharmacyStoreImage = result.secure_url
+      })
+    }
+    
 
     const newPharmacy = new Pharmacy({
       name,
@@ -51,6 +64,7 @@ exports.addMedicineStore = async (req, res) => {
       aboutPharmacy: aboutPharmacy || "", 
       acheivements: acheivements || [], 
       openHour: openHour || "9:00 AM - 10:00 PM", 
+      pharmacyImage: pharmacyStoreImage
     });
 
     await newPharmacy.save();
@@ -72,31 +86,38 @@ exports.addMedicineStore = async (req, res) => {
 
 
 exports.removeMedicineStore = async (req, res) => {
-    try {
-        const {id} = req.body;
-        const existMedicineStore = await Pharmacy.findById(id);
+  try {
+      const { id } = req.body;
+      const existMedicineStore = await Pharmacy.findById(id);
 
-        if (!existMedicineStore) {
-            return res.status(404).json({
-                success: false,
-                message: "No Medical Store found with this ID"
-            });
-        }
-        await Pharmacy.findByIdAndDelete(id);
+      if (!existMedicineStore) {
+          return res.status(404).json({
+              success: false,
+              message: "No Medical Store found with this ID"
+          });
+      }
+      const imageUrl = existMedicineStore.image;
+      await Pharmacy.findByIdAndDelete(id);
 
-        return res.status(200).json({
-            success: true,
-            message: "Pharmacy removed successfully"
-        });
+      if (imageUrl && !imageUrl.includes("vecteezy.com")) {
+          const publicId = imageUrl.split("/").pop().split(".")[0]; 
+          await cloudinary.uploader.destroy(`MEDISENSE/Pharmacy_Images/${publicId}`);
+      }
 
-    } catch (err) {
-        console.error("Error in removing pharmacy:", err);
-        return res.status(500).json({
-            success: false,
-            message: "Error in removing pharmacy"
-        });
-    }
+      return res.status(200).json({
+          success: true,
+          message: "Pharmacy removed successfully"
+      });
+
+  } catch (err) {
+      console.error("Error in removing pharmacy:", err);
+      return res.status(500).json({
+          success: false,
+          message: "Error in removing pharmacy"
+      });
+  }
 };
+
 
 
 

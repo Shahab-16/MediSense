@@ -34,6 +34,12 @@ const StoreContextProvider = ({ children }) => {
     }
 
 
+
+
+
+
+
+
     const contextValue = {
         stats,
         setStats,
@@ -47,5 +53,8 @@ const StoreContextProvider = ({ children }) => {
         </StoreContext.Provider>
     );
 };
+
+
+
 
 export default StoreContextProvider;

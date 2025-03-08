@@ -5,6 +5,7 @@ const medicalStoreSchema = new mongoose.Schema({
   name: { type: String, required: true },
   ownerName:{type:String,required:true},
   LicenseNumber:{type:String,required:true},
+  pharmacyImage:{type:String,required:true},
   address: { type: String, required: true },
   contact: { type: String, required: true },
   email: { type: String, required: true },

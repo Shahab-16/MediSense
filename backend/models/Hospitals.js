@@ -6,6 +6,7 @@ const hospitalSchema = new mongoose.Schema({
   address: { type: String, required: true },
   contact: { type: String, required: true },
   email: { type: String, required: true },
+  hospitalImage:{type:String,required:true},
   doctors: [{ type: mongoose.Schema.Types.ObjectId, ref: "Doctors" }],
   facilities: [{ type: String }],
   emergencyFacility: { type: Boolean, default: false },
