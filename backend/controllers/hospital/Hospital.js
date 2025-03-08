@@ -1,8 +1,5 @@
 const Doctor = require("../../models/Doctors");
 const Hospital = require("../../models/Hospitals");
-
-const Doctor = require("../models/doctor_schema");
-const Hospital = require("../models/hospital_schema");
 const bcrypt = require("bcrypt");
 
 exports.addDoctor = async (req, res) => {
