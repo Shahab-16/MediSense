@@ -29,7 +29,7 @@ const UserSchema = new mongoose.Schema(
     },
     role: {
       type: String,
-      enum: ["user", "doctor", "admin"],
+      enum: ["user", "doctor", "admin", "hospital", "pharmacy"],
       default: "user",
     },
     medicineCart: [

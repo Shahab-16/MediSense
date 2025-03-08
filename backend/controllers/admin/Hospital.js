@@ -142,3 +142,6 @@ exports.removeHospital = async (req, res) => {
     });
   }
 };
+
+
+
