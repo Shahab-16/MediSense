@@ -1,7 +1,9 @@
 const Doctor = require("../../models/Doctors");
 const Hospital = require("../../models/Hospitals");
 const bcrypt = require("bcrypt");
-
+const Appointment=require("../../models/Appointment");
+const Doctors = require("../../models/Doctors");
+const User = require("../../models/User");
 exports.addDoctor = async (req, res) => {
   try {
     const {
@@ -179,3 +181,50 @@ exports.listAllDoctors = async (req, res) => {
   }
 };
 
+//api for appointment
+
+exports.bookAppointment= async (req,res)=>{
+  try{
+    const {userId,docId,slotDate,slotTime}=req.body;
+    //"-password" is done to remove password from doctor data
+    const docData=await Doctors.findById(docId).select("-password");
+    if(!docData.available){
+      return res.json({succes:false,message:"Docter not available"})
+    }
+    let slot_booked=docData.slot_booked;
+    if(slot_booked[slotDate]){
+      //check if the slotime is avalible or not is the slotdate
+      if(slot_booked[slotDate].includes(slotTime)){
+        //if not available then return slot not avail
+        return res.json({succes:false,message:"slot not available"})
+      } else{
+        slot_booked[slotDate].push(slotTime);
+      }
+    } //if not one has booked on this date then create a new bookin on this date;
+    else{
+      slot_booked[slotDate]=[];
+      slot_booked[slotDate].push(slotTime);
+    }
+    const userData=await User.findById(userId).select("-password");
+    delete docData.slot_booked;
+    const appointmentdata={
+      docData,
+      userData,
+      docId,
+      userId,
+      amount:docData.fees,
+      slotTime,
+      slotDate,
+    }
+    const newAppointment=new Appointment(newAppointment);
+    await newAppointment.save();
+
+    // save new slotData in doctersData
+    await Doctors.findByIdAndUpdate(docId,{slot_booked});
+    res.json({succes:true,message:"slot booked"});
+
+  } catch (error) {
+      console.log(error);
+      res.json({success : false,message :error.message})
+  }
+}
