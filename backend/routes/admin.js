@@ -8,7 +8,7 @@ const { authMiddleware, isAdminMiddleware } = require("../middlewares/auth");
 
 // Routes for Hospitals
 router.post('/hospital/add-hospital', addHospital);
-router.get('/hospital/list-hospital', listHospitals);
+router.get('/hospital/list-hospitals', listHospitals);
 router.delete('/hospital/remove-hospital', removeHospital);
 
 // Routes for Pharmacies

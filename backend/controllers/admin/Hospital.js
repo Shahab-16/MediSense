@@ -13,11 +13,11 @@ exports.addHospital = async (req, res) => {
       ambulance,
       beds,
       establishedYear,
-      departments, 
+      departments,
       type,
       status,
       aboutHospital,
-      achievements, 
+      achievements,
       emergencyFacility,
       emergencyContact,
       icuBeds,
@@ -31,7 +31,7 @@ exports.addHospital = async (req, res) => {
       !address ||
       !contact ||
       !email ||
-      ambulance === undefined ||  
+      ambulance === undefined ||
       beds === undefined ||
       !type
     ) {
@@ -72,7 +72,7 @@ exports.addHospital = async (req, res) => {
       ambulance,
       beds,
       establishedYear: establishedYear || null,
-      departments: departments || [], 
+      departments: departments || [],
       type,
       achievements: achievements || [],
       status: status || "open",

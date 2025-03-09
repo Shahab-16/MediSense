@@ -1,14 +1,15 @@
 import React, { useState } from "react";
-import { FaCloudUploadAlt } from "react-icons/fa"; // Importing a React icon for upload
+import { FaCloudUploadAlt } from "react-icons/fa";
+import { addHospital } from "../../services/api";
 
 const AddHospital = () => {
   const [formData, setFormData] = useState({
-    hospitalId: "",
     name: "",
     address: "",
     contact: "",
     email: "",
     hospitalImage: "",
+    file: null, // Store the actual file for API submission
     doctors: [],
     facilities: [],
     emergencyFacility: false,
@@ -17,28 +18,82 @@ const AddHospital = () => {
     beds: 0,
     icuBeds: 0,
     establishedYear: null,
-    deparments: [],
+    departments: [],
     type: "",
     status: "open",
     aboutHospital: "",
-    acheivements: [],
+    achievements: [],
     advancedFacilities: [],
     visitingHours: "9:00 AM - 8:00 PM",
     maxConsultancyTime: 30,
   });
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+    const { name, value, type } = e.target;
+
+    if (type === "file") {
+      const file = e.target.files[0];
+      if (file) {
+        const imageUrl = URL.createObjectURL(file);
+        setFormData((prevData) => ({
+          ...prevData,
+          hospitalImage: imageUrl,
+          file: file,
+        }));
+      }
+    } else {
+      setFormData({
+        ...formData,
+        [name]: value,
+      });
+    }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle form submission, e.g., send data to an API
-    console.log(formData);
+
+    const formDataToSend = new FormData();
+    Object.entries(formData).forEach(([key, value]) => {
+      if (key !== "hospitalImage" && key !== "file") {
+        formDataToSend.append(key, value);
+      }
+    });
+
+    if (formData.file) {
+      formDataToSend.append("hospitalImage", formData.file); // Append the file
+    }
+
+    try {
+      await addHospital(formDataToSend);
+      alert("Hospital Added Successfully");
+      // Reset the form after successful submission
+      setFormData({
+        name: "",
+        address: "",
+        contact: "",
+        email: "",
+        hospitalImage: "",
+        file: null,
+        doctors: [],
+        facilities: [],
+        emergencyFacility: false,
+        emergencyContact: "911-222-3333",
+        ambulance: 0,
+        beds: 0,
+        icuBeds: 0,
+        establishedYear: null,
+        departments: [],
+        type: "",
+        status: "open",
+        aboutHospital: "",
+        achievements: [],
+        advancedFacilities: [],
+        visitingHours: "9:00 AM - 8:00 PM",
+        maxConsultancyTime: 30,
+      });
+    } catch (err) {
+      console.log("Error in Adding Hospital", err);
+    }
   };
 
   return (
@@ -54,14 +109,23 @@ const AddHospital = () => {
           {/* Upload Hospital Image */}
           <div className="flex items-center gap-6 mb-6">
             <label htmlFor="hospital-img" className="cursor-pointer">
-              <div className="w-28 h-28 rounded-full bg-gray-200 flex items-center justify-center shadow-lg hover:shadow-xl transition duration-300">
-                <FaCloudUploadAlt className="text-4xl text-gray-500" />
+              <div className="w-28 h-28 rounded-full bg-gray-200 flex items-center justify-center shadow-lg hover:shadow-xl transition duration-300 overflow-hidden">
+                {formData.hospitalImage ? (
+                  <img
+                    src={formData.hospitalImage}
+                    alt="Uploaded"
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <FaCloudUploadAlt className="text-4xl text-gray-500" />
+                )}
               </div>
             </label>
             <input
               type="file"
               id="hospital-img"
               name="hospitalImage"
+              accept="image/*"
               onChange={handleChange}
               hidden
             />
@@ -147,6 +211,16 @@ const AddHospital = () => {
                 name="beds"
                 placeholder="Number of Beds"
                 value={formData.beds}
+                onChange={handleChange}
+                min={1}
+                required
+              />
+              <input
+                className="border rounded-lg px-4 py-3 shadow-sm focus:ring-2 focus:ring-blue-300"
+                type="number"
+                name="ambulance"
+                placeholder="Number of Ambulances"
+                value={formData.ambulance}
                 onChange={handleChange}
                 min={1}
                 required

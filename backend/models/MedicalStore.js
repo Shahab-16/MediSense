@@ -1,3 +1,5 @@
+const mongoose=require("mongoose");
+
 const medicalStoreSchema = new mongoose.Schema({
   storeId: { type: String, unique: true },
   name: { type: String, required: true },

@@ -1,5 +1,7 @@
 import React, { useState } from "react";
-import { FaCloudUploadAlt } from "react-icons/fa"; // Importing a React icon for upload
+import { FaCloudUploadAlt } from "react-icons/fa";
+import { addPharmacy } from "../../services/api";
+import { toast } from "react-toastify";
 
 const AddPharmacy = () => {
   const [formData, setFormData] = useState({
@@ -20,6 +22,8 @@ const AddPharmacy = () => {
     openHour: "9:00 AM - 10:00 PM",
   });
 
+  const [imagePreview, setImagePreview] = useState(null);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -31,17 +35,29 @@ const AddPharmacy = () => {
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+
       setFormData({
         ...formData,
-        pharmacyImage: file.name, // You can handle file upload logic here
+        pharmacyImage: file,
       });
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle form submission, e.g., send data to an API
-    console.log(formData);
+    try{
+      await addPharmacy(formData);
+      toast.success("Pharmacy Added Successfully");
+      console.log(formData);
+    }
+    catch(error){
+      console.log("Error in adding pharmacy", error);
+    }
   };
 
   return (
@@ -57,8 +73,16 @@ const AddPharmacy = () => {
           {/* Upload Pharmacy Image */}
           <div className="flex items-center gap-6 mb-6">
             <label htmlFor="pharmacy-img" className="cursor-pointer">
-              <div className="w-28 h-28 rounded-full bg-gray-200 flex items-center justify-center shadow-lg hover:shadow-xl transition duration-300">
-                <FaCloudUploadAlt className="text-4xl text-gray-500" />
+              <div className="w-28 h-28 rounded-full bg-gray-200 flex items-center justify-center shadow-lg hover:shadow-xl transition duration-300 overflow-hidden">
+                {imagePreview ? (
+                  <img
+                    src={imagePreview}
+                    alt="Uploaded Preview"
+                    className="w-full h-full object-cover rounded-full"
+                  />
+                ) : (
+                  <FaCloudUploadAlt className="text-4xl text-gray-500" />
+                )}
               </div>
             </label>
             <input
