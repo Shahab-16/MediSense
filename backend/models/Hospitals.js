@@ -6,7 +6,7 @@ const hospitalSchema = new mongoose.Schema({
   address: { type: String, required: true },
   contact: { type: String, required: true },
   email: { type: String, required: true },
-  hospitalImage:{type:String,required:true},
+  hospitalImage: { type: String, required: true },
   doctors: [{ type: mongoose.Schema.Types.ObjectId, ref: "Doctors" }],
   facilities: [{ type: String }],
   emergencyFacility: { type: Boolean, default: false },
@@ -15,11 +15,11 @@ const hospitalSchema = new mongoose.Schema({
   beds: { type: Number, required: true, default: 0 },
   icuBeds: { type: Number, default: 0 },
   establishedYear: { type: Number, default: null },
-  deparments: [{ type: String }],
+  departments: [{ type: String }],  // ✅ Fixed spelling
   type: { type: String, enum: ["Government", "Private", "Charitable"], required: true },
   status: { type: String, enum: ["open", "closed"], default: "open" },
   aboutHospital: { type: String, default: "" },
-  acheivements: [{ type: String }],
+  achievements: [{ type: String }],  // ✅ Fixed spelling
   advancedFacilities: [{ type: String, default: "" }],
   visitingHours: { type: String, default: "9:00 AM - 8:00 PM" },
   maxConsultancyTime: { type: Number, default: 30 },

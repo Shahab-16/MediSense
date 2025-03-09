@@ -13,11 +13,11 @@ exports.addHospital = async (req, res) => {
       ambulance,
       beds,
       establishedYear,
-      deparments,
+      departments, 
       type,
       status,
       aboutHospital,
-      acheivements,
+      achievements, 
       emergencyFacility,
       emergencyContact,
       icuBeds,
@@ -26,14 +26,13 @@ exports.addHospital = async (req, res) => {
       maxConsultancyTime,
     } = req.body;
 
-    // Check for required fields
     if (
       !name ||
       !address ||
       !contact ||
       !email ||
-      !ambulance ||
-      !beds ||
+      ambulance === undefined ||  
+      beds === undefined ||
       !type
     ) {
       return res.status(400).json({
@@ -73,9 +72,9 @@ exports.addHospital = async (req, res) => {
       ambulance,
       beds,
       establishedYear: establishedYear || null,
-      deparments: deparments || [],
+      departments: departments || [], 
       type,
-      acheivements: acheivements || [],
+      achievements: achievements || [],
       status: status || "open",
       aboutHospital: aboutHospital || "",
       emergencyFacility: emergencyFacility || false,
@@ -142,16 +141,14 @@ exports.removeHospital = async (req, res) => {
 
     const hospitalImageUrl = existingHospital.hospitalImage;
 
-    // Delete image from Cloudinary if it's not the default one
     if (
       hospitalImageUrl &&
-      !hospitalImageUrl.includes("vecteezy.com") // Ensure it's not the default image
+      !hospitalImageUrl.includes("vecteezy.com")
     ) {
-      const publicId = hospitalImageUrl.split("/").pop().split(".")[0];
+      const parts = hospitalImageUrl.split("/");
+      const publicId = parts[parts.length - 1].split(".")[0]; // Extract filename without extension
 
-      await cloudinary.uploader.destroy(
-        `MEDISENSE/Hospital_Images/${publicId}`
-      );
+      await cloudinary.uploader.destroy(`MEDISENSE/Hospital_Images/${publicId}`);
     }
 
     // Delete the hospital from the database
