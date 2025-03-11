@@ -3,6 +3,7 @@ import { AiOutlineDelete, AiOutlineSearch } from "react-icons/ai";
 import { assets } from "../../assets/admin_assets/assets";
 import { useNavigate } from "react-router";
 import { listPharmacies, removePharmacy } from "../../services/api";
+import { toast } from "react-toastify";
 
 const ListAllPharmacy = () => {
   const navigate = useNavigate();
@@ -13,25 +14,35 @@ const ListAllPharmacy = () => {
 
   // Fetch pharmacy data from the backend
   useEffect(() => {
-    const fetchPharmacies = async () => {
-      try {
-        const data = await listPharmacies(); // Call the API to fetch pharmacies
-        setPharmacyList(data); // Set the fetched data to state
-        setLoading(false); // Set loading to false
-      } catch (err) {
-        setError("Failed to fetch pharmacies"); // Handle errors
-        setLoading(false);
-      }
-    };
+      const fetchPharmacies = async () => {
+        try {
+          const response = await listPharmacies(); // Call the API to fetch hospitals
+          console.log(response)
+          if (response.success && Array.isArray(response.pharmaciesList)) {
+            setPharmacyList(response.pharmaciesList); // Set the fetched data to state
+          } else {
+            setError("Invalid data format received from the API");
+          }
+        } catch (err) {
+          setError("Failed to fetch pharmacies"); // Handle errors
+        } finally {
+          setLoading(false); // Set loading to false
+        }
+      };
+  
+      fetchPharmacies();
+    }, []);
 
-    fetchPharmacies();
-  }, []);
+    console.log(pharmacyList)
+  
 
   const handleRemovePharmacy = async (id) => {
     try {
+      console.log("Removing pharmacy with ID:", id);
       await removePharmacy(id); // Call the API to remove the pharmacy
+      console.log("Pharmacy removed successfully");
       setPharmacyList((prevList) => prevList.filter((pharmacy) => pharmacy._id !== id)); // Update the state
-      alert("Pharmacy removed successfully");
+      toast.success("Pharmacy removed successfully");
     } catch (err) {
       console.error("Error removing pharmacy:", err);
     }
@@ -80,6 +91,7 @@ const ListAllPharmacy = () => {
         <p className="text-center">Image</p>
         <p className="text-left">Pharmacy Name</p>
         <p className="text-left">Location</p>
+        <p className="text-left">Contact</p>
         <p className="text-center">Open/Close</p>
         <p className="text-center">Remove</p>
       </div>
@@ -106,7 +118,12 @@ const ListAllPharmacy = () => {
 
               {/* Location */}
               <p className="hidden sm:block text-left text-gray-600">
-                {pharmacy.location}
+                {pharmacy.address}
+              </p>
+
+              {/* Contact */}
+              <p className="hidden sm:block text-left text-gray-600">
+                {pharmacy.contact}
               </p>
 
               {/* Open/Close Status */}

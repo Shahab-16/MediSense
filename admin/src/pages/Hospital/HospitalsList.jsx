@@ -1,27 +1,70 @@
 import React, { useEffect, useState } from "react";
 import { AiOutlineDelete, AiOutlineSearch } from "react-icons/ai";
 import { assets } from "../../assets/admin_assets/assets";
-import { AllHospitals } from "../../assets/admin_assets/assets";
 import { useNavigate } from "react-router-dom";
+import { listHospitals, removeHospital } from "../../services/api";
 
 const HospitalsList = () => {
   const [searchTerm, setSearchTerm] = useState("");
+  const [hospitals, setHospitals] = useState([]); // Initialize as an empty array
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-  const handleRemove = (id) => {
-    console.log(`Remove doctor with ID: ${id}`);
-    // Add logic to remove the doctor
+  // Fetch hospitals from the backend
+  useEffect(() => {
+    const fetchHospitals = async () => {
+      try {
+        const response = await listHospitals(); // Call the API to fetch hospitals
+        if (response.success && Array.isArray(response.hospitalsList)) {
+          setHospitals(response.hospitalsList); // Set the fetched data to state
+        } else {
+          setError("Invalid data format received from the API");
+        }
+      } catch (err) {
+        setError("Failed to fetch hospitals"); // Handle errors
+      } finally {
+        setLoading(false); // Set loading to false
+      }
+    };
+
+    fetchHospitals();
+  }, []);
+
+  // Function to handle removing a hospital
+  const handleRemove = async (id) => {
+    try {
+      await removeHospital(id); // Call the API to remove the hospital
+      setHospitals((prevHospitals) =>
+        prevHospitals.filter((hospital) => hospital._id !== id)
+      ); // Update the state
+      alert("Hospital removed successfully");
+    } catch (err) {
+      console.error("Error removing hospital:", err);
+    }
   };
-  const filteredHospitals = AllHospitals.filter((hospital) =>
+
+  // Filter hospitals based on search term
+  const filteredHospitals = hospitals.filter((hospital) =>
     hospital.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  // Show loading message
+  if (loading) {
+    return <p className="text-center">Loading...</p>;
+  }
+
+  // Show error message
+  if (error) {
+    return <p className="text-center text-red-500">{error}</p>;
+  }
+
   return (
     <div className="flex flex-col max-w-[1320px] mx-auto gap-8 p-4 sm:p-8">
-      {/* Button to Add Doctors */}
+      {/* Button to Add Hospital */}
       <span className="flex justify-center">
         <button
-          onClick={() => navigate("/admin/doctors/add-doctors")}
+          onClick={() => navigate("/admin/hospitals/add-hospital")}
           className="text-white bg-blue-800 p-2 rounded-md"
         >
           Add Hospital +
@@ -56,13 +99,13 @@ const HospitalsList = () => {
         {filteredHospitals.length > 0 ? (
           filteredHospitals.map((hospital) => (
             <div
-              key={hospital.hospitalId}
+              key={hospital._id} // Use _id from the backend
               className="grid grid-cols-2 sm:grid-cols-6 gap-4 sm:gap-6 items-center bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300"
             >
               {/* Image */}
               <div className="text-center ml-[25%]">
                 <img
-                  src={assets.hospital}
+                  src={hospital.hospitalImage || assets.hospital} // Use hospital image from backend or fallback
                   alt={hospital.name}
                   className="w-[60px] h-[60px] rounded-md object-cover mx-auto"
                 />
@@ -86,23 +129,24 @@ const HospitalsList = () => {
               {/* Availability */}
               <p
                 className={`text-center font-medium ${
-                  hospital.open ? "text-green-600" : "text-red-600"
+                  hospital.status === "open" ? "text-green-600" : "text-red-600"
                 }`}
               >
-                {hospital.open ? "Open" : "Close"}
+                {hospital.status === "open" ? "Open" : "Closed"}
               </p>
 
               {/* Remove Button */}
               <div className="text-center">
                 <button
-                  onClick={() => handleRemove(hospital.hospitalId)}
+                  onClick={() => handleRemove(hospital._id)}
                   className="text-red-600 hover:text-red-800"
                 >
                   <AiOutlineDelete size={24} />
                 </button>
               </div>
             </div>
-          ))) : (
+          ))
+        ) : (
           <p className="text-center text-gray-600">No hospitals found.</p>
         )}
       </div>

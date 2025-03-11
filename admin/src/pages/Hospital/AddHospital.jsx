@@ -8,8 +8,10 @@ const AddHospital = () => {
     address: "",
     contact: "",
     email: "",
+
     hospitalImage: "",
     file: null, // Store the actual file for API submission
+
     doctors: [],
     facilities: [],
     emergencyFacility: false,
@@ -17,7 +19,7 @@ const AddHospital = () => {
     ambulance: 0,
     beds: 0,
     icuBeds: 0,
-    establishedYear: null,
+    establishedYear: "",
     departments: [],
     type: "",
     status: "open",
@@ -59,12 +61,19 @@ const AddHospital = () => {
       }
     });
 
+
     if (formData.file) {
       formDataToSend.append("hospitalImage", formData.file); // Append the file
     }
 
+
+
+    for (let [key, value] of formDataToSend.entries()) {
+      console.log(key, value);
+    }
+
     try {
-      await addHospital(formDataToSend);
+      await addHospital(formData);
       alert("Hospital Added Successfully");
       // Reset the form after successful submission
       setFormData({

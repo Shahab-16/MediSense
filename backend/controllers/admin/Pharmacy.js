@@ -3,6 +3,7 @@ const cloudinary = require("cloudinary").v2;
 
 exports.addMedicineStore = async (req, res) => {
   try {
+    console.log("Add Pharmacy called in the backend");
     const {
       name,
       ownerName,
@@ -96,7 +97,8 @@ exports.addMedicineStore = async (req, res) => {
 
 exports.removeMedicineStore = async (req, res) => {
   try {
-    const { id } = req.body;
+    console.log("Backend tak aa rhi h",req.params);
+    const { id } = req.params;
     const existMedicineStore = await Pharmacy.findById(id);
 
     if (!existMedicineStore) {
@@ -106,18 +108,20 @@ exports.removeMedicineStore = async (req, res) => {
       });
     }
 
-    const imageUrl = existMedicineStore.pharmacyImage;
+    //const imageUrl = existMedicineStore.pharmacyImage;
 
     // Delete store from DB
     await Pharmacy.findByIdAndDelete(id);
 
     // Delete image from Cloudinary if it's not the default one
+    /*
     if (imageUrl && !imageUrl.includes("vecteezy.com")) {
       const publicId = imageUrl.split("/").pop().split(".")[0];
       await cloudinary.uploader.destroy(
         `MEDISENSE/Pharmacy_Images/${publicId}`
       );
     }
+      */
 
     return res.status(200).json({
       success: true,

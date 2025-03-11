@@ -9,7 +9,7 @@ export const addHospital = async (hospitalData) => {
 };
 
 export const removeHospital = async (id) => {
-  const response = await axios.delete(`${API_URL}/hospital/${id}`);
+  const response = await axios.delete(`${API_URL}/hospital/remove-hospital/${id}`);
   return response.data;
 };
 
@@ -25,11 +25,13 @@ export const addPharmacy = async (pharmacyData) => {
 };
 
 export const removePharmacy = async (id) => {
+  console.log("Removing pharmacy with ID in service api folder:", id);
   const response = await axios.delete(`${API_URL}/pharmacy/remove-pharmacy/${id}`);
+  console.log("Response data after backend call and printing in service api folder:", response.data);
   return response.data;
 };
 
 export const listPharmacies = async () => {
-  const response = await axios.get(`${API_URL}/pharmacies/list-all-pharmacies`);
+  const response = await axios.get(`${API_URL}/pharmacy/list-all-pharmacies`);
   return response.data;
 };

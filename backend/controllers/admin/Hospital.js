@@ -3,28 +3,21 @@ const cloudinary = require("cloudinary").v2;
 
 exports.addHospital = async (req, res) => {
   try {
+    console.log("Request Body:", req.body);
     const {
       name,
       address,
       contact,
       email,
-      doctors,
-      facilities,
       ambulance,
       beds,
       establishedYear,
-      departments,
       type,
       status,
-      aboutHospital,
-      achievements,
-      emergencyFacility,
-      emergencyContact,
-      icuBeds,
-      advancedFacilities,
-      visitingHours,
-      maxConsultancyTime,
+      aboutHospital
     } = req.body;
+
+    console.log(name, address, contact, email, ambulance, beds, establishedYear, type, status, aboutHospital);
 
     if (
       !name ||
@@ -67,22 +60,22 @@ exports.addHospital = async (req, res) => {
       address,
       contact,
       email,
-      doctors: doctors || [],
-      facilities: facilities || [],
-      ambulance,
-      beds,
+      doctors: [],
+      facilities: [],
+      ambulance:Number(ambulance),
+      beds: Number(beds),
       establishedYear: establishedYear || null,
-      departments: departments || [],
+      departments:[],
       type,
-      achievements: achievements || [],
+      achievements: [],
       status: status || "open",
       aboutHospital: aboutHospital || "",
-      emergencyFacility: emergencyFacility || false,
-      emergencyContact: emergencyContact || "911-222-3333",
-      icuBeds: icuBeds || 0,
-      advancedFacilities: advancedFacilities || [],
-      visitingHours: visitingHours || "9:00 AM - 8:00 PM",
-      maxConsultancyTime: maxConsultancyTime || 30,
+      emergencyFacility: false,
+      emergencyContact: "911-222-3333",
+      icuBeds: 0,
+      advancedFacilities: [],
+      visitingHours: "9:00 AM - 8:00 PM",
+      maxConsultancyTime: 30,
       hospitalImage,
     });
 
@@ -104,8 +97,10 @@ exports.addHospital = async (req, res) => {
 };
 
 exports.listHospitals = async (req, res) => {
+  console.log("List Hospitals called in the backend");
   try {
     const hospitalsList = await Hospital.find({});
+    console.log(hospitalsList);
     if (!hospitalsList) {
       return res.status(400).json({
         success: false,
@@ -128,7 +123,7 @@ exports.listHospitals = async (req, res) => {
 
 exports.removeHospital = async (req, res) => {
   try {
-    const { id } = req.body;
+    const { id } = req.params;
 
     // Check if hospital exists
     const existingHospital = await Hospital.findById(id);
@@ -139,6 +134,8 @@ exports.removeHospital = async (req, res) => {
       });
     }
 
+
+    /*
     const hospitalImageUrl = existingHospital.hospitalImage;
 
     if (
@@ -150,7 +147,10 @@ exports.removeHospital = async (req, res) => {
 
       await cloudinary.uploader.destroy(`MEDISENSE/Hospital_Images/${publicId}`);
     }
+ 
+    */
 
+    
     // Delete the hospital from the database
     await Hospital.findByIdAndDelete(id);
 
