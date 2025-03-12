@@ -8,7 +8,6 @@ exports.addMedicine = async (req, res) => {
       name,
       price,
       manufacturerBrand,
-      medicalStoreId,
       description,
       prescriptionRequired,
       stock,
@@ -22,6 +21,8 @@ exports.addMedicine = async (req, res) => {
       storageInstructions,
       discount,
     } = req.body;
+
+    const {medicalStoreId}=req.params;
 
     // ✅ First, validate required fields
     if (!name || !price || !manufacturerBrand || !medicalStoreId) {
@@ -94,7 +95,7 @@ exports.addMedicine = async (req, res) => {
 // Delete Medicine
 exports.deleteMedicine = async (req, res) => {
   try {
-    const { medicineId, quantity } = req.body;
+    const {pharmacyId,medicineId}=req.params;
 
     let medicine = await Medicine.findById(medicineId);
     if (!medicine) {

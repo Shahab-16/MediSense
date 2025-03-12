@@ -113,7 +113,7 @@ const Appointment = () => {
                         ))}
                     </div>
                     <div>
-                        <button onClick={bookAppointment} className="bg-blue-600 text-white text-sm font-light px-14 py-3 rounded-full my-6">Book Appointment</button>
+                        <button onClick={()=>bookAppointment()} className="bg-blue-600 text-white text-sm font-light px-14 py-3 rounded-full my-6">Book Appointment</button>
                     </div>
                 </div>
             </div>

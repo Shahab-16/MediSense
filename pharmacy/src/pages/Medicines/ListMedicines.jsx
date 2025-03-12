@@ -1,6 +1,7 @@
 import React from "react";
 import { medicines } from "../../assets/admin_assets/assets";
 import { AiOutlineDelete } from "react-icons/ai";
+import { listAllMedicine,removeMedicine } from "../../services/api";
 
 const ListMedicines = () => {
   return (
@@ -53,6 +54,7 @@ const ListMedicines = () => {
             <div className="text-center">
               <button
                 className="text-red-600 hover:text-red-800 transition-colors duration-300"
+                onClick={()=>deleteHandler(medicine.id,number)}
               >
                 <AiOutlineDelete size={24} />
               </button>

@@ -7,9 +7,9 @@ const {addDoctor,listAllDoctors,deleteDoctor,bookAppointment}=require('../contro
 const URL=process.env.Main_Url
 
 
-router.post(`/add-doctor`,addDoctor);
-router.get(`/list-all-doctors`,listAllDoctors);
-router.delete(`/delete-doctor`,deleteDoctor);
-router.post('/appointment',bookAppointment);
+router.post(`/:hospitalId/add-doctor`,addDoctor);
+router.get(`/:hospitalId/list-all-doctors`,listAllDoctors);
+router.delete(`/:hospitalId/delete-doctor/:doctorId`,deleteDoctor);
+router.post('/:hospitalId/book-appointment/:doctorId',bookAppointment);
 
 module.exports=router;
