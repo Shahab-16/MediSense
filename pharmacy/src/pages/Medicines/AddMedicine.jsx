@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
-import { FaCloudUploadAlt } from 'react-icons/fa'; // Importing a React icon for upload
+import { FaCloudUploadAlt } from 'react-icons/fa'; // Importing an upload icon
 
 const AddMedicine = () => {
   const [formData, setFormData] = useState({
     name: '',
     price: 0,
     manufacturerBrand: '',
-    medicalStoreId: '',
     description: '',
     prescriptionRequired: false,
     stock: 0,
@@ -15,11 +14,11 @@ const AddMedicine = () => {
     expiryDate: '',
     dosageForm: '',
     strength: '',
-    usageInstructions: 'Refer to packaging or consult a doctor',
     sideEffects: [],
-    storageInstructions: 'Store in a cool, dry place away from sunlight',
     discount: 0,
   });
+
+  const [imagePreview, setImagePreview] = useState(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -32,33 +31,32 @@ const AddMedicine = () => {
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
+      const imageUrl = URL.createObjectURL(file);
+      setImagePreview(imageUrl); // Update image preview
       setFormData({
         ...formData,
-        medicineImage: file.name, // You can handle file upload logic here
+        medicineImage: file, // Store file in state (for API submission)
       });
     }
   };
 
   const handleCategoryChange = (e) => {
-    const { value } = e.target;
     setFormData({
       ...formData,
-      category: value.split(',').map((item) => item.trim()), // Convert comma-separated string to array
+      category: e.target.value.split(',').map((item) => item.trim()), // Convert to array
     });
   };
 
   const handleSideEffectsChange = (e) => {
-    const { value } = e.target;
     setFormData({
       ...formData,
-      sideEffects: value.split(',').map((item) => item.trim()), // Convert comma-separated string to array
+      sideEffects: e.target.value.split(',').map((item) => item.trim()), // Convert to array
     });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Handle form submission, e.g., send data to an API
-    console.log(formData);
+    console.log(formData); // Log form data (or send to API)
   };
 
   return (
@@ -66,17 +64,23 @@ const AddMedicine = () => {
       <form onSubmit={handleSubmit} className='m-5 w-full'>
         <p className='font-semibold text-[25px] p-5 ml-2'>Add Medicine</p>
         <div className='bg-white mx-8 px-5'>
+
           {/* Upload Medicine Image */}
           <div className='flex pt-6 pb-6'>
             <label htmlFor='med-img' className='cursor-pointer'>
-              <div className='w-28 h-28 rounded-full bg-gray-200 flex items-center justify-center shadow-lg hover:shadow-xl transition duration-300'>
-                <FaCloudUploadAlt className='text-4xl text-gray-500' />
+              <div className='w-28 h-28 rounded-full bg-gray-200 flex items-center justify-center shadow-lg hover:shadow-xl transition duration-300 overflow-hidden'>
+                {imagePreview ? (
+                  <img src={imagePreview} alt='Uploaded' className='w-full h-full object-cover' />
+                ) : (
+                  <FaCloudUploadAlt className='text-4xl text-gray-500' />
+                )}
               </div>
             </label>
             <input
               type='file'
               id='med-img'
               name='medicineImage'
+              accept='image/*'
               onChange={handleFileChange}
               hidden
             />
@@ -103,9 +107,9 @@ const AddMedicine = () => {
                 <input
                   className='border rounded px-3 py-2'
                   type='number'
-                  placeholder='Price in Rs.'
                   name='price'
                   min={0}
+                  placeholder='Price in Rs.'
                   value={formData.price}
                   onChange={handleChange}
                   required
@@ -135,33 +139,8 @@ const AddMedicine = () => {
                   required
                 ></textarea>
               </div>
-              <div className='flex flex-col gap-1'>
-                <p>Prescription Required</p>
-                <select
-                  className='border rounded px-3 py-2'
-                  name='prescriptionRequired'
-                  value={formData.prescriptionRequired}
-                  onChange={handleChange}
-                  required
-                >
-                  <option value={false}>No</option>
-                  <option value={true}>Yes</option>
-                </select>
-              </div>
-              <div className='flex flex-col gap-1'>
-                <p>Stock</p>
-                <input
-                  className='border rounded px-3 py-2'
-                  type='number'
-                  name='stock'
-                  placeholder='Stock'
-                  min={1}
-                  value={formData.stock}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
             </div>
+
             <div className='w-full lg:flex-1 flex flex-col gap-4'>
               <div className='flex flex-col gap-1'>
                 <p>Category (Comma Separated)</p>
@@ -243,12 +222,11 @@ const AddMedicine = () => {
           </div>
 
           {/* Submit Button */}
-          <button
-            type='submit'
-            className='bg-blue-600 px-10 py-3 mt-8 text-white rounded-full'
-          >
-            Add Medicine
-          </button>
+          <div className='mt-5 flex justify-center'>
+            <button type='submit' className='bg-blue-500 text-white px-5 py-2 rounded hover:bg-blue-600'>
+              Submit
+            </button>
+          </div>
         </div>
       </form>
     </div>
