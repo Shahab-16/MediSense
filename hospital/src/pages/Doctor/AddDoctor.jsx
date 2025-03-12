@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { FaCloudUploadAlt } from 'react-icons/fa';
-
+import { addDoctor } from '../../services/api';
+import {toast} from "react-toastify";
 const AddDoctor = () => {
   const [formData, setFormData] = useState({
     name: '',
@@ -62,12 +63,10 @@ const AddDoctor = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
-    if (!formData.name || !formData.email || !formData.specialization) {
-      alert('Please fill all required fields!');
-      return;
-    }
+    await addDoctor(formData);
+    toast.success("Doctor added successfully");
     console.log(formData);
   };
 
