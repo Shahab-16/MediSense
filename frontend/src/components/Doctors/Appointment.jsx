@@ -1,14 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { doctors } from "../../assets/asset";
-
+import { StoreContext } from "../../context/StoreContext";
+import { useNavigate } from "react-router-dom";
 const Appointment = () => {
     const { docId } = useParams();
+    const navigate=useNavigate()
     const [docInfo, setDocInfo] = useState(null);
     const [docSlots, setDocSlots] = useState([]);
     const [slotIndex,setSlotIndex]=useState(0);
     const [slotTime,setSlotTime]=useState(' ');
-    const daysOfWeek=['SUN','MON','TUE','WED','THU','FRI','SAT']
+    const {doctors}=useContext(StoreContext);
+    const daysOfWeek=['SUN','MON','TUE','WED','THU','FRI','SAT'];
+
     const fetchDocInfo = async () => {
         const docInfo = doctors.find(doc => doc._id == docId);
         setDocInfo(docInfo);
@@ -54,6 +58,7 @@ const Appointment = () => {
     //make appContext
     const bookAppointment=async () =>{
         //make api call to get the book appointment
+
     }
 
 
@@ -113,7 +118,7 @@ const Appointment = () => {
                         ))}
                     </div>
                     <div>
-                        <button onClick={()=>bookAppointment()} className="bg-blue-600 text-white text-sm font-light px-14 py-3 rounded-full my-6">Book Appointment</button>
+                        <button onClick = {bookAppointment}  className="bg-blue-600 text-white text-sm font-light px-14 py-3 rounded-full my-6">Book Appointment</button>
                     </div>
                 </div>
             </div>

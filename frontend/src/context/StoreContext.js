@@ -1,6 +1,6 @@
 // StoreContext.js
 import { createContext, useState } from "react";
-
+import { doctors } from "../assets/asset";
 export const StoreContext = createContext();
 
 const StoreContextProvider = ({ children }) => {
@@ -41,6 +41,7 @@ const StoreContextProvider = ({ children }) => {
 
 
     const contextValue = {
+        doctors,
         stats,
         setStats,
         login,
