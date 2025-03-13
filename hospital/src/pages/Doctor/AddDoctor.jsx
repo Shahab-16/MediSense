@@ -1,29 +1,33 @@
-import React, { useState } from 'react';
-import { FaCloudUploadAlt } from 'react-icons/fa';
-import { addDoctor } from '../../services/api';
-import {toast} from "react-toastify";
+import React, { useState } from "react";
+import { FaCloudUploadAlt } from "react-icons/fa";
+import { addDoctor } from "../../services/api";
+import { toast } from "react-toastify";
+import { useParams } from "react-router-dom";
 const AddDoctor = () => {
+
+  const {hospitalId}=useParams();
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: '',
-    profileImage: '',
-    specialization: '',
+    name: "",
+    email: "",
+    password: "",
+    profileImage: "",
+    specialization: "",
     degree: [],
     available: true,
-    consultationFee: 0,
+    fees: 0,
     experience: 1,
-    about: '',
-    address: { line1: '' },
-    pincode: '',
-    date: new Date().toISOString().split('T')[0],
+    about: "",
+    address: { line1: "" },
+    pincode: "",
+    date: new Date().toISOString().split("T")[0],
     slot_booked: {},
-    phone: '',
-    hospitalId: '',
+    phone: "",
     currentPatients: [],
     pastPatients: [],
-    languagesSpoken: 'English',
+    languagesSpoken: "English",
+    hospitalId:hospitalId
   });
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -59,15 +63,20 @@ const AddDoctor = () => {
   const handleDegreeChange = (e) => {
     setFormData((prevData) => ({
       ...prevData,
-      degree: e.target.value.split(',').map((degree) => degree.trim()), // Store as an array
+      degree: e.target.value.split(",").map((degree) => degree.trim()), // Store as an array
     }));
   };
 
-  const handleSubmit = async(e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    await addDoctor(formData);
-    toast.success("Doctor added successfully");
-    console.log(formData);
+    try{
+      await addDoctor(formData);
+      toast.success("Doctor added successfully");
+       console.log(formData);
+    }
+    catch(err){
+      console.log("Error in adding doctor", err);
+    }
   };
 
   return (
@@ -75,7 +84,6 @@ const AddDoctor = () => {
       <form onSubmit={handleSubmit} className="m-5 w-full">
         <p className="font-semibold text-[25px] p-5 ml-2">Add Doctor</p>
         <div className="bg-white mx-8 px-5">
-          
           {/* Upload Doctor Image */}
           <div className="flex pt-6 pb-6">
             <label htmlFor="doc-img" className="cursor-pointer">
@@ -98,7 +106,9 @@ const AddDoctor = () => {
               onChange={handleFileChange}
               hidden
             />
-            <p className="mx-3 flex items-center text-gray-600">Upload Doctor <br /> Picture</p>
+            <p className="mx-3 flex items-center text-gray-600">
+              Upload Doctor <br /> Picture
+            </p>
           </div>
 
           {/* Doctor Details */}
@@ -147,7 +157,10 @@ const AddDoctor = () => {
                   name="experience"
                   value={formData.experience}
                   onChange={(e) =>
-                    setFormData({ ...formData, experience: parseInt(e.target.value, 10) })
+                    setFormData({
+                      ...formData,
+                      experience: parseInt(e.target.value, 10),
+                    })
                   }
                   required
                 >
@@ -162,7 +175,7 @@ const AddDoctor = () => {
                 <input
                   className="border rounded px-3 py-2"
                   type="number"
-                  name="consultationFee"
+                  name="fees"
                   placeholder="Doctor Fees"
                   value={formData.consultationFee}
                   onChange={handleChange}
@@ -197,7 +210,7 @@ const AddDoctor = () => {
                   type="text"
                   name="degree"
                   placeholder="Enter degrees (comma-separated)"
-                  value={formData.degree.join(', ')}
+                  value={formData.degree.join(", ")}
                   onChange={handleDegreeChange}
                   required
                 />
@@ -231,7 +244,10 @@ const AddDoctor = () => {
 
           {/* Submit Button */}
           <div className="mt-6">
-            <button className="bg-blue-500 text-white px-5 py-2 rounded hover:bg-blue-700" type="submit">
+            <button
+              className="bg-blue-500 text-white px-5 py-2 rounded hover:bg-blue-700"
+              type="submit"
+            >
               Submit
             </button>
           </div>

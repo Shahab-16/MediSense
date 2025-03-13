@@ -7,6 +7,6 @@ const {addMedicine,listAllMedicines,deleteMedicine}=require('../controllers/phar
 
 router.post(`/:pharmacyId/add-medicine`,addMedicine)
 router.get(`/:pharmacyId/list-all-medicines`,listAllMedicines)
-router.delete(`/:pharmacyId/delete-medicine`,deleteMedicine)
+router.delete(`/:pharmacyId/delete-medicine/:medicineId`,deleteMedicine)
 
 module.exports=router;

@@ -2,11 +2,15 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const otpgenerator = require("otp-generator");
 const User = require("../models/User");
+const Hospital = require("../models/Hospitals");
+const Doctor = require("../models/Doctors");
+const MedicalStore = require("../models/MedicalStore");
 const OTP = require("../models/OTP");
 
+// Signup (Only for User/Patient)
 exports.Signup = async (req, res) => {
   try {
-    const {firstName,lastName, email, password, confirmPassword, otp } = req.body;
+    const { firstName, lastName, email, password, confirmPassword, otp } = req.body;
 
     if (!firstName || !lastName || !email || !password || !confirmPassword || !otp) {
       return res.status(400).json({
@@ -33,18 +37,7 @@ exports.Signup = async (req, res) => {
 
     // Fetch the most recent OTP for the given email
     const response = await OTP.find({ email }).sort({ createdAt: -1 }).limit(1);
-    console.log(response);
-
-    if (response.length === 0) {
-      return res.status(400).json({
-        success: false,
-        message: "The OTP is not valid",
-      });
-    }
-
-    const recentOTP = response[0].OTP;
-
-    if (otp !== recentOTP) {
+    if (response.length === 0 || response[0].OTP !== otp) {
       return res.status(400).json({
         success: false,
         message: "The OTP is not valid",
@@ -76,6 +69,7 @@ exports.Signup = async (req, res) => {
   }
 };
 
+// Login for All Roles (User, Hospital, Doctor, Pharmacy, Admin)
 exports.Login = async (req, res) => {
   try {
     const { email, password, role } = req.body;
@@ -87,85 +81,139 @@ exports.Login = async (req, res) => {
       });
     }
 
-    // Hardcoded credentials for doctor and admin
-    const validCredentials = [
-      { email: "mdshahabuddin0516@gmail.com", password: "87654321" },
-      { email: "122arsalanahmed@gmail.com", password: "87654321" },
-    ];
+    let user;
+    let payload;
 
-    // Check role for doctor or admin
-    if (role === "doctor" || role === "admin" || role === "pharmacy" || role === "hospital") {
-      const isValid = validCredentials.some(
-        (cred) => cred.email === email && cred.password === password
-      );
+    switch (role) {
+      case "user":
+        user = await User.findOne({ email });
+        if (!user) {
+          return res.status(400).json({
+            success: false,
+            message: "User not found",
+          });
+        }
+        if (!(await bcrypt.compare(password, user.password))) {
+          return res.status(401).json({
+            success: false,
+            message: "Password is incorrect",
+          });
+        }
+        payload = {
+          id: user._id,
+          name: `${user.firstName} ${user.lastName}`,
+          email: user.email,
+          role: "user",
+        };
+        console.log(payload);
+        break;
 
-      if (isValid) {
-        const payLoad = { email, role };
-        const token = jwt.sign(payLoad, process.env.JWT_SECRET, {
-          expiresIn: "2h",
-        });
+      case "hospital":
+        user = await Hospital.findOne({ email });
+        if (!user) {
+          return res.status(400).json({
+            success: false,
+            message: "Hospital not found",
+          });
+        }
+        if (password !== user.password) {
+          return res.status(401).json({
+            success: false,
+            message: "Password is incorrect",
+          });
+        }
+        payload = {
+          id: user._id,
+          name: user.name,
+          email: user.email,
+          role: "hospital",
+        };
+        break;
 
-        return res.status(200).json({
-          success: true,
-          token,
-          role,
-          message: `${role.charAt(0).toUpperCase() + role.slice(1)} Login Success`,
-        });
-      } else {
-        return res.status(401).json({
-          success: false,
-          message: "Invalid email or password for doctor or admin",
-        });
-      }
-    }
+      case "doctor":
+        user = await Doctor.findOne({ email });
+        if (!user) {
+          return res.status(400).json({
+            success: false,
+            message: "Doctor not found",
+          });
+        }
+        if (password !== user.password) {
+          return res.status(401).json({
+            success: false,
+            message: "Password is incorrect",
+          });
+        }
+        payload = {
+          id: user._id,
+          name: user.name,
+          email: user.email,
+          role: "doctor",
+        };
+        break;
 
-    // Regular user login logic
-    if (role === "user") {
-      const user = await User.findOne({ email });
+      case "pharmacy":
+        user = await MedicalStore.findOne({ email });
+        if (!user) {
+          return res.status(400).json({
+            success: false,
+            message: "Pharmacy not found",
+          });
+        }
+        if (password !== user.password) {
+          return res.status(401).json({
+            success: false,
+            message: "Password is incorrect",
+          });
+        }
+        payload = {
+          id: user._id,
+          name: user.name,
+          email: user.email,
+          role: "pharmacy",
+        };
+        break;
 
-      if (!user) {
+      case "admin":
+        // Hardcoded admin credentials
+        if (email === "mdshahabuddin0516@gmail.com" && password === "87654321") {
+          payload = {
+            id: "Shahab16",
+            name: "Shahab",
+            email: "mdshahabuddin0516@gmail.com",
+            role: "admin",
+          };
+        } else {
+          return res.status(401).json({
+            success: false,
+            message: "Invalid email or password for admin",
+          });
+        }
+        break;
+
+      default:
         return res.status(400).json({
           success: false,
-          message: "User not found",
+          message: "Invalid role specified",
         });
-      }
-
-      if (await bcrypt.compare(password, user.password)) {
-        const payLoad = {
-          id: user._id,
-          email: user.email,
-          role: user.role,
-        };
-        const token = jwt.sign(payLoad, process.env.JWT_SECRET, {
-          expiresIn: "2h",
-        });
-
-        user.token = token;
-        user.password = undefined;
-
-        const options = {
-          expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
-          httpOnly: true,
-        };
-        return res.cookie("token", token, options).status(200).json({
-          success: true,
-          token,
-          user,
-          message: `User Login Success`,
-        });
-      } else {
-        return res.status(401).json({
-          success: false,
-          message: "Password is incorrect",
-        });
-      }
     }
 
-    return res.status(400).json({
-      success: false,
-      message: "Invalid role specified",
+    // Generate JWT token
+    const token = jwt.sign(payload, process.env.JWT_SECRET, {
+      expiresIn: "2h",
+    });
+
+    // Remove sensitive data before sending the response
+    user.password = undefined;
+
+    return res.status(200).json({
+      success: true,
+      token,
+      user: payload,
+      message: `${role.charAt(0).toUpperCase() + role.slice(1)} Login Success`,
     });
   } catch (error) {
+    console.error("Error during login:", error);
     return res.status(500).json({
       success: false,
       message: "Something went wrong in login",
@@ -173,7 +221,7 @@ exports.Login = async (req, res) => {
   }
 };
 
-
+// Send OTP (For User Signup)
 exports.SendOTP = async (req, res) => {
   try {
     const { email } = req.body;
@@ -230,86 +278,101 @@ exports.SendOTP = async (req, res) => {
   }
 };
 
-
-exports.changePassword = async (req, res) => {
+// Verify OTP (For User Signup)
+exports.verifyOtp = async (req, res) => {
   try {
-    const userDetails = await User.findById(req.user.id);
-    const { oldPassword, newPassword } = req.body;
+    const { email, otp } = req.body;
 
-    const isPasswordMatch = await bcrypt.compare(
-      oldPassword,
-      userDetails.password
-    );
-    if (!isPasswordMatch) {
-      return res
-        .status(401)
-        .json({ success: false, message: "The password is incorrect" });
-    }
-
-    const encryptedPassword = await bcrypt.hash(newPassword, 10);
-    const updatedUserDetails = await User.findByIdAndUpdate(
-      req.user.id,
-      { password: encryptedPassword },
-      { new: true }
-    );
-    try {
-      const emailResponse = await mailSender(
-        updatedUserDetails.email,
-        "Password for your account has been updated",
-        passwordUpdated(
-          updatedUserDetails.email,
-          `Password updated successfully for ${updatedUserDetails.firstName} ${updatedUserDetails.lastName}`
-        )
-      );
-      console.log("Email sent successfully:", emailResponse.response);
-    } catch (error) {
-      console.error("Error occurred while sending email:", error);
-      return res.status(500).json({
+    // Fetch the most recent OTP for the given email
+    const response = await OTP.find({ email }).sort({ createdAt: -1 }).limit(1);
+    if (response.length === 0 || response[0].OTP !== otp) {
+      return res.status(400).json({
         success: false,
-        message: "Error occurred while sending email",
-        error: error.message,
+        message: "Invalid OTP",
       });
     }
 
-    return res
-      .status(200)
-      .json({ success: true, message: "Password updated successfully" });
+    return res.status(200).json({
+      success: true,
+      message: "OTP verified successfully",
+    });
   } catch (error) {
-    console.error("Error occurred while updating password:", error);
+    console.error("Error during OTP verification:", error);
     return res.status(500).json({
       success: false,
-      message: "Error occurred while updating password",
-      error: error.message,
+      message: "Something went wrong during OTP verification",
     });
   }
 };
 
-
-
-exports.verifyOtp = async (req, res) => {
+// Change Password (For All Roles)
+exports.changePassword = async (req, res) => {
   try {
-      const { email, otp } = req.body;
+    const { oldPassword, newPassword } = req.body;
+    const userId = req.user.id;
+    const role = req.user.role;
 
-      // Fetch the most recent OTP for the given email
-      const response = await OTP.find({ email }).sort({ createdAt: -1 }).limit(1);
-      if (response.length === 0 || response[0].OTP !== otp) {
-          return res.status(400).json({
-              success: false,
-              message: "Invalid OTP",
-          });
-      }
-
-      return res.status(200).json({
-          success: true,
-          message: "OTP verified successfully",
-      });
-  } catch (error) {
-      console.error("Error during OTP verification:", error);
-      return res.status(500).json({
+    let user;
+    switch (role) {
+      case "user":
+        user = await User.findById(userId);
+        break;
+      case "hospital":
+        user = await Hospital.findById(userId);
+        break;
+      case "doctor":
+        user = await Doctor.findById(userId);
+        break;
+      case "pharmacy":
+        user = await MedicalStore.findById(userId);
+        break;
+      default:
+        return res.status(400).json({
           success: false,
-          message: "Something went wrong during OTP verification",
+          message: "Invalid role specified",
+        });
+    }
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
       });
+    }
+
+    // Validate old password
+    if (role === "user") {
+      if (!(await bcrypt.compare(oldPassword, user.password))) {
+        return res.status(401).json({
+          success: false,
+          message: "Old password is incorrect",
+        });
+      }
+    } else {
+      if (oldPassword !== user.password) {
+        return res.status(401).json({
+          success: false,
+          message: "Old password is incorrect",
+        });
+      }
+    }
+
+    // Hash the new password
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    // Update the password
+    user.password = hashedPassword;
+    await user.save();
+
+    return res.status(200).json({
+      success: true,
+      message: "Password updated successfully",
+    });
+  } catch (error) {
+    console.error("Error during password change:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Something went wrong during password change",
+    });
   }
 };
-
-

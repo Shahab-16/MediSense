@@ -106,7 +106,7 @@ const HospitalSidebar = () => {
             <p>Doctors List</p>
           </NavLink>
           <NavLink
-            to="/hospital/doctors/add-doctors"
+            to="/hospital/:hospitalId/doctors/add-doctors"
             className="flex items-center gap-3 text-base text-gray-700 p-2 rounded-md hover:bg-gray-100 transition-all duration-300"
           >
             <MdPersonAddAlt1 size={18} />
