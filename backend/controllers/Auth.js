@@ -146,7 +146,7 @@ exports.Login = async (req, res) => {
             message: "Doctor not found",
           });
         }
-        if (password !== user.password) {
+        if (!(await bcrypt.compare(password, user.password))) {
           return res.status(401).json({
             success: false,
             message: "Password is incorrect",
