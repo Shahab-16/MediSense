@@ -1,5 +1,6 @@
 const Pharmacy = require("../../models/MedicalStore");
 const cloudinary = require("cloudinary").v2;
+const bcrypt = require("bcryptjs");
 
 exports.addMedicineStore = async (req, res) => {
   try {
@@ -11,6 +12,8 @@ exports.addMedicineStore = async (req, res) => {
       address,
       contact,
       email,
+      password,
+      confirmPassword,
       medicines,
       deliveryAvailable,
       establishedYear,
@@ -23,13 +26,16 @@ exports.addMedicineStore = async (req, res) => {
     let pharmacyStoreImage =
       "https://static.vecteezy.com/system/resources/previews/002/172/389/large_2x/pharmacy-store-front-on-city-background-commercial-property-medicine-building-illustration-in-flat-style-vector.jpg";
 
+    // Validate required fields
     if (
       !name ||
       !ownerName ||
       !LicenseNumber ||
       !address ||
       !contact ||
-      !email
+      !email ||
+      !password ||
+      !confirmPassword
     ) {
       return res.status(400).json({
         success: false,
@@ -37,6 +43,15 @@ exports.addMedicineStore = async (req, res) => {
       });
     }
 
+    // Check if password and confirmPassword match
+    if (password !== confirmPassword) {
+      return res.status(400).json({
+        success: false,
+        message: "Password and Confirm Password do not match",
+      });
+    }
+
+    // Check if pharmacy already exists
     const existingPharmacy = await Pharmacy.findOne({ email });
 
     if (existingPharmacy) {
@@ -46,6 +61,10 @@ exports.addMedicineStore = async (req, res) => {
       });
     }
 
+    // Hash the password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Upload image to Cloudinary if provided
     if (req.file) {
       try {
         const result = await cloudinary.uploader.upload(req.file.path, {
@@ -62,6 +81,7 @@ exports.addMedicineStore = async (req, res) => {
       }
     }
 
+    // Create a new pharmacy instance
     const newPharmacy = new Pharmacy({
       name,
       ownerName,
@@ -69,6 +89,7 @@ exports.addMedicineStore = async (req, res) => {
       address,
       contact,
       email,
+      password: hashedPassword, // Save the hashed password
       medicines: medicines || [],
       deliveryAvailable: deliveryAvailable || false,
       establishedYear: establishedYear || null,
@@ -79,6 +100,7 @@ exports.addMedicineStore = async (req, res) => {
       pharmacyImage: pharmacyStoreImage,
     });
 
+    // Save the new pharmacy to the database
     await newPharmacy.save();
 
     return res.status(200).json({
@@ -87,6 +109,7 @@ exports.addMedicineStore = async (req, res) => {
       data: newPharmacy,
     });
   } catch (err) {
+    console.error("Error in adding pharmacy:", err);
     return res.status(500).json({
       success: false,
       message: "Error in adding pharmacy",
@@ -94,7 +117,6 @@ exports.addMedicineStore = async (req, res) => {
     });
   }
 };
-
 exports.removeMedicineStore = async (req, res) => {
   try {
     console.log("Backend tak aa rhi h",req.params);

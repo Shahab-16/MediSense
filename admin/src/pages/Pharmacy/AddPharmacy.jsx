@@ -13,6 +13,8 @@ const AddPharmacy = () => {
     address: "",
     contact: "",
     email: "",
+    password: "",
+    confirmPassword: "",
     medicines: [],
     deliveryAvailable: false,
     establishedYear: null,
@@ -50,13 +52,20 @@ const AddPharmacy = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try{
+
+    // Check if password and confirm password match
+    if (formData.password !== formData.confirmPassword) {
+      toast.error("Password and Confirm Password do not match");
+      return;
+    }
+
+    try {
       await addPharmacy(formData);
       toast.success("Pharmacy Added Successfully");
       console.log(formData);
-    }
-    catch(error){
+    } catch (error) {
       console.log("Error in adding pharmacy", error);
+      toast.error("Failed to add pharmacy");
     }
   };
 
@@ -133,6 +142,24 @@ const AddPharmacy = () => {
                 name="email"
                 placeholder="Email"
                 value={formData.email}
+                onChange={handleChange}
+                required
+              />
+              <input
+                className="border rounded-lg px-4 py-3 shadow-sm focus:ring-2 focus:ring-blue-300"
+                type="password"
+                name="password"
+                placeholder="Password"
+                value={formData.password}
+                onChange={handleChange}
+                required
+              />
+              <input
+                className="border rounded-lg px-4 py-3 shadow-sm focus:ring-2 focus:ring-blue-300"
+                type="password"
+                name="confirmPassword"
+                placeholder="Confirm Password"
+                value={formData.confirmPassword}
                 onChange={handleChange}
                 required
               />

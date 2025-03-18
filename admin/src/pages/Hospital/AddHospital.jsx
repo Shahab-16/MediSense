@@ -8,10 +8,10 @@ const AddHospital = () => {
     address: "",
     contact: "",
     email: "",
-
+    password: "",
+    confirmPassword: "",
     hospitalImage: "",
     file: null, // Store the actual file for API submission
-
     doctors: [],
     facilities: [],
     emergencyFacility: false,
@@ -54,26 +54,24 @@ const AddHospital = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (formData.password !== formData.confirmPassword) {
+      alert("Password and Confirm Password do not match");
+      return;
+    }
+
     const formDataToSend = new FormData();
     Object.entries(formData).forEach(([key, value]) => {
-      if (key !== "hospitalImage" && key !== "file") {
+      if (key !== "hospitalImage" && key !== "file" && key !== "confirmPassword") {
         formDataToSend.append(key, value);
       }
     });
-
 
     if (formData.file) {
       formDataToSend.append("hospitalImage", formData.file); // Append the file
     }
 
-
-
-    for (let [key, value] of formDataToSend.entries()) {
-      console.log(key, value);
-    }
-
     try {
-      await addHospital(formData);
+      await addHospital(formDataToSend);
       alert("Hospital Added Successfully");
       // Reset the form after successful submission
       setFormData({
@@ -81,6 +79,8 @@ const AddHospital = () => {
         address: "",
         contact: "",
         email: "",
+        password: "",
+        confirmPassword: "",
         hospitalImage: "",
         file: null,
         doctors: [],
@@ -90,7 +90,7 @@ const AddHospital = () => {
         ambulance: 0,
         beds: 0,
         icuBeds: 0,
-        establishedYear: null,
+        establishedYear: "",
         departments: [],
         type: "",
         status: "open",
@@ -180,6 +180,24 @@ const AddHospital = () => {
                 placeholder="Established Year"
                 value={formData.establishedYear}
                 onChange={handleChange}
+              />
+              <input
+                className="border rounded-lg px-4 py-3 shadow-sm focus:ring-2 focus:ring-blue-300"
+                type="password"
+                name="password"
+                placeholder="Password"
+                value={formData.password}
+                onChange={handleChange}
+                required
+              />
+              <input
+                className="border rounded-lg px-4 py-3 shadow-sm focus:ring-2 focus:ring-blue-300"
+                type="password"
+                name="confirmPassword"
+                placeholder="Confirm Password"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                required
               />
             </div>
 

@@ -7,12 +7,13 @@ const {
   deleteDoctor,
   bookAppointment,
 } = require("../controllers/hospital/Hospital");
+const { authMiddleware,isHospitalMiddleware } = require("../middlewares/auth");
 
 const URL = process.env.Main_Url;
 
-router.post(`/:hospitalId/add-doctor`, addDoctor);
-router.get(`/:hospitalId/list-all-doctors`, listAllDoctors);
-router.delete(`/:hospitalId/delete-doctor/:doctorId`, deleteDoctor);
-router.post("/:hospitalId/book-appointment/:doctorId", bookAppointment);
+router.post(`/:hospitalName/add-doctor`,authMiddleware,isHospitalMiddleware,addDoctor);
+router.get(`/:hospitalName/list-all-doctors`,authMiddleware,isHospitalMiddleware, listAllDoctors);
+router.delete(`/:hospitalName/delete-doctor/:doctorId`,authMiddleware,isHospitalMiddleware, deleteDoctor);
+router.post("/:hospitalName/book-appointment/:doctorId",authMiddleware,isHospitalMiddleware,bookAppointment);
 
 module.exports = router;

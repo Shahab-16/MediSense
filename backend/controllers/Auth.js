@@ -10,9 +10,17 @@ const OTP = require("../models/OTP");
 // Signup (Only for User/Patient)
 exports.Signup = async (req, res) => {
   try {
-    const { firstName, lastName, email, password, confirmPassword, otp } = req.body;
+    const { firstName, lastName, email, password, confirmPassword, otp } =
+      req.body;
 
-    if (!firstName || !lastName || !email || !password || !confirmPassword || !otp) {
+    if (
+      !firstName ||
+      !lastName ||
+      !email ||
+      !password ||
+      !confirmPassword ||
+      !otp
+    ) {
       return res.status(400).json({
         success: false,
         message: "All fields are required",
@@ -105,7 +113,6 @@ exports.Login = async (req, res) => {
           email: user.email,
           role: "user",
         };
-        console.log(payload);
         break;
 
       case "hospital":
@@ -116,7 +123,7 @@ exports.Login = async (req, res) => {
             message: "Hospital not found",
           });
         }
-        if (password !== user.password) {
+        if (!(await bcrypt.compare(password, user.password))) {
           return res.status(401).json({
             success: false,
             message: "Password is incorrect",
@@ -128,6 +135,7 @@ exports.Login = async (req, res) => {
           email: user.email,
           role: "hospital",
         };
+        console.log(payload);
         break;
 
       case "doctor":
@@ -160,7 +168,7 @@ exports.Login = async (req, res) => {
             message: "Pharmacy not found",
           });
         }
-        if (password !== user.password) {
+        if (!(await bcrypt.compare(password, user.password))) {
           return res.status(401).json({
             success: false,
             message: "Password is incorrect",
@@ -170,13 +178,17 @@ exports.Login = async (req, res) => {
           id: user._id,
           name: user.name,
           email: user.email,
-          role: "pharmacy",
+          role: "pharmacy", // Ensure this is set correctly
         };
+        console.log(payload);
         break;
 
       case "admin":
         // Hardcoded admin credentials
-        if (email === "mdshahabuddin0516@gmail.com" && password === "87654321") {
+        if (
+          email === "mdshahabuddin0516@gmail.com" &&
+          password === "87654321"
+        ) {
           payload = {
             id: "Shahab16",
             name: "Shahab",
@@ -204,7 +216,9 @@ exports.Login = async (req, res) => {
     });
 
     // Remove sensitive data before sending the response
-    user.password = undefined;
+    if (user) {
+      user.password = undefined;
+    }
 
     return res.status(200).json({
       success: true,

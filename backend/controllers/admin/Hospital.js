@@ -1,5 +1,6 @@
 const Hospital = require("../../models/Hospitals");
 const cloudinary = require("cloudinary").v2;
+const bcrypt = require("bcryptjs");
 
 exports.addHospital = async (req, res) => {
   try {
@@ -9,21 +10,39 @@ exports.addHospital = async (req, res) => {
       address,
       contact,
       email,
+      password,
+      confirmPassword,
+      ambulance,
+      beds,
+      establishedYear,
+      type,
+      status,
+      aboutHospital,
+    } = req.body;
+
+    console.log(
+      name,
+      address,
+      contact,
+      email,
+      password,
+      confirmPassword,
       ambulance,
       beds,
       establishedYear,
       type,
       status,
       aboutHospital
-    } = req.body;
+    );
 
-    console.log(name, address, contact, email, ambulance, beds, establishedYear, type, status, aboutHospital);
-
+    // Validate required fields
     if (
       !name ||
       !address ||
       !contact ||
       !email ||
+      !password ||
+      !confirmPassword ||
       ambulance === undefined ||
       beds === undefined ||
       !type
@@ -31,6 +50,14 @@ exports.addHospital = async (req, res) => {
       return res.status(400).json({
         success: false,
         message: "All required fields must be provided",
+      });
+    }
+
+    // Check if password and confirmPassword match
+    if (password !== confirmPassword) {
+      return res.status(400).json({
+        success: false,
+        message: "Password and Confirm Password do not match",
       });
     }
 
@@ -43,6 +70,9 @@ exports.addHospital = async (req, res) => {
         message: "Hospital already exists",
       });
     }
+
+    // Hash the password
+    const hashedPassword = await bcrypt.hash(password, 10);
 
     let hospitalImage =
       "https://static.vecteezy.com/system/resources/previews/011/098/092/original/hospital-clinic-building-3d-icon-illustration-png.png";
@@ -60,12 +90,13 @@ exports.addHospital = async (req, res) => {
       address,
       contact,
       email,
+      password: hashedPassword, // Save the hashed password
       doctors: [],
       facilities: [],
-      ambulance:Number(ambulance),
+      ambulance: Number(ambulance),
       beds: Number(beds),
       establishedYear: establishedYear || null,
-      departments:[],
+      departments: [],
       type,
       achievements: [],
       status: status || "open",
@@ -88,6 +119,7 @@ exports.addHospital = async (req, res) => {
       data: newHospital,
     });
   } catch (err) {
+    console.error("Error in adding hospital:", err);
     return res.status(500).json({
       success: false,
       message: "Error in adding hospital",
@@ -95,7 +127,6 @@ exports.addHospital = async (req, res) => {
     });
   }
 };
-
 exports.listHospitals = async (req, res) => {
   console.log("List Hospitals called in the backend");
   try {
