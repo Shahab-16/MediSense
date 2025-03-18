@@ -7,7 +7,8 @@ const MedicalStore = require("../models/MedicalStore");
 // General Auth Middleware
 exports.authMiddleware = async (req, res, next) => {
   try {
-    const token = req.body.token || req.headers["authorization"]?.replace("Bearer ", "");
+    const token =
+      req.body.token || req.headers["authorization"]?.replace("Bearer ", "");
 
     if (!token) {
       return res.status(401).json({
@@ -31,9 +32,11 @@ exports.authMiddleware = async (req, res, next) => {
         break;
       case "pharmacy":
         user = await MedicalStore.findById(decoded.id);
+        console.log("Printing pharmacy details", user);
         break;
       case "admin":
-        user = { id: decoded.id, role: "admin" }; // Admin is hardcoded
+        // Hardcoded admin object
+        user = { id: decoded.id, role: "admin" };
         break;
       default:
         return res.status(401).json({
@@ -49,16 +52,21 @@ exports.authMiddleware = async (req, res, next) => {
       });
     }
 
-    req.user = user; // Attach user to request object
+    // Attach user and role to the request object
+    req.user = {
+      ...(user.toObject ? user.toObject() : user), // Convert Mongoose document to plain object if it exists
+      role: decoded.role, // Explicitly add the role from the token
+    };
+
     next();
   } catch (err) {
+    console.error("Error in authMiddleware:", err); // Log the error for debugging
     return res.status(401).json({
       success: false,
       message: "Token is invalid",
     });
   }
 };
-
 // Role-Specific Middlewares
 exports.isAdminMiddleware = (req, res, next) => {
   if (req.user.role !== "admin") {
@@ -81,11 +89,11 @@ exports.isHospitalMiddleware = (req, res, next) => {
 };
 
 exports.isPharmacyMiddleware = (req, res, next) => {
-  console.log(req.user.role);
-  if (req.user.role !== "pharmacy") {
+  console.log("User role:", req.user.role);
+  if (req.user.role !== "pharmacy" && req.user.role !== "hospital") {
     return res.status(403).json({
       success: false,
-      message: "Access denied. You are not a pharmacy.Mistake here in role",
+      message: "Access denied. You are not a pharmacy or hospital.",
     });
   }
   next();

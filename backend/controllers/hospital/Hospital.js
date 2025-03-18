@@ -29,10 +29,11 @@ exports.addDoctor = async (req, res) => {
       languagesSpoken,
     } = req.body;
 
-    const { hospitalId } = req.params;
+    // Extract and format the hospital name from the URL
+    const hospitalName = req.params.hospitalName.replace(/-/g, " ");
 
     console.log(req.body);
-    console.log(hospitalId);
+    console.log(hospitalName);
 
     if (
       !name ||
@@ -47,7 +48,7 @@ exports.addDoctor = async (req, res) => {
       !about ||
       !address ||
       !date ||
-      !hospitalId
+      !hospitalName
     ) {
       return res.status(400).json({
         success: false,
@@ -55,11 +56,13 @@ exports.addDoctor = async (req, res) => {
       });
     }
 
-    // Validate hospitalId before conversion
-    if (!mongoose.Types.ObjectId.isValid(hospitalId)) {
-      return res.status(400).json({
+    // Find the hospital by name
+    const hospital = await Hospital.findOne({ name: hospitalName });
+
+    if (!hospital) {
+      return res.status(404).json({
         success: false,
-        message: "Invalid hospital ID format",
+        message: "Hospital not found",
       });
     }
 
@@ -116,7 +119,7 @@ exports.addDoctor = async (req, res) => {
       address,
       date,
       slot_booked: slot_booked || {},
-      hospitalId: new mongoose.Types.ObjectId(hospitalId), // Convert hospitalId to ObjectId
+      hospitalId: hospital._id, // Use the hospital's _id
       currentPatients: convertedCurrentPatients,
       pastPatients: convertedPastPatients,
       languagesSpoken,
@@ -126,7 +129,7 @@ exports.addDoctor = async (req, res) => {
     await doctor.save();
 
     // Add the doctor to the hospital's doctors list
-    await Hospital.findByIdAndUpdate(hospitalId, {
+    await Hospital.findByIdAndUpdate(hospital._id, {
       $push: { doctors: doctor._id },
     });
 
@@ -147,11 +150,15 @@ exports.addDoctor = async (req, res) => {
 
 exports.deleteDoctor = async (req, res) => {
   try {
-    const { hospitalId, doctorId } = req.body;
+    const { doctorId } = req.params;
+    const hospitalName = req.params.hospitalName.replace(/-/g, " ");
 
-    const hospital = await Hospital.findByIdAndUpdate(hospitalId, {
-      $pull: { doctors: doctorId },
-    });
+    const hospital = await Hospital.findOneAndUpdate(
+      { name: hospitalName },
+      {
+        $pull: { doctors: doctorId },
+      }
+    );
 
     if (!hospital) {
       return res.status(404).json({ message: "Hospital not found" });
@@ -163,44 +170,28 @@ exports.deleteDoctor = async (req, res) => {
       return res.status(404).json({ message: "Doctor not found" });
     }
 
-    const profileImageUrl = doctor.profileImage;
-
     await Doctor.findByIdAndDelete(doctorId);
-
-    // Delete the image from Cloudinary if it’s not the default image
-    if (
-      profileImageUrl &&
-      profileImageUrl.includes("no-profile-pic-icon-7.jpg")
-    ) {
-      const publicId = profileImageUrl.split("/").pop().split(".")[0];
-
-      await cloudinary.uploader.destroy(
-        `MEDISENSE/Doctor_Profile_Images/${publicId}`
-      );
-    }
 
     res.status(200).json({ message: "Doctor removed successfully" });
   } catch (error) {
-    res
-      .status(500)
-      .json({ message: "Error removing doctor", error: error.message });
+    res.status(500).json({ message: "Error removing doctor", error: error.message });
   }
 };
 
 exports.listAllDoctors = async (req, res) => {
   try {
-    const { hospitalId } = req.params;
+    const hospitalName=req.params.hospitalName.replace(/-/g, " ");
 
     // Check if hospitalId is provided
-    if (!hospitalId) {
+    if (!hospitalName) {
       return res.status(400).json({
         success: false,
-        message: "Hospital ID is required",
+        message: "Hospital Name is required",
       });
     }
 
     // Check if the hospital exists
-    const existingHospital = await Hospital.findById(hospitalId);
+    const existingHospital = await Hospital.findOne({name:hospitalName});
     if (!existingHospital) {
       return res.status(404).json({
         success: false,
@@ -209,7 +200,7 @@ exports.listAllDoctors = async (req, res) => {
     }
 
     // Fetch doctors associated with the hospital
-    const doctors = await Doctor.find({ hospitalId }).populate("hospitalId");
+    const doctors = await Doctor.find({ hospitalId: existingHospital._id }).populate("hospitalId");
 
     // Check if any doctors are found
     if (doctors.length === 0) {

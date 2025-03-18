@@ -22,9 +22,10 @@ exports.addMedicine = async (req, res) => {
       discount,
     } = req.body;
 
-    const { medicalStoreId } = req.params;
+    // Extract the pharmacy name from the URL and replace hyphens with spaces
+    const pharmacyName = req.params.pharmacyName.replace(/-/g, " ");
 
-    if (!name || !price || !manufacturerBrand || !medicalStoreId) {
+    if (!name || !price || !manufacturerBrand || !pharmacyName) {
       return res
         .status(400)
         .json({ message: "All required fields must be filled" });
@@ -38,12 +39,17 @@ exports.addMedicine = async (req, res) => {
       medicineImage = result.secure_url;
     }
 
-    const existingStore = await MedicalStore.findById(medicalStoreId);
+    // Find the MedicalStore by name
+    const existingStore = await MedicalStore.findOne({ name: pharmacyName });
     if (!existingStore) {
       return res.status(404).json({ message: "Pharmacy not found" });
     }
 
-    let existingMedicine = await Medicine.findOne({ name, medicalStoreId });
+    // Check if the medicine already exists in the store
+    let existingMedicine = await Medicine.findOne({
+      name,
+      medicalStoreId: existingStore._id,
+    });
 
     if (existingMedicine) {
       existingMedicine.stock += stock || 1;
@@ -55,11 +61,12 @@ exports.addMedicine = async (req, res) => {
       });
     }
 
+    // Create a new medicine
     const medicine = new Medicine({
       name,
       price,
       manufacturerBrand,
-      medicalStoreId,
+      medicalStoreId: existingStore._id, // Use the ID of the found MedicalStore
       description,
       prescriptionRequired,
       stock: stock || 1,
@@ -77,7 +84,8 @@ exports.addMedicine = async (req, res) => {
 
     await medicine.save();
 
-    await MedicalStore.findByIdAndUpdate(medicalStoreId, {
+    // Update the MedicalStore's medicines array
+    await MedicalStore.findByIdAndUpdate(existingStore._id, {
       $push: { medicines: medicine._id },
     });
 
@@ -90,9 +98,10 @@ exports.addMedicine = async (req, res) => {
 // Delete Medicine
 exports.deleteMedicine = async (req, res) => {
   try {
-    const { pharmacyId, medicineId } = req.params;
+    const { medicineId } = req.params;
+    const pharmacyName = req.params.pharmacyName.replace(/-/g, " ");
 
-    const medicineStore = await MedicalStore.findById(pharmacyId);
+    const medicineStore = await MedicalStore.findOne({ name: pharmacyName });
 
     if (!medicineStore) {
       return res.status(404).json({ message: "Medical Store not found" });
@@ -110,20 +119,18 @@ exports.deleteMedicine = async (req, res) => {
 
     return res.status(200).json({ message: "Medicine deleted successfully" });
   } catch (err) {
-    res
-      .status(500)
-      .json({
-        message: "Failed at first try and in deleting medicine",
-        error: err.message,
-      });
+    res.status(500).json({
+      message: "Failed at first try and in deleting medicine",
+      error: err.message,
+    });
   }
 };
 
 // List All Medicines in a Store
 exports.listAllMedicines = async (req, res) => {
   try {
-    const { medicineStoreId } = req.body;
-    const store = await MedicalStore.findById(medicineStoreId).populate(
+    const pharmacyName = req.params.pharmacyName.replace(/-/g, " ");
+    const store = await MedicalStore.findOne({ name: pharmacyName }).populate(
       "medicines"
     );
     if (!store) {
