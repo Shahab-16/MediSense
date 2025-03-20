@@ -19,13 +19,21 @@ connectDB()
     process.exit(1); // Exit if database connection fails
   });
 
-// Allow CORS for all URLs
-app.use(cors({
-  origin: '*', // Allow requests from any origin
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', // Allowed HTTP methods
-  credentials: true, // Allow cookies and credentials
-}));
+// Allow CORS for frontend URL
+const corsOptions = {
+  origin: 'http://localhost:3000',  // ✅ Correct frontend URL
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',  // ✅ Specify allowed methods
+  credentials: true,  // ✅ Important for sending cookies and tokens
+  allowedHeaders: ['Content-Type', 'Authorization'],  // ✅ Specify allowed headers
+};
 
+app.use(cors(corsOptions));
+
+// Add custom headers to handle OPTIONS preflight requests
+app.options('*', cors(corsOptions));  // ✅ Ensures preflight checks are handled
+
+
+// JSON middleware must be before your routes
 app.use(express.json());
 
 // Routes
@@ -34,11 +42,7 @@ app.use('/admin', adminRoute);
 app.use('/hospital', hospitalRoute);
 app.use('/pharmacy', pharmacyRoute);
 
-app.get('/', (req, res) => {
-  res.send('Hello, MediSense Backend is Running!');
-});
-
-// Global Error Handler (for better debugging)
+// Global Error Handler
 app.use((err, req, res, next) => {
   console.error("Error:", err.message);
   res.status(500).json({ error: err.message });
