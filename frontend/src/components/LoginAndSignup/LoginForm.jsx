@@ -23,7 +23,8 @@ const LoginForm = () => {
   const navigate = useNavigate();
   const [isOtpSent, setIsOtpSent] = useState(false);
 
-  const url = "https://medisense-backend.vercel.app";
+  const url = "http://localhost:5000";
+
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -45,15 +46,17 @@ const LoginForm = () => {
 
   const submitForm = async (e) => {
     e.preventDefault();
-    navigate('/dashboard');
+    console.log("entered in submitted form");
     setloading(true);
     try {
       if (currState === "Login") {
+        console.log("entered in try block and before backend call");
         const response = await axios.post(
           `${url}/user/login`,
           { email: data.email, password: data.password, role: role },
           { withCredentials: true }
         );
+        console.log("entered in try block and after backend call",response);
         if (response.data.success) {
           console.log("Login success");
           toast.success("Login success");
@@ -64,7 +67,7 @@ const LoginForm = () => {
               "https://medisense-admin-section.vercel.app/admin";
           } else if (role === "doctor") {
             window.location.href =
-              "https://medisense-doctor.vercel.app/";
+              "https://medisense-doctor-section.vercel.app/";
           } else if(role === "pharmacy"){
             window.location.href =
             "https://medisense-pharmacy.vercel.app/";
