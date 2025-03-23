@@ -22,7 +22,9 @@ const LoginForm = () => {
   const { login, setLogin } = useContext(StoreContext);
   const navigate = useNavigate();
   const [isOtpSent, setIsOtpSent] = useState(false);
+
   const url = "http://localhost:5000";
+
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -44,19 +46,18 @@ const LoginForm = () => {
 
   const submitForm = async (e) => {
     e.preventDefault();
-    console.log("Submitted login form data:", data);
+    console.log("entered in submitted form");
     setloading(true);
     try {
       console.log("ENTERED IN TRY BLOCK OF LOGIN FORM");
       if (currState === "Login") {
+        console.log("entered in try block and before backend call");
         const response = await axios.post(
           `${url}/user/login`,
           { email: data.email, password: data.password, role: role },
           { withCredentials: true } // Ensure cookies are sent and received
         );
-
-        console.log("Login response:", response.data.token);
-
+        console.log("entered in try block and after backend call",response);
         if (response.data.success) {
           console.log("Login success and the response is here:", response.data);
           toast.success("Login success");
@@ -97,13 +98,18 @@ const LoginForm = () => {
             // Redirect to the admin application with the token as a query parameter
             window.location.href = `http://localhost:3001`;
           } else if (role === "doctor") {
-            window.location.href = "https://medisense-doctor-section.vercel.app/";
-          } else if (role === "pharmacy") {
-            window.location.href = "http://localhost:5174/pharmacy/dashboard";
-          } else if (role === "hospital") {
-            window.location.href = "http://localhost:5173/hospital/dashboard";
-          } else {
-            alert("Something went wrong");
+            window.location.href =
+              "https://medisense-doctor-section.vercel.app/";
+          } else if(role === "pharmacy"){
+            window.location.href =
+            "http://localhost:5174/";
+          }
+          else if(role === "hospital"){
+            window.location.href =
+            "http://localhost:5173/";
+          }
+          else{
+            navigate("/dashboard/home"); // For relative paths, keep using navigate
           }
         
           return response.data.user; // Return user data for further use
