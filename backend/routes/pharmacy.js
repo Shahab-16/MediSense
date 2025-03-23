@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const upload=require('../utils/multerConfig');
 
 const {
   addMedicine,
@@ -24,6 +25,7 @@ router.post(
   "/:pharmacyName/add-medicine",
   authMiddleware,
   isPharmacyMiddleware,
+  upload.single("medicineImage"),
   addMedicine
 );
 router.get(

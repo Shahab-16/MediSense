@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
-import { FaCloudUploadAlt } from 'react-icons/fa'; // Importing an upload icon
+import { FaCloudUploadAlt } from 'react-icons/fa';
+import { addMedicine } from '../../services/api';
+import { useParams } from 'react-router-dom';
 
 const AddMedicine = () => {
+  const pharmacyNameObject = useParams();
   const [formData, setFormData] = useState({
     name: '',
     price: 0,
@@ -19,6 +22,8 @@ const AddMedicine = () => {
   });
 
   const [imagePreview, setImagePreview] = useState(null);
+  const [successMessage, setSuccessMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -54,17 +59,29 @@ const AddMedicine = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData); // Log form data (or send to API)
+    console.log(formData);
+    try {
+      console.log("Printing Pharmacy name in add medicine:", pharmacyNameObject.pharmacyName);
+      const response = await addMedicine(pharmacyNameObject.pharmacyName, formData);
+      console.log("Medicine added successfully:", response);
+      setSuccessMessage("Medicine added successfully!");
+      setErrorMessage(''); // Clear any previous error message
+    } catch (err) {
+      console.error("Error in adding medicine:", err);
+      setErrorMessage("Error in adding medicine. Please try again.");
+      setSuccessMessage(''); // Clear any previous success message
+    }
   };
 
   return (
     <div className='h-full-screen w-full bg-blue-50'>
       <form onSubmit={handleSubmit} className='m-5 w-full'>
         <p className='font-semibold text-[25px] p-5 ml-2'>Add Medicine</p>
+        {successMessage && <div className="text-green-500 p-5 ml-2">{successMessage}</div>}
+        {errorMessage && <div className="text-red-500 p-5 ml-2">{errorMessage}</div>}
         <div className='bg-white mx-8 px-5'>
-
           {/* Upload Medicine Image */}
           <div className='flex pt-6 pb-6'>
             <label htmlFor='med-img' className='cursor-pointer'>

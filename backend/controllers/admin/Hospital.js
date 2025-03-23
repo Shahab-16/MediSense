@@ -1,8 +1,10 @@
 const Hospital = require("../../models/Hospitals");
 const cloudinary = require("cloudinary").v2;
 const bcrypt = require("bcryptjs");
+const fs = require("fs");
 
 exports.addHospital = async (req, res) => {
+  console.log("Add Hospital called in the backend");
   try {
     console.log("Request Body:", req.body);
     const {
@@ -20,20 +22,7 @@ exports.addHospital = async (req, res) => {
       aboutHospital,
     } = req.body;
 
-    console.log(
-      name,
-      address,
-      contact,
-      email,
-      password,
-      confirmPassword,
-      ambulance,
-      beds,
-      establishedYear,
-      type,
-      status,
-      aboutHospital
-    );
+    console.log("Printing data in backend of Hospital", req.body);
 
     // Validate required fields
     if (
@@ -42,7 +31,6 @@ exports.addHospital = async (req, res) => {
       !contact ||
       !email ||
       !password ||
-      !confirmPassword ||
       ambulance === undefined ||
       beds === undefined ||
       !type
@@ -50,14 +38,6 @@ exports.addHospital = async (req, res) => {
       return res.status(400).json({
         success: false,
         message: "All required fields must be provided",
-      });
-    }
-
-    // Check if password and confirmPassword match
-    if (password !== confirmPassword) {
-      return res.status(400).json({
-        success: false,
-        message: "Password and Confirm Password do not match",
       });
     }
 
@@ -77,11 +57,25 @@ exports.addHospital = async (req, res) => {
     let hospitalImage =
       "https://static.vecteezy.com/system/resources/previews/011/098/092/original/hospital-clinic-building-3d-icon-illustration-png.png";
 
+    // Upload image to Cloudinary if a file is provided
     if (req.file) {
+      console.log("Working fine before making this cloudinary uploader call");
+
+      // Debug Cloudinary configuration
+      console.log('Cloudinary Config in Controller:', {
+        cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+        api_key: process.env.CLOUDINARY_API_KEY,
+        api_secret: process.env.CLOUDINARY_API_SECRET,
+      });
+
       const result = await cloudinary.uploader.upload(req.file.path, {
         folder: "MEDISENSE/Hospital_Images",
       });
       hospitalImage = result.secure_url;
+      console.log("Image uploaded to Cloudinary:", result.secure_url);
+
+      // Delete the temporary file after uploading to Cloudinary
+      fs.unlinkSync(req.file.path);
     }
 
     // Create a new hospital instance
@@ -110,7 +104,6 @@ exports.addHospital = async (req, res) => {
       hospitalImage,
     });
 
-    // Save the new hospital to the database
     await newHospital.save();
 
     return res.status(200).json({
@@ -127,6 +120,12 @@ exports.addHospital = async (req, res) => {
     });
   }
 };
+
+
+
+
+
+
 exports.listHospitals = async (req, res) => {
   console.log("List Hospitals called in the backend");
   try {
@@ -165,23 +164,6 @@ exports.removeHospital = async (req, res) => {
       });
     }
 
-
-    /*
-    const hospitalImageUrl = existingHospital.hospitalImage;
-
-    if (
-      hospitalImageUrl &&
-      !hospitalImageUrl.includes("vecteezy.com")
-    ) {
-      const parts = hospitalImageUrl.split("/");
-      const publicId = parts[parts.length - 1].split(".")[0]; // Extract filename without extension
-
-      await cloudinary.uploader.destroy(`MEDISENSE/Hospital_Images/${publicId}`);
-    }
- 
-    */
-
-    
     // Delete the hospital from the database
     await Hospital.findByIdAndDelete(id);
 

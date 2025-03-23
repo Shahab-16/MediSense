@@ -8,12 +8,13 @@ const MedicalStore = require("../models/MedicalStore");
 exports.authMiddleware = async (req, res, next) => {
   try {
     const token =
-      req.body.token || req.headers["authorization"]?.replace("Bearer ", "");
+    req.cookies.token || req.headers["authorization"]?.replace("Bearer ", "") || req.body.token || req.query.token || req.headers.token;
+  console.log("Token is getting printed and present in backend of auth middleware", token);
 
     if (!token) {
       return res.status(401).json({
         success: false,
-        message: "Token is required",
+        message: "Token is required in authMiddleware",
       });
     }
 

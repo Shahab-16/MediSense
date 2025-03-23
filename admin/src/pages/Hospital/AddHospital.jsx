@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { FaCloudUploadAlt } from "react-icons/fa";
 import { addHospital } from "../../services/api";
 
 const AddHospital = () => {
@@ -10,8 +9,6 @@ const AddHospital = () => {
     email: "",
     password: "",
     confirmPassword: "",
-    hospitalImage: "",
-    file: null, // Store the actual file for API submission
     doctors: [],
     facilities: [],
     emergencyFacility: false,
@@ -29,26 +26,18 @@ const AddHospital = () => {
     visitingHours: "9:00 AM - 8:00 PM",
     maxConsultancyTime: 30,
   });
+  const [hospitalImage, setHospitalImage] = useState(null);
 
   const handleChange = (e) => {
-    const { name, value, type } = e.target;
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
 
-    if (type === "file") {
-      const file = e.target.files[0];
-      if (file) {
-        const imageUrl = URL.createObjectURL(file);
-        setFormData((prevData) => ({
-          ...prevData,
-          hospitalImage: imageUrl,
-          file: file,
-        }));
-      }
-    } else {
-      setFormData({
-        ...formData,
-        [name]: value,
-      });
-    }
+  const handleImageChange = (e) => {
+    setHospitalImage(e.target.files[0]);
   };
 
   const handleSubmit = async (e) => {
@@ -60,14 +49,11 @@ const AddHospital = () => {
     }
 
     const formDataToSend = new FormData();
-    Object.entries(formData).forEach(([key, value]) => {
-      if (key !== "hospitalImage" && key !== "file" && key !== "confirmPassword") {
-        formDataToSend.append(key, value);
-      }
-    });
-
-    if (formData.file) {
-      formDataToSend.append("hospitalImage", formData.file); // Append the file
+    for (const key in formData) {
+      formDataToSend.append(key, formData[key]);
+    }
+    if (hospitalImage) {
+      formDataToSend.append("hospitalImage", hospitalImage);
     }
 
     try {
@@ -81,8 +67,6 @@ const AddHospital = () => {
         email: "",
         password: "",
         confirmPassword: "",
-        hospitalImage: "",
-        file: null,
         doctors: [],
         facilities: [],
         emergencyFacility: false,
@@ -100,6 +84,7 @@ const AddHospital = () => {
         visitingHours: "9:00 AM - 8:00 PM",
         maxConsultancyTime: 30,
       });
+      setHospitalImage(null);
     } catch (err) {
       console.log("Error in Adding Hospital", err);
     }
@@ -115,34 +100,6 @@ const AddHospital = () => {
           Add Hospital
         </p>
         <div className="bg-white p-5 rounded-xl shadow-md">
-          {/* Upload Hospital Image */}
-          <div className="flex items-center gap-6 mb-6">
-            <label htmlFor="hospital-img" className="cursor-pointer">
-              <div className="w-28 h-28 rounded-full bg-gray-200 flex items-center justify-center shadow-lg hover:shadow-xl transition duration-300 overflow-hidden">
-                {formData.hospitalImage ? (
-                  <img
-                    src={formData.hospitalImage}
-                    alt="Uploaded"
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <FaCloudUploadAlt className="text-4xl text-gray-500" />
-                )}
-              </div>
-            </label>
-            <input
-              type="file"
-              id="hospital-img"
-              name="hospitalImage"
-              accept="image/*"
-              onChange={handleChange}
-              hidden
-            />
-            <p className="text-gray-700">
-              Upload Hospital <br /> Picture
-            </p>
-          </div>
-
           {/* Hospital Details */}
           <div className="flex flex-col lg:flex-row gap-8 text-gray-700">
             <div className="w-full flex flex-col gap-4">
@@ -252,6 +209,17 @@ const AddHospital = () => {
                 min={1}
                 required
               />
+              <div className="border rounded-lg px-4 py-3 shadow-sm focus:ring-2 focus:ring-blue-300">
+                <label className="block text-sm font-medium text-gray-700">
+                  Hospital Image
+                </label>
+                <input
+                  className="mt-1 block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer focus:outline-none"
+                  type="file"
+                  name="hospitalImage"
+                  onChange={handleImageChange}
+                />
+              </div>
             </div>
           </div>
 

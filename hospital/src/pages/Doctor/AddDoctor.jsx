@@ -3,31 +3,30 @@ import { FaCloudUploadAlt } from "react-icons/fa";
 import { addDoctor } from "../../services/api";
 import { toast } from "react-toastify";
 import { useParams } from "react-router-dom";
-const AddDoctor = () => {
 
-  const {hospitalId}=useParams();
+const AddDoctor = () => {
+  const { hospitalName } = useParams(); // Extract hospitalName from URL
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
+    phone: "",
     password: "",
     profileImage: "",
     specialization: "",
     degree: [],
     available: true,
     fees: 0,
-    experience: 1,
     about: "",
     address: { line1: "" },
     pincode: "",
-    date: new Date().toISOString().split("T")[0],
     slot_booked: {},
-    phone: "",
     currentPatients: [],
     pastPatients: [],
     languagesSpoken: "English",
-    hospitalId:hospitalId
   });
 
+  const [file, setFile] = useState(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -55,8 +54,8 @@ const AddDoctor = () => {
       setFormData((prevData) => ({
         ...prevData,
         profileImage: imageUrl,
-        file: file,
       }));
+      setFile(file);
     }
   };
 
@@ -69,16 +68,28 @@ const AddDoctor = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try{
-      await addDoctor(formData);
+    try {
+      const formDataToSend = new FormData();
+      formDataToSend.append("name", formData.name);
+      formDataToSend.append("email", formData.email); // Append email only once
+      formDataToSend.append("phone", formData.phone);
+      formDataToSend.append("password", formData.password);
+      formDataToSend.append("specialization", formData.specialization);
+      formDataToSend.append("degree", JSON.stringify(formData.degree)); // Ensure this is a valid JSON string
+      formDataToSend.append("fees", formData.fees);
+      formDataToSend.append("address", JSON.stringify(formData.address)); // Ensure this is a valid JSON string
+      formDataToSend.append("languagesSpoken", formData.languagesSpoken);
+      formDataToSend.append("profileImage", file); // Append the file
+  
+      await addDoctor(hospitalName, formDataToSend);
       toast.success("Doctor added successfully");
-       console.log(formData);
-    }
-    catch(err){
+    } catch (err) {
       console.log("Error in adding doctor", err);
+      toast.error("Failed to add doctor");
     }
   };
 
+  
   return (
     <div className="h-full-screen w-full bg-blue-50">
       <form onSubmit={handleSubmit} className="m-5 w-full">
@@ -139,6 +150,18 @@ const AddDoctor = () => {
                 />
               </div>
               <div className="flex flex-col gap-1">
+                <p>Phone</p>
+                <input
+                  className="border rounded px-3 py-2"
+                  type="text"
+                  name="phone"
+                  placeholder="Phone"
+                  value={formData.phone}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div className="flex flex-col gap-1">
                 <p>Set Password</p>
                 <input
                   className="border rounded px-3 py-2"
@@ -151,33 +174,13 @@ const AddDoctor = () => {
                 />
               </div>
               <div className="flex flex-col gap-1">
-                <p>Experience</p>
-                <select
-                  className="border rounded px-3 py-2"
-                  name="experience"
-                  value={formData.experience}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      experience: parseInt(e.target.value, 10),
-                    })
-                  }
-                  required
-                >
-                  <option value="1">1-5 Years</option>
-                  <option value="6">6-10 Years</option>
-                  <option value="11">11-15 Years</option>
-                  <option value="15">15+ Years</option>
-                </select>
-              </div>
-              <div className="flex flex-col gap-1">
                 <p>Fees</p>
                 <input
                   className="border rounded px-3 py-2"
                   type="number"
                   name="fees"
                   placeholder="Doctor Fees"
-                  value={formData.consultationFee}
+                  value={formData.fees}
                   onChange={handleChange}
                   required
                 />
@@ -235,6 +238,18 @@ const AddDoctor = () => {
                   name="pincode"
                   placeholder="Enter pincode"
                   value={formData.pincode}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div className="flex flex-col gap-1">
+                <p>Languages Spoken</p>
+                <input
+                  className="border rounded px-3 py-2"
+                  type="text"
+                  name="languagesSpoken"
+                  placeholder="Languages Spoken"
+                  value={formData.languagesSpoken}
                   onChange={handleChange}
                   required
                 />

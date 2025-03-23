@@ -16,7 +16,7 @@ const Otp = () => {
     const [otp, setOtp] = useState(Array(6).fill("")); 
     const inputRefs = useRef([]);
 
-    const url = 'https://medisense-backend.vercel.app';
+    const url = 'http://localhost:5000';
 
     // Handle OTP input
     const handleChange = (value, index) => {

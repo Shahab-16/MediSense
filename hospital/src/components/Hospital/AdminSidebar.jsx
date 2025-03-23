@@ -11,37 +11,34 @@ import {
 import { MdPersonAddAlt1 } from "react-icons/md";
 import { BsListCheck, BsAward } from "react-icons/bs";
 import { FaHospital } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import Cookies from "js-cookie"; // Import js-cookie
 
 const HospitalSidebar = () => {
   const [isDoctorsDropdownOpen, setDoctorsDropdownOpen] = useState(false);
   const [isHospitalDropdownOpen, setHospitalDropdownOpen] = useState(false);
-  const navigate = useNavigate();
+  
+  const userPayload = Cookies.get("user"); // Get the user payload from the cookie
+  const hospitalName = userPayload ? JSON.parse(userPayload).name : "";
 
-  const doctorDropDownClick = () => {
-    setDoctorsDropdownOpen(!isDoctorsDropdownOpen);
-    navigate("/hospital/doctors");
-  };
+  // Replace spaces with hyphens in hospitalName
+  const formattedHospitalName = hospitalName.replace(/\s+/g, "-");
 
-  const hospitalDropDownClick = () => {
-    setHospitalDropdownOpen(!isHospitalDropdownOpen);
-    navigate("/hospital/profile");
-  };
+  console.log("Printing hospital name in add doctor frontend", formattedHospitalName);
 
   const logoutHandler = () => {
-      localStorage.removeItem("token");
-      toast.success("Logout done successfully");
-      setTimeout(() => {
-        window.location.href = "https://medisense-frontend.vercel.app/";
-      }, 2000);
-    };
+    localStorage.removeItem("token");
+    Cookies.remove("user"); // Remove the user cookie on logout
+    toast.success("Logout done successfully");
+    setTimeout(() => {
+      window.location.href = "https://medisense-frontend.vercel.app/";
+    }, 2000);
+  };
 
-    
   return (
     <div className="bg-white text-gray-800 w-full md:w-1/4 lg:max-w-[20%] p-6 flex flex-col gap-4 border-r shadow-md">
       <NavLink
-        to="/hospital/dashboard"
+        to={`/hospital/${formattedHospitalName}/dashboard`}
         className="flex items-center gap-3 p-3 hover:bg-gray-200 rounded-md transition-all duration-300"
       >
         <FiHome size={24} />
@@ -50,7 +47,7 @@ const HospitalSidebar = () => {
 
       {/* Hospital Profile Section */}
       <div
-        onClick={hospitalDropDownClick}
+        onClick={() => setHospitalDropdownOpen(!isHospitalDropdownOpen)}
         className="flex justify-between items-center p-3 hover:bg-gray-100 rounded-md cursor-pointer transition-all duration-300"
       >
         <div className="flex items-center gap-3">
@@ -62,21 +59,21 @@ const HospitalSidebar = () => {
       {isHospitalDropdownOpen && (
         <div className="flex flex-col gap-3 ml-6 mt-2 border-l-2 border-gray-300 pl-4">
           <NavLink
-            to="/hospital/information"
+            to={`/hospital/${formattedHospitalName}/information`}
             className="flex items-center gap-3 text-base text-gray-700 p-2 rounded-md hover:bg-gray-100 transition-all duration-300"
           >
             <FiInfo size={18} />
             <p>Hospital Information</p>
           </NavLink>
           <NavLink
-            to="/hospital/achievements"
+            to={`/hospital/${formattedHospitalName}/achievements`}
             className="flex items-center gap-3 text-base text-gray-700 p-2 rounded-md hover:bg-gray-100 transition-all duration-300"
           >
             <BsAward size={18} />
             <p>Achievements</p>
           </NavLink>
           <NavLink
-            to="/hospital/settings"
+            to={`/hospital/${formattedHospitalName}/settings`}
             className="flex items-center gap-3 text-base text-gray-700 p-2 rounded-md hover:bg-gray-100 transition-all duration-300"
           >
             <FiSettings size={18} />
@@ -87,7 +84,7 @@ const HospitalSidebar = () => {
 
       {/* Doctors Section */}
       <div
-        onClick={doctorDropDownClick}
+        onClick={() => setDoctorsDropdownOpen(!isDoctorsDropdownOpen)}
         className="flex justify-between items-center p-3 hover:bg-gray-100 rounded-md cursor-pointer transition-all duration-300"
       >
         <div className="flex items-center gap-3">
@@ -99,14 +96,14 @@ const HospitalSidebar = () => {
       {isDoctorsDropdownOpen && (
         <div className="flex flex-col gap-3 ml-6 mt-2 border-l-2 border-gray-300 pl-4">
           <NavLink
-            to="/hospital/doctors/list-doctors"
+            to={`/hospital/${formattedHospitalName}/doctors/list-doctors`}
             className="flex items-center gap-3 text-base text-gray-700 p-2 rounded-md hover:bg-gray-100 transition-all duration-300"
           >
             <BsListCheck size={18} />
             <p>Doctors List</p>
           </NavLink>
           <NavLink
-            to="/hospital/:hospitalId/doctors/add-doctors"
+            to={`/hospital/${formattedHospitalName}/doctors/add-doctor`}
             className="flex items-center gap-3 text-base text-gray-700 p-2 rounded-md hover:bg-gray-100 transition-all duration-300"
           >
             <MdPersonAddAlt1 size={18} />

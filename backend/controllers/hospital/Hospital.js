@@ -5,6 +5,7 @@ const cloudinary = require("cloudinary").v2;
 const Appointment = require("../../models/Appointment");
 const Doctors = require("../../models/Doctors");
 const User = require("../../models/User");
+const fs = require("fs");
 
 const mongoose = require("mongoose");
 
@@ -16,47 +17,18 @@ exports.addDoctor = async (req, res) => {
       phone,
       password,
       specialization,
-      degree,
-      available,
+      degree, // Already a JSON string (e.g., '["MBBS"]')
       fees,
-      experience,
-      about,
-      address,
-      date,
-      slot_booked,
-      currentPatients,
-      pastPatients,
+      address, // Already a JSON string (e.g., '{"line1":"Main Road,Rourkela"}')
       languagesSpoken,
     } = req.body;
 
-    // Extract and format the hospital name from the URL
-    const hospitalName = req.params.hospitalName.replace(/-/g, " ");
-
-    console.log(req.body);
-    console.log(hospitalName);
-
-    if (
-      !name ||
-      !email ||
-      !phone ||
-      !password ||
-      !specialization ||
-      !degree ||
-      !available ||
-      !fees ||
-      !experience ||
-      !about ||
-      !address ||
-      !date ||
-      !hospitalName
-    ) {
-      return res.status(400).json({
-        success: false,
-        message: "All fields are required",
-      });
-    }
+    // No need to parse degree and address again
+    const degreeArray = degree; // Already a JSON string
+    const addressObject = address; // Already a JSON string
 
     // Find the hospital by name
+    const hospitalName = req.params.hospitalName.replace(/-/g, " ");
     const hospital = await Hospital.findOne({ name: hospitalName });
 
     if (!hospital) {
@@ -86,22 +58,23 @@ exports.addDoctor = async (req, res) => {
 
     // Upload profile image to Cloudinary if it exists
     if (req.file) {
-      const result = await cloudinary.uploader.upload(req.file.path, {
-        folder: "MEDISENSE/Doctor_Profile_Images",
-      });
-      profileImageUrl = result.secure_url;
+      try {
+        const result = await cloudinary.uploader.upload(req.file.path, {
+          folder: "MEDISENSE/Doctor_Images",
+        });
+        profileImageUrl = result.secure_url;
+        console.log("Cloudinary URL:", profileImageUrl);
+      } catch (err) {
+        console.error("Error uploading image to Cloudinary:", err);
+        return res.status(500).json({
+          success: false,
+          message: "Error uploading image",
+          error: err.message,
+        });
+      } finally {
+        fs.unlinkSync(req.file.path); // Delete the temporary file
+      }
     }
-
-    // Convert currentPatients and pastPatients to ObjectId array (only if valid)
-    const convertToObjectIdArray = (ids) => {
-      if (!Array.isArray(ids)) return [];
-      return ids
-        .filter((id) => mongoose.Types.ObjectId.isValid(id)) // Ensure IDs are valid
-        .map((id) => new mongoose.Types.ObjectId(id));
-    };
-
-    const convertedCurrentPatients = convertToObjectIdArray(currentPatients);
-    const convertedPastPatients = convertToObjectIdArray(pastPatients);
 
     // Create a new doctor with Cloudinary image URL
     const doctor = new Doctor({
@@ -109,19 +82,16 @@ exports.addDoctor = async (req, res) => {
       email,
       phone,
       password: hashedPassword,
-      profileImage: profileImageUrl, // Save Cloudinary image URL
+      profileImage: profileImageUrl,
       specialization,
-      degree,
-      available,
+      degree: degreeArray, // Already a JSON string
+      available: true,
       fees,
-      experience,
-      about,
-      address,
-      date,
-      slot_booked: slot_booked || {},
-      hospitalId: hospital._id, // Use the hospital's _id
-      currentPatients: convertedCurrentPatients,
-      pastPatients: convertedPastPatients,
+      address: addressObject, // Already a JSON string
+      slot_booked: {},
+      hospitalId: hospital._id,
+      currentPatients: [],
+      pastPatients: [],
       languagesSpoken,
     });
 
@@ -139,6 +109,7 @@ exports.addDoctor = async (req, res) => {
       doctor,
     });
   } catch (error) {
+    console.error("Error in addDoctor controller:", error);
     res.status(500).json({
       success: false,
       message: "Error adding doctor",
@@ -146,7 +117,6 @@ exports.addDoctor = async (req, res) => {
     });
   }
 };
-
 
 exports.deleteDoctor = async (req, res) => {
   try {
@@ -174,13 +144,17 @@ exports.deleteDoctor = async (req, res) => {
 
     res.status(200).json({ message: "Doctor removed successfully" });
   } catch (error) {
-    res.status(500).json({ message: "Error removing doctor", error: error.message });
+    res
+      .status(500)
+      .json({ message: "Error removing doctor", error: error.message });
   }
 };
 
 exports.listAllDoctors = async (req, res) => {
   try {
-    const hospitalName=req.params.hospitalName.replace(/-/g, " ");
+    const hospitalName = req.params.hospitalName.replace(/-/g, " ");
+
+    console.log("Hospital Name in listing doctors:", hospitalName);
 
     // Check if hospitalId is provided
     if (!hospitalName) {
@@ -191,7 +165,7 @@ exports.listAllDoctors = async (req, res) => {
     }
 
     // Check if the hospital exists
-    const existingHospital = await Hospital.findOne({name:hospitalName});
+    const existingHospital = await Hospital.findOne({ name: hospitalName });
     if (!existingHospital) {
       return res.status(404).json({
         success: false,
@@ -200,7 +174,9 @@ exports.listAllDoctors = async (req, res) => {
     }
 
     // Fetch doctors associated with the hospital
-    const doctors = await Doctor.find({ hospitalId: existingHospital._id }).populate("hospitalId");
+    const doctors = await Doctor.find({
+      hospitalId: existingHospital._id,
+    }).populate("hospitalId");
 
     // Check if any doctors are found
     if (doctors.length === 0) {

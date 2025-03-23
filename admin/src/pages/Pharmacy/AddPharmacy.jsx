@@ -25,6 +25,7 @@ const AddPharmacy = () => {
   });
 
   const [imagePreview, setImagePreview] = useState(null);
+  const [isUploading, setIsUploading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -60,12 +61,46 @@ const AddPharmacy = () => {
     }
 
     try {
-      await addPharmacy(formData);
+      setIsUploading(true);
+
+      const formDataToSend = new FormData();
+      for (const key in formData) {
+        if (key === "pharmacyImage" && formData[key]) {
+          formDataToSend.append("pharmacyImage", formData[key]);
+        } else {
+          formDataToSend.append(key, formData[key]);
+        }
+      }
+
+      await addPharmacy(formDataToSend);
       toast.success("Pharmacy Added Successfully");
-      console.log(formData);
+
+      // Reset the form after successful submission
+      setFormData({
+        storeId: "",
+        name: "",
+        ownerName: "",
+        LicenseNumber: "",
+        pharmacyImage: "",
+        address: "",
+        contact: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+        medicines: [],
+        deliveryAvailable: false,
+        establishedYear: null,
+        status: "open",
+        aboutPharmacy: "",
+        acheivements: [],
+        openHour: "9:00 AM - 10:00 PM",
+      });
+      setImagePreview(null);
     } catch (error) {
       console.log("Error in adding pharmacy", error);
       toast.error("Failed to add pharmacy");
+    } finally {
+      setIsUploading(false);
     }
   };
 
@@ -231,8 +266,9 @@ const AddPharmacy = () => {
           <button
             type="submit"
             className="w-full bg-blue-700 hover:bg-blue-800 text-white font-semibold py-3 rounded-full mt-8 shadow-lg transition duration-300"
+            disabled={isUploading}
           >
-            Add Pharmacy
+            {isUploading ? "Uploading..." : "Add Pharmacy"}
           </button>
         </div>
       </form>

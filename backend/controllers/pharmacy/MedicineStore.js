@@ -1,6 +1,10 @@
 const MedicalStore = require("../../models/MedicalStore");
 const Medicine = require("../../models/Medicines");
 const cloudinary = require("cloudinary").v2;
+const bcrypt = require("bcryptjs");
+const mongoose = require("mongoose");
+const fs = require("fs");
+const path = require("path");
 
 exports.addMedicine = async (req, res) => {
   try {
@@ -35,8 +39,23 @@ exports.addMedicine = async (req, res) => {
       "https://cdn.pixabay.com/photo/2014/03/25/16/59/medicine-297778_1280.png";
 
     if (req.file) {
-      const result = await cloudinary.uploader.upload(req.file.path);
-      medicineImage = result.secure_url;
+      try{
+        const result = await cloudinary.uploader.upload(req.file.path,{
+          folder:"MEDISENSE/Medicines_Images"
+        });
+        medicineImage = result.secure_url;
+        console.log("medicineImage:", medicineImage);
+      }
+      catch(err){
+        console.error("Error uploading image to Cloudinary:", err);
+        return res.status(500).json({
+          success: false,
+          message: "Error uploading image",
+          error: err.message,
+        });
+      }
+
+      fs.unlinkSync(req.file.path);
     }
 
     // Find the MedicalStore by name

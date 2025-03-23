@@ -81,6 +81,7 @@ exports.Signup = async (req, res) => {
 exports.Login = async (req, res) => {
   try {
     const { email, password, role } = req.body;
+    console.log("Here in the login auth controller begin",email,password,role);
 
     if (!email || !password || !role) {
       return res.status(400).json({
@@ -113,6 +114,7 @@ exports.Login = async (req, res) => {
           email: user.email,
           role: "user",
         };
+        console.log(payload);
         break;
 
       case "hospital":
@@ -158,6 +160,7 @@ exports.Login = async (req, res) => {
           email: user.email,
           role: "doctor",
         };
+        console.log(payload);
         break;
 
       case "pharmacy":
@@ -220,9 +223,19 @@ exports.Login = async (req, res) => {
       user.password = undefined;
     }
 
+    console.log("Printing the token after login",token);
+
+    // Set token in a cookie
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: false, // Set to true if using HTTPS
+      sameSite: 'none', // Allow cross-origin cookies
+      domain: 'localhost', // Allow cookies to be shared across subdomains
+    });
+
     return res.status(200).json({
       success: true,
-      token,
+      token:token,
       user: payload,
       message: `${role.charAt(0).toUpperCase() + role.slice(1)} Login Success`,
     });

@@ -1,6 +1,7 @@
 const Pharmacy = require("../../models/MedicalStore");
 const cloudinary = require("cloudinary").v2;
 const bcrypt = require("bcryptjs");
+const fs = require("fs");
 
 exports.addMedicineStore = async (req, res) => {
   try {
@@ -71,6 +72,7 @@ exports.addMedicineStore = async (req, res) => {
           folder: "MEDISENSE/Pharmacy_Images",
         });
         pharmacyStoreImage = result.secure_url;
+        console.log(pharmacyStoreImage);
       } catch (error) {
         console.error("Error uploading image to Cloudinary:", error);
         return res.status(500).json({
@@ -79,6 +81,7 @@ exports.addMedicineStore = async (req, res) => {
           error: error.message,
         });
       }
+      fs.unlinkSync(req.file.path);
     }
 
     // Create a new pharmacy instance

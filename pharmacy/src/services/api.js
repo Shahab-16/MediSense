@@ -1,19 +1,78 @@
-import axios from 'axios';
+import axios from "axios";
 
-const API_URL='http://localhost:5000/';
+const BASE_URL = "http://localhost:5000";
 
+// Function to get the token from localStorage, cookies, or headers
+const getToken = () => {
+  // Check localStorage first
+  const tokenFromLocalStorage = localStorage.getItem("token");
+  console.log("Token from localStorage:", tokenFromLocalStorage);
+  if (tokenFromLocalStorage) return tokenFromLocalStorage;
 
-export const addMedicine=async(pharmacyId,medicineData)=>{
-    const response=await axios.post(`${API_URL}/${pharmacyId}/add-medicine`,medicineData);
-    return response.data;
-}
+  // Check cookies
+  const tokenFromCookies = document.cookie
+    .split("; ")
+    .find((row) => row.startsWith("token="))
+    ?.split("=")[1];
+  console.log("Token from cookies:", tokenFromCookies);
+  if (tokenFromCookies) return tokenFromCookies;
 
-export const removeMedicine=async(pharmacyId,medicineId,number)=>{
-    const response=await axios.delete(`${API_URL}/${pharmacyId}/delete-medicine/${medicinieId}`);
-    return response.data;
-}
+  // Check headers
+  const tokenFromHeaders = axios.defaults.headers.common[
+    "Authorization"
+  ]?.replace("Bearer ", "");
+  console.log("Token from headers:", tokenFromHeaders);
+  if (tokenFromHeaders) return tokenFromHeaders;
 
-export const listAllMedicine=async(id)=>{
-    const response=await axios.get(`${API_URL}/list-all-medicines`);
-    return response.data;
-}
+  console.log("No token found");
+  return null; // No token found
+};
+
+// Add Medicine
+export const addMedicine = async (pharmacyName, medicineData) => {
+  const token = getToken();
+  console.log("printing name of pharmacy in service api folder:", pharmacyName);
+  const response = await axios.post(
+    `${BASE_URL}/pharmacy/${pharmacyName}/add-medicine`,
+    medicineData,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      withCredentials: true, // Include credentials (cookies) if needed
+    }
+  );
+  return response.data;
+};
+
+// Remove Medicine
+export const removeMedicine = async (pharmacyName, medicineId) => {
+  const token = getToken();
+  const response = await axios.delete(
+    `${BASE_URL}/pharmacy/${pharmacyName}/delete-medicine/${medicineId}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      withCredentials: true, // Include credentials (cookies) if needed
+    }
+  );
+  return response.data;
+};
+
+// List All Medicines
+export const listAllMedicine = async (pharmacyName) => {
+  const token = getToken();
+  console.log("printing name of pharmacy in service api folder:", pharmacyName);
+  const response = await axios.get(
+    `${BASE_URL}/pharmacy/${pharmacyName}/list-all-medicines`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      withCredentials: true, // Include credentials (cookies) if needed
+    }
+  );
+  console.log("Response data after backend call and printing in service api folder:", response.data);
+  return response.data;
+};

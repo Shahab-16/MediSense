@@ -9,7 +9,7 @@ import Spinner from "../spinner/spinner";
 
 const LoginForm = () => {
   const { role } = useParams();
-  const [ loading, setloading ] = useState(false);
+  const [loading, setloading] = useState(false);
   const [data, setData] = useState({
     firstName: "",
     lastName: "",
@@ -22,8 +22,7 @@ const LoginForm = () => {
   const { login, setLogin } = useContext(StoreContext);
   const navigate = useNavigate();
   const [isOtpSent, setIsOtpSent] = useState(false);
-
-  const url = "https://medisense-backend.vercel.app";
+  const url = "http://localhost:5000";
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -45,40 +44,70 @@ const LoginForm = () => {
 
   const submitForm = async (e) => {
     e.preventDefault();
-    navigate('/dashboard');
+    console.log("Submitted login form data:", data);
     setloading(true);
     try {
+      console.log("ENTERED IN TRY BLOCK OF LOGIN FORM");
       if (currState === "Login") {
         const response = await axios.post(
           `${url}/user/login`,
           { email: data.email, password: data.password, role: role },
-          { withCredentials: true }
+          { withCredentials: true } // Ensure cookies are sent and received
         );
+
+        console.log("Login response:", response.data.token);
+
         if (response.data.success) {
-          console.log("Login success");
+          console.log("Login success and the response is here:", response.data);
           toast.success("Login success");
+        
+          // Store the token in localStorage
           localStorage.setItem("token", response.data.token);
+          localStorage.setItem("user", JSON.stringify(response.data.user));
+        
+          // Store hospitalName if role is hospital
+          if (role === "hospital") {
+            localStorage.setItem("hospitalName", response.data.hospitalName);
+          }
+        
+          console.log("localStorage after setting:", {
+            token: localStorage.getItem("token"),
+            user: localStorage.getItem("user"),
+            hospitalName: localStorage.getItem("hospitalName"),
+          });
+        
+          // Set the token in a cookie for cross-domain access
+          document.cookie = `token=${response.data.token}; path=/; domain=.localhost; Secure; SameSite=None`;
+        
+          // Set the user payload in a cookie
+          const userPayload = JSON.stringify(response.data.user);
+          document.cookie = `user=${encodeURIComponent(userPayload)}; path=/; domain=.localhost; Secure; SameSite=None`;
+        
+          console.log("Cookies after setting:", document.cookie);
+        
+          // Set the token in axios default headers for future requests
+          axios.defaults.headers.common["Authorization"] = `Bearer ${response.data.token}`;
+        
+          console.log(
+            "Token is stored in localStorage, cookie, and axios headers"
+          );
+        
           // Navigate based on role
           if (role === "admin") {
-            window.location.href =
-              "https://medisense-admin-section.vercel.app/admin";
+            // Redirect to the admin application with the token as a query parameter
+            window.location.href = `http://localhost:3001`;
           } else if (role === "doctor") {
-            window.location.href =
-              "https://medisense-doctor.vercel.app/";
-          } else if(role === "pharmacy"){
-            window.location.href =
-            "https://medisense-pharmacy.vercel.app/";
+            window.location.href = "https://medisense-doctor-section.vercel.app/";
+          } else if (role === "pharmacy") {
+            window.location.href = "http://localhost:5174/pharmacy/dashboard";
+          } else if (role === "hospital") {
+            window.location.href = "http://localhost:5173/hospital/dashboard";
+          } else {
+            alert("Something went wrong");
           }
-          else if(role === "hospital"){
-            window.location.href =
-            "https://medisense-hospital.vercel.app/";
-          }
-          else{
-            navigate("/dashboard/home"); // For relative paths, keep using navigate
-          }
-
-          setLogin(false);
-        } else {
+        
+          return response.data.user; // Return user data for further use
+        }else {
           alert(response.data.message);
           console.log(response.data.message);
           toast.error(response.data.message);
@@ -92,6 +121,7 @@ const LoginForm = () => {
             password: data.password,
             confirmPassword: data.confirmPassword,
           });
+
           if (response.data.success) {
             toast.success("OTP sent successfully");
             setIsOtpSent(true);
@@ -118,7 +148,7 @@ const LoginForm = () => {
       setloading(false);
     }
   };
-  
+
   useEffect(() => {
     if (login) document.body.classList.add("overflow-hidden");
     return () => document.body.classList.remove("overflow-hidden");

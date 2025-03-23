@@ -1,32 +1,73 @@
 const express = require('express');
 const cors = require('cors');
+const cookieParser = require('cookie-parser');
 const connectDB = require('./config/Database');
 const userRoute = require('./routes/userRoute');
 const adminRoute = require('./routes/admin');
 const hospitalRoute = require('./routes/hospital');
 const pharmacyRoute = require('./routes/pharmacy');
 
-require('dotenv').config();
+require('dotenv').config(); // Load environment variables
+
+// Cloudinary Configuration
+const cloudinary = require('cloudinary').v2;
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
+console.log('Cloudinary Config:', {
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 const app = express();
-console.log("Backend is running");
 
 // Connect to the database
 connectDB()
   .then(() => console.log("Connected to the database"))
   .catch(err => {
     console.error("Database connection error:", err);
-    process.exit(1); // Exit if database connection fails
+    process.exit(1);
   });
 
-// Allow CORS for all URLs
-app.use(cors({
-  origin: '*', // Allow requests from any origin
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', // Allowed HTTP methods
-  credentials: true, // Allow cookies and credentials
-}));
+// List of allowed origins for CORS
+const allowedOrigins = [
+  'http://localhost:3000',
+  'http://localhost:3001',
+  'https://medisense-doctor-section.vercel.app',
+  'https://medisense-pharmacy.vercel.app',
+  'http://localhost:5173',
+  'http://localhost:5174',
+  //'https://medisense-hospital.vercel.app',
+];
 
+// Enable CORS with dynamic origin checking
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
+    credentials: true, // Allow credentials (cookies, authorization headers)
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+  })
+);
+
+// Handle preflight requests
+app.options('*', cors());
+
+// Parse JSON request bodies
 app.use(express.json());
+
+// Parse cookies
+app.use(cookieParser());
 
 // Routes
 app.use('/user', userRoute);
@@ -34,14 +75,15 @@ app.use('/admin', adminRoute);
 app.use('/hospital', hospitalRoute);
 app.use('/pharmacy', pharmacyRoute);
 
+// Default route
 app.get('/', (req, res) => {
   res.send('Hello, MediSense Backend is Running!');
 });
 
-// Global Error Handler (for better debugging)
+// Global Error Handler
 app.use((err, req, res, next) => {
-  console.error("Error:", err.message);
-  res.status(500).json({ error: err.message });
+  console.error("Error:", err.stack);
+  res.status(500).json({ error: 'Internal Server Error' });
 });
 
 // Start the server

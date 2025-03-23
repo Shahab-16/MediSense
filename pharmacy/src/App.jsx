@@ -10,26 +10,25 @@ import OrderedMedicines from './pages/Medicines/OrderedMedicines';
 import PharmacySettings from './pages/Pharmacy/Settings';
 import PharmacyInformation from './pages/Pharmacy/PharmacyInformation';
 
-
 const App = () => {
   return (
     <div className="flex flex-col min-h-screen">
       <ToastContainer />
       <>
-            <PharmacyNavbar />
-            <div className="flex flex-1">
-              <PharmacySidebar />
-              <Routes>
-                <Route path="/pharmacy/*" element={<Dashboard />} />
-                <Route path="/pharmacy/medicines/list-medicines" element={<ListMedicines />} />
-                <Route path="/pharmacy/medicines/add-medicine" element={<AddMedicine />} />
-                <Route path="/pharmacy/medicines/ordered-medicines" element={<OrderedMedicines />} />
-                <Route path="/pharmacy/settings" element={<PharmacySettings />} />
-                <Route path="/pharmacy/information" element={<PharmacyInformation />} />
-                <Route path="*" element={<Navigate to="/pharmacy/dashboard" />} />
-              </Routes>
-            </div>
-          </>
+        <PharmacyNavbar />
+        <div className="flex flex-1">
+          <PharmacySidebar />
+          <Routes>
+            <Route path="/pharmacy/:pharmacyName/dashboard" element={<Dashboard />} />
+            <Route path="/pharmacy/:pharmacyName/medicines/list-medicines" element={<ListMedicines />} />
+            <Route path="/pharmacy/:pharmacyName/medicines/add-medicine" element={<AddMedicine />} />
+            <Route path="/pharmacy/:pharmacyName/medicines/ordered-medicines" element={<OrderedMedicines />} />
+            <Route path="/pharmacy/:pharmacyName/settings" element={<PharmacySettings />} />
+            <Route path="/pharmacy/:pharmacyName/information" element={<PharmacyInformation />} />
+            <Route path="*" element={<Navigate to="/pharmacy/dashboard" />} />
+          </Routes>
+        </div>
+      </>
     </div>
   );
 };

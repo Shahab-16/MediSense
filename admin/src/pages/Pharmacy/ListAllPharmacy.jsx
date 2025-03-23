@@ -107,7 +107,7 @@ const ListAllPharmacy = () => {
               {/* Image */}
               <div className="text-center">
                 <img
-                  src={pharmacy.image || assets.medical_store} // Use pharmacy image from backend or fallback
+                  src={pharmacy.pharmacyImage} // Use pharmacy image from backend or fallback
                   alt={pharmacy.name}
                   className="w-[50px] h-[50px] sm:w-[60px] sm:h-[60px] rounded-md object-cover mx-auto"
                 />
