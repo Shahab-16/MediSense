@@ -29,15 +29,15 @@ const getToken = () => {
 };
 
 // Add Medicine
-export const addMedicine = async (pharmacyName, medicineData) => {
+export const addMedicine = async (pharmacyName, formData) => {
   const token = getToken();
-  console.log("printing name of pharmacy in service api folder:", pharmacyName);
   const response = await axios.post(
     `${BASE_URL}/pharmacy/${pharmacyName}/add-medicine`,
-    medicineData,
+    formData,
     {
       headers: {
         Authorization: `Bearer ${token}`,
+        'Content-Type': 'multipart/form-data',
       },
       withCredentials: true, // Include credentials (cookies) if needed
     }

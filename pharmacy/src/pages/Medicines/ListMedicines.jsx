@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { AiOutlineDelete, AiOutlineSearch } from "react-icons/ai";
 import { useNavigate, useParams } from "react-router-dom";
 import { listAllMedicine, removeMedicine } from "../../services/api";
+import { toast } from "react-toastify";
 
 const ListMedicines = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -40,9 +41,10 @@ const ListMedicines = () => {
       setMedicines((prevMedicines) =>
         prevMedicines.filter((medicine) => medicine._id !== medicineId)
       ); // Update the state
-      alert("Medicine removed successfully");
+      toast.success("Medicine removed successfully!");
     } catch (err) {
       console.error("Error removing medicine:", err);
+      toast.error("Error removing medicine. Please try again.");
     }
   };
 

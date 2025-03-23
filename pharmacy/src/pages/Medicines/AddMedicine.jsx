@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { FaCloudUploadAlt } from 'react-icons/fa';
 import { addMedicine } from '../../services/api';
 import { useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const AddMedicine = () => {
   const pharmacyNameObject = useParams();
@@ -63,15 +64,12 @@ const AddMedicine = () => {
     e.preventDefault();
     console.log(formData);
     try {
-      console.log("Printing Pharmacy name in add medicine:", pharmacyNameObject.pharmacyName);
       const response = await addMedicine(pharmacyNameObject.pharmacyName, formData);
       console.log("Medicine added successfully:", response);
-      setSuccessMessage("Medicine added successfully!");
-      setErrorMessage(''); // Clear any previous error message
+      toast.success("Medicine added successfully!");
     } catch (err) {
       console.error("Error in adding medicine:", err);
-      setErrorMessage("Error in adding medicine. Please try again.");
-      setSuccessMessage(''); // Clear any previous success message
+      toast.error("Error in adding medicine. Please try again.");
     }
   };
 

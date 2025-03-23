@@ -102,11 +102,11 @@ const LoginForm = () => {
               "https://medisense-doctor-section.vercel.app/";
           } else if(role === "pharmacy"){
             window.location.href =
-            "http://localhost:5174/";
+            "http://localhost:5173/";
           }
           else if(role === "hospital"){
             window.location.href =
-            "http://localhost:5173/";
+            "http://localhost:5174/";
           }
           else{
             navigate("/dashboard/home"); // For relative paths, keep using navigate

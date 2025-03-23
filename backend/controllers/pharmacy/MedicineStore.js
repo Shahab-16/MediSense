@@ -35,6 +35,8 @@ exports.addMedicine = async (req, res) => {
         .json({ message: "All required fields must be filled" });
     }
 
+    console.log("Entered in add medicine and lets see the req.file:", req.file);
+
     let medicineImage =
       "https://cdn.pixabay.com/photo/2014/03/25/16/59/medicine-297778_1280.png";
 
