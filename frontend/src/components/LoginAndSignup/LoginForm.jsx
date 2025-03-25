@@ -23,7 +23,7 @@ const LoginForm = () => {
   const navigate = useNavigate();
   const [isOtpSent, setIsOtpSent] = useState(false);
 
-  const url = "http://localhost:5000";
+  const url = process.env.BACKEND_URL;
 
 
   const handleInputChange = (e) => {
@@ -96,17 +96,17 @@ const LoginForm = () => {
           // Navigate based on role
           if (role === "admin") {
             // Redirect to the admin application with the token as a query parameter
-            window.location.href = `http://localhost:3001`;
+            window.location.href = `https://medisense-admin-section.vercel.app`;
           } else if (role === "doctor") {
             window.location.href =
-              "https://medisense-doctor-section.vercel.app/";
+              "https://medisense-doctor-section.vercel.app";
           } else if(role === "pharmacy"){
             window.location.href =
-            "http://localhost:5174/";
+            "https://medisense-pharmacy.vercel.app";
           }
           else if(role === "hospital"){
             window.location.href =
-            "http://localhost:5173/";
+            "https://medisense-hospital.vercel.app";
           }
           else{
             navigate("/dashboard/home"); // For relative paths, keep using navigate

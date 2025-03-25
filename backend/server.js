@@ -41,7 +41,7 @@ const allowedOrigins = [
   'https://medisense-pharmacy.vercel.app',
   'http://localhost:5173',
   'http://localhost:5174',
-  //'https://medisense-hospital.vercel.app',
+  'https://medisense-hospital.vercel.app'
 ];
 
 // Enable CORS with dynamic origin checking

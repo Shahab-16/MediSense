@@ -1,5 +1,5 @@
 import axios from 'axios';
-const API_URL = 'http://localhost:5000/admin';
+const API_URL = `${process.env.BACKEND_URL}/admin`;
 
 // Function to get the token from localStorage
 const getToken = () => {
