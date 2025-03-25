@@ -1,6 +1,6 @@
 const Doctor = require("../../models/Doctors");
 const Hospital = require("../../models/Hospitals");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const cloudinary = require("cloudinary").v2;
 const Appointment = require("../../models/Appointment");
 const Doctors = require("../../models/Doctors");
