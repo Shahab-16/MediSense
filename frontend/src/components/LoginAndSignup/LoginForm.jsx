@@ -23,7 +23,7 @@ const LoginForm = () => {
   const navigate = useNavigate();
   const [isOtpSent, setIsOtpSent] = useState(false);
 
-  const url = 'https://medisense-backend.vercel.app';
+  const url = "https://medisense-backend.vercel.app";
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -46,61 +46,79 @@ const LoginForm = () => {
   const submitForm = async (e) => {
     e.preventDefault();
     setloading(true);
-
     try {
-      const response = await axios.post(
-        `${url}/user/login`,
-        { email: data.email, password: data.password, role: role },
-        { withCredentials: true }
-      );
+      if (currState === "Login") {
+        const response = await axios.post(
+          `${url}/user/login`,
+          { email: data.email, password: data.password, role: role },
+          { withCredentials: true }
+        );
 
-      if (response.data.success) {
-        const token = response.data.token;
-        const user = response.data.user;
+        if (response.data.success) {
+          toast.success("Login success");
 
-        // For same-domain apps
-        if (role === "user") {
-          localStorage.setItem("token", token);
-          localStorage.setItem("user", JSON.stringify(user));
-          navigate("/dashboard/home");
-          return;
-        }
+          // Store the token in localStorage
+          localStorage.setItem("token", response.data.token);
+          localStorage.setItem("user", JSON.stringify(response.data.user));
 
-        // Cross-domain apps (admin/doctor/pharmacy/hospital)
-        const targetUrls = {
-          admin: "https://medisense-admin-section.vercel.app/auth-handler",
-          doctor: "https://medisense-doctor-section.vercel.app/auth-handler",
-          pharmacy: "https://medisense-pharmacy.vercel.app/auth-handler",
-          hospital: "https://medisense-hospital.vercel.app/auth-handler"
-        };
-
-        const targetWindow = window.open(targetUrls[role], "_blank");
-        
-        // Send token every 500ms until confirmed
-        const sendTokenInterval = setInterval(() => {
-          targetWindow.postMessage(
-            {
-              type: "AUTH_TOKEN",
-              token,
-              user
-            },
-            targetUrls[role].split("/auth-handler")[0] // Origin only
-          );
-        }, 500);
-
-        // Cleanup on success
-        window.addEventListener("message", (event) => {
-          if (event.data.type === "AUTH_SUCCESS") {
-            clearInterval(sendTokenInterval);
-            toast.success("Login successful! Redirecting...");
+          if (role === "hospital") {
+            localStorage.setItem("hospitalName", response.data.hospitalName);
           }
-        }, { once: true });
 
-      } else {
-        toast.error(response.data.message);
+          // Set cookies with proper Vercel domain
+          document.cookie = `token=${response.data.token}; path=/; domain=.vercel.app; Secure; SameSite=None`;
+          document.cookie = `user=${encodeURIComponent(JSON.stringify(response.data.user))}; path=/; domain=.vercel.app; Secure; SameSite=None`;
+
+          // Set axios headers
+          axios.defaults.headers.common["Authorization"] = `Bearer ${response.data.token}`;
+
+          // Redirect based on role
+          const redirectUrls = {
+            admin: "https://medisense-admin-section.vercel.app/",
+            doctor: "https://medisense-doctor-section.vercel.app/",
+            pharmacy: "https://medisense-pharmacy.vercel.app/",
+            hospital: "https://medisense-hospital.vercel.app/",
+            user: "/dashboard/home"
+          };
+
+          const targetUrl = redirectUrls[role];
+          if (role === "user") {
+            navigate(targetUrl);
+          } else {
+            window.location.href = targetUrl;
+          }
+        } else {
+          toast.error(response.data.message);
+        }
+      } else if (currState === "Signup") {
+        if (!isOtpSent) {
+          const response = await axios.post(`${url}/user/send-otp`, {
+            email: data.email,
+            firstName: data.firstName,
+            lastName: data.lastName,
+            password: data.password,
+            confirmPassword: data.confirmPassword,
+          });
+
+          if (response.data.success) {
+            toast.success("OTP sent successfully");
+            setIsOtpSent(true);
+            navigate("/signup/verify-otp", {
+              state: {
+                email: data.email,
+                firstName: data.firstName,
+                lastName: data.lastName,
+                password: data.password,
+                confirmPassword: data.confirmPassword,
+              },
+            });
+          } else {
+            toast.error(response.data.message);
+          }
+        }
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || "Login failed");
+      toast.error(error.response?.data?.message || "An error occurred");
     } finally {
       setloading(false);
     }
@@ -155,7 +173,6 @@ const LoginForm = () => {
                   email: "",
                   password: "",
                   confirmPassword: "",
-                  doctorId: "",
                 });
                 setOtp("");
               }}

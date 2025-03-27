@@ -78,10 +78,10 @@ exports.Signup = async (req, res) => {
 };
 
 // Login for All Roles (User, Hospital, Doctor, Pharmacy, Admin)
+
 exports.Login = async (req, res) => {
   try {
     const { email, password, role } = req.body;
-    console.log("Here in the login auth controller begin",email,password,role);
 
     if (!email || !password || !role) {
       return res.status(400).json({
@@ -96,17 +96,9 @@ exports.Login = async (req, res) => {
     switch (role) {
       case "user":
         user = await User.findOne({ email });
-        if (!user) {
-          return res.status(400).json({
-            success: false,
-            message: "User not found",
-          });
-        }
+        if (!user) return res.status(400).json({ success: false, message: "User not found" });
         if (!(await bcrypt.compare(password, user.password))) {
-          return res.status(401).json({
-            success: false,
-            message: "Password is incorrect",
-          });
+          return res.status(401).json({ success: false, message: "Password is incorrect" });
         }
         payload = {
           id: user._id,
@@ -114,45 +106,28 @@ exports.Login = async (req, res) => {
           email: user.email,
           role: "user",
         };
-        console.log(payload);
         break;
 
       case "hospital":
         user = await Hospital.findOne({ email });
-        if (!user) {
-          return res.status(400).json({
-            success: false,
-            message: "Hospital not found",
-          });
-        }
+        if (!user) return res.status(400).json({ success: false, message: "Hospital not found" });
         if (!(await bcrypt.compare(password, user.password))) {
-          return res.status(401).json({
-            success: false,
-            message: "Password is incorrect",
-          });
+          return res.status(401).json({ success: false, message: "Password is incorrect" });
         }
         payload = {
           id: user._id,
           name: user.name,
           email: user.email,
           role: "hospital",
+          hospitalName: user.name // Add hospitalName for frontend
         };
-        console.log(payload);
         break;
 
       case "doctor":
         user = await Doctor.findOne({ email });
-        if (!user) {
-          return res.status(400).json({
-            success: false,
-            message: "Doctor not found",
-          });
-        }
+        if (!user) return res.status(400).json({ success: false, message: "Doctor not found" });
         if (!(await bcrypt.compare(password, user.password))) {
-          return res.status(401).json({
-            success: false,
-            message: "Password is incorrect",
-          });
+          return res.status(401).json({ success: false, message: "Password is incorrect" });
         }
         payload = {
           id: user._id,
@@ -160,38 +135,24 @@ exports.Login = async (req, res) => {
           email: user.email,
           role: "doctor",
         };
-        console.log(payload);
         break;
 
       case "pharmacy":
         user = await MedicalStore.findOne({ email });
-        if (!user) {
-          return res.status(400).json({
-            success: false,
-            message: "Pharmacy not found",
-          });
-        }
+        if (!user) return res.status(400).json({ success: false, message: "Pharmacy not found" });
         if (!(await bcrypt.compare(password, user.password))) {
-          return res.status(401).json({
-            success: false,
-            message: "Password is incorrect",
-          });
+          return res.status(401).json({ success: false, message: "Password is incorrect" });
         }
         payload = {
           id: user._id,
           name: user.name,
           email: user.email,
-          role: "pharmacy", // Ensure this is set correctly
+          role: "pharmacy",
         };
-        console.log(payload);
         break;
 
       case "admin":
-        // Hardcoded admin credentials
-        if (
-          email === "mdshahabuddin0516@gmail.com" &&
-          password === "87654321"
-        ) {
+        if (email === "mdshahabuddin0516@gmail.com" && password === "87654321") {
           payload = {
             id: "Shahab16",
             name: "Shahab",
@@ -199,66 +160,41 @@ exports.Login = async (req, res) => {
             role: "admin",
           };
         } else {
-          return res.status(401).json({
-            success: false,
-            message: "Invalid email or password for admin",
-          });
+          return res.status(401).json({ success: false, message: "Invalid admin credentials" });
         }
         break;
 
       default:
-        return res.status(400).json({
-          success: false,
-          message: "Invalid role specified",
-        });
+        return res.status(400).json({ success: false, message: "Invalid role specified" });
     }
 
-    const token = jwt.sign(payload, process.env.JWT_SECRET, {
-      expiresIn: "2h",
-    });
+    const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "2h" });
 
-    // Remove sensitive data before sending the response
-    if (user) {
-      user.password = undefined;
-    }
-
-    // Determine environment
-    const isProduction = process.env.NODE_ENV === 'production';
-
-    // Set cookie configuration
+    // Set secure cross-domain cookies
     const cookieOptions = {
       httpOnly: true,
-      secure: isProduction, // true in production (HTTPS required)
-      sameSite: isProduction ? 'none' : 'lax', // 'none' for cross-site in production
-      maxAge: 2 * 60 * 60 * 1000, // 2 hours in milliseconds
-      path: '/',
-      // Domain should be set to your main domain in production
-      // Example: domain: isProduction ? '.yourdomain.com' : undefined
-      // For now using undefined which defaults to current domain
-      domain: isProduction ? '.vercel.app' : 'localhost'
+      secure: true, // Required for HTTPS
+      sameSite: 'none', // Required for cross-site
+      maxAge: 2 * 60 * 60 * 1000, // 2 hours
+      domain: '.vercel.app' // Key for cross-subdomain
     };
 
-    // Set token in cookie
-    res.cookie('token', token, cookieOptions);
-
-    // For development with multiple ports on localhost
-    if (!isProduction) {
-      res.header('Access-Control-Allow-Credentials', 'true');
-      res.header('Access-Control-Allow-Origin', req.headers.origin || 'http://localhost:3000');
-    }
+    res.cookie('auth_token', token, cookieOptions);
+    res.cookie('user_data', JSON.stringify(payload), {
+      ...cookieOptions,
+      httpOnly: false // Allow frontend to read
+    });
 
     return res.status(200).json({
       success: true,
-      token:token,
+      token,
       user: payload,
       message: `${role.charAt(0).toUpperCase() + role.slice(1)} Login Success`,
     });
+
   } catch (error) {
-    console.error("Error during login:", error);
-    return res.status(500).json({
-      success: false,
-      message: "Something went wrong in login",
-    });
+    console.error("Login error:", error);
+    return res.status(500).json({ success: false, message: "Login failed" });
   }
 };
 
