@@ -213,7 +213,6 @@ exports.Login = async (req, res) => {
         });
     }
 
-    // Generate JWT token
     const token = jwt.sign(payload, process.env.JWT_SECRET, {
       expiresIn: "2h",
     });
@@ -223,15 +222,30 @@ exports.Login = async (req, res) => {
       user.password = undefined;
     }
 
-    console.log("Printing the token after login",token);
+    // Determine environment
+    const isProduction = process.env.NODE_ENV === 'production';
 
-    // Set token in a cookie
-    res.cookie('token', token, {
+    // Set cookie configuration
+    const cookieOptions = {
       httpOnly: true,
-      secure: false, // Set to true if using HTTPS
-      sameSite: 'none', // Allow cross-origin cookies
-      domain: 'localhost', // Allow cookies to be shared across subdomains
-    });
+      secure: isProduction, // true in production (HTTPS required)
+      sameSite: isProduction ? 'none' : 'lax', // 'none' for cross-site in production
+      maxAge: 2 * 60 * 60 * 1000, // 2 hours in milliseconds
+      path: '/',
+      // Domain should be set to your main domain in production
+      // Example: domain: isProduction ? '.yourdomain.com' : undefined
+      // For now using undefined which defaults to current domain
+      domain: isProduction ? '.yourmaindomain.com' : 'localhost'
+    };
+
+    // Set token in cookie
+    res.cookie('token', token, cookieOptions);
+
+    // For development with multiple ports on localhost
+    if (!isProduction) {
+      res.header('Access-Control-Allow-Credentials', 'true');
+      res.header('Access-Control-Allow-Origin', req.headers.origin || 'http://localhost:3000');
+    }
 
     return res.status(200).json({
       success: true,
