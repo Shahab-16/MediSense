@@ -235,7 +235,7 @@ exports.Login = async (req, res) => {
       // Domain should be set to your main domain in production
       // Example: domain: isProduction ? '.yourdomain.com' : undefined
       // For now using undefined which defaults to current domain
-      domain: isProduction ? '.yourmaindomain.com' : 'localhost'
+      domain: isProduction ? '.vercel.app' : 'localhost'
     };
 
     // Set token in cookie
