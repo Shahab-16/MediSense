@@ -25,7 +25,6 @@ const LoginForm = () => {
 
   const url = 'https://medisense-backend.vercel.app';
 
-
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setData({ ...data, [name]: value });
@@ -46,94 +45,62 @@ const LoginForm = () => {
 
   const submitForm = async (e) => {
     e.preventDefault();
-    console.log("entered in submitted form");
     setloading(true);
+
     try {
-      console.log("ENTERED IN TRY BLOCK OF LOGIN FORM");
-      if (currState === "Login") {
-        console.log("entered in try block and before backend call");
-        const response = await axios.post(
-          `${url}/user/login`,
-          { email: data.email, password: data.password, role: role },
-          { withCredentials: true }
-        );
-        
-        console.log("entered in try block and after backend call",response);
-        if (response.data.success) {
-          console.log("Login success and the response is here:", response.data);
-          toast.success("Login success");
-        
-          // Store the token in localStorage
-          localStorage.setItem("token", response.data.token);
-          localStorage.setItem("user", JSON.stringify(response.data.user));
-        
-          if (role === "hospital") {
-            localStorage.setItem("hospitalName", response.data.hospitalName);
-          }
-        
-          console.log("localStorage after setting:", {
-            token: localStorage.getItem("token"),
-            user: localStorage.getItem("user"),
-            hospitalName: localStorage.getItem("hospitalName"),
-          });
-        
-          // Determine if we're in production
-          const isProduction = process.env.NODE_ENV === 'production';
-          
-          // Set cookie - modified for production
-          const cookieSettings = [
-            `token=${response.data.token}`,
-            `path=/`,
-            // Only set domain in production for your main domain
-            // Example: isProduction ? 'domain=yourmaindomain.com' : ''
-            // Or omit domain to be current domain only
-            isProduction ? 'Secure' : '', // Only use Secure in HTTPS
-            'SameSite=Lax' // Better compatibility than SameSite=None
-          ].filter(Boolean).join('; ');
-          
-          document.cookie = cookieSettings;
-        
-          // Set user cookie similarly
-          const userPayload = JSON.stringify(response.data.user);
-          document.cookie = [
-            `user=${encodeURIComponent(userPayload)}`,
-            `path=/`,
-            isProduction ? 'Secure' : '',
-            'SameSite=Lax'
-          ].filter(Boolean).join('; ');
-        
-          console.log("Cookies after setting:", document.cookie);
-        
-          // Set axios default headers
-          axios.defaults.headers.common["Authorization"] = `Bearer ${response.data.token}`;
-        
-          // Navigate based on role
-          if (role === "admin") {
-            // For cross-domain, consider passing token via URL hash or window.postMessage
-            window.location.href = `https://medisense-admin-section.vercel.app?token=${encodeURIComponent(response.data.token)}`;
-          } else if (role === "doctor") {
-            window.location.href = `https://medisense-doctor-section.vercel.app?token=${encodeURIComponent(response.data.token)}`;
-          } else if(role === "pharmacy"){
-            window.location.href = `https://medisense-pharmacy.vercel.app?token=${encodeURIComponent(response.data.token)}`;
-          }
-          else if(role === "hospital"){
-            window.location.href = `https://medisense-hospital.vercel.app?token=${encodeURIComponent(response.data.token)}`;
-          }
-          else{
-            navigate("/dashboard/home");
-          }
-        
-          return response.data.user;
-        } else {
-          alert(response.data.message);
-          console.log(response.data.message);
-          toast.error(response.data.message);
+      const response = await axios.post(
+        `${url}/user/login`,
+        { email: data.email, password: data.password, role: role },
+        { withCredentials: true }
+      );
+
+      if (response.data.success) {
+        const token = response.data.token;
+        const user = response.data.user;
+
+        // For same-domain apps
+        if (role === "user") {
+          localStorage.setItem("token", token);
+          localStorage.setItem("user", JSON.stringify(user));
+          navigate("/dashboard/home");
+          return;
         }
-      } 
-      // ... rest of your code remains the same ...
+
+        // Cross-domain apps (admin/doctor/pharmacy/hospital)
+        const targetUrls = {
+          admin: "https://medisense-admin-section.vercel.app/auth-handler",
+          doctor: "https://medisense-doctor-section.vercel.app/auth-handler",
+          pharmacy: "https://medisense-pharmacy.vercel.app/auth-handler",
+          hospital: "https://medisense-hospital.vercel.app/auth-handler"
+        };
+
+        const targetWindow = window.open(targetUrls[role], "_blank");
+        
+        // Send token every 500ms until confirmed
+        const sendTokenInterval = setInterval(() => {
+          targetWindow.postMessage(
+            {
+              type: "AUTH_TOKEN",
+              token,
+              user
+            },
+            targetUrls[role].split("/auth-handler")[0] // Origin only
+          );
+        }, 500);
+
+        // Cleanup on success
+        window.addEventListener("message", (event) => {
+          if (event.data.type === "AUTH_SUCCESS") {
+            clearInterval(sendTokenInterval);
+            toast.success("Login successful! Redirecting...");
+          }
+        }, { once: true });
+
+      } else {
+        toast.error(response.data.message);
+      }
     } catch (error) {
-      console.error("Error:", error.response?.data?.message || error.message);
-      alert("An error occurred. Please try again.");
+      toast.error(error.response?.data?.message || "Login failed");
     } finally {
       setloading(false);
     }
