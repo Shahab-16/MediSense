@@ -4,13 +4,6 @@ const Hospital = require("../models/Hospitals");
 const Doctor = require("../models/Doctors");
 const MedicalStore = require("../models/MedicalStore");
 
-// General Auth Middleware
-const jwt = require("jsonwebtoken");
-const User = require("../models/User");
-const Hospital = require("../models/Hospitals");
-const Doctor = require("../models/Doctors");
-const MedicalStore = require("../models/MedicalStore");
-
 exports.authMiddleware = async (req, res, next) => {
   try {
     // 1. Check for token in multiple locations
