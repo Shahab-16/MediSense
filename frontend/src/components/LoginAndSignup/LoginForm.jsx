@@ -53,32 +53,46 @@ const LoginForm = () => {
           { email: data.email, password: data.password, role: role },
           { withCredentials: true }
         );
-  
+
         if (response.data.success) {
           toast.success("Login success");
-  
-          // Store the token in localStorage
-          localStorage.setItem("token", response.data.token);
+
           localStorage.setItem("user", JSON.stringify(response.data.user));
 
-          console.log("token is getting printed before sending it to api server", response.data.token);
-  
+          localStorage.setItem("token", response.data.token);
+
+          // Store in cookie as backup
+          document.cookie = `token=${response.data.token}; path=/; secure; samesite=none`;
+
+          // Set axios default headers
+          axios.defaults.headers.common[
+            "Authorization"
+          ] = `Bearer ${response.data.token}`;
+
+          console.log("Token storage verified:", {
+            localStorage: localStorage.getItem("token"),
+            cookies: document.cookie,
+            axiosHeaders: axios.defaults.headers.common["Authorization"],
+          });
+
           if (role === "hospital") {
             localStorage.setItem("hospitalName", response.data.hospitalName);
           }
-  
+
           // Set axios headers
-          axios.defaults.headers.common["Authorization"] = `Bearer ${response.data.token}`;
-  
+          axios.defaults.headers.common[
+            "Authorization"
+          ] = `Bearer ${response.data.token}`;
+
           // Redirect based on role
           const redirectUrls = {
             admin: "https://medisense-admin-section.vercel.app/",
             doctor: "https://medisense-doctor-section.vercel.app/",
             pharmacy: "https://medisense-pharmacy.vercel.app/",
             hospital: "https://medisense-hospital.vercel.app/",
-            user: "/dashboard/home"
+            user: "/dashboard/home",
           };
-  
+
           const targetUrl = redirectUrls[role];
           if (role === "user") {
             navigate(targetUrl);
@@ -98,7 +112,7 @@ const LoginForm = () => {
             password: data.password,
             confirmPassword: data.confirmPassword,
           });
-  
+
           if (response.data.success) {
             toast.success("OTP sent successfully");
             setIsOtpSent(true);
