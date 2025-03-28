@@ -2,69 +2,71 @@ import axios from "axios";
 
 const BASE_URL = "https://medisense-backend.vercel.app";
 
-// Function to get the token from localStorage, cookies, or headers
+// Create an axios instance with default config
+const api = axios.create({
+  baseURL: BASE_URL,
+  withCredentials: true,
+});
+
+// Request interceptor to add the token to headers
+api.interceptors.request.use(
+  (config) => {
+    const token = getToken();
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
+// Function to get the token from localStorage
 const getToken = () => {
   // Check localStorage first
-  const tokenFromLocalStorage = localStorage.getItem("token");
-  if (tokenFromLocalStorage) return tokenFromLocalStorage;
-
-  // Check cookies
-  const tokenFromCookies = document.cookie
-    .split("; ")
-    .find((row) => row.startsWith("token="))
-    ?.split("=")[1];
-  if (tokenFromCookies) return tokenFromCookies;
-
-  // Check headers
-  const tokenFromHeaders = axios.defaults.headers.common["Authorization"]?.replace("Bearer ", "");
-  if (tokenFromHeaders) return tokenFromHeaders;
-
-  return null;
+  const token = localStorage.getItem("token");
+  return token;
 };
 
 // Add Medicine
 export const addMedicine = async (pharmacyName, formData) => {
-  const token = getToken();
-  const response = await axios.post(
-    `${BASE_URL}/pharmacy/${pharmacyName}/add-medicine`,
-    formData,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'multipart/form-data',
-      },
-      withCredentials: true,
-    }
-  );
-  return response.data;
+  try {
+    const response = await api.post(
+      `/pharmacy/${pharmacyName}/add-medicine`,
+      formData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || error.message;
+  }
 };
 
 // Remove Medicine
 export const removeMedicine = async (pharmacyName, medicineId) => {
-  const token = getToken();
-  const response = await axios.delete(
-    `${BASE_URL}/pharmacy/${pharmacyName}/delete-medicine/${medicineId}`,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      withCredentials: true,
-    }
-  );
-  return response.data;
+  try {
+    const response = await api.delete(
+      `/pharmacy/${pharmacyName}/delete-medicine/${medicineId}`
+    );
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || error.message;
+  }
 };
 
 // List All Medicines
 export const listAllMedicine = async (pharmacyName) => {
-  const token = getToken();
-  const response = await axios.get(
-    `${BASE_URL}/pharmacy/${pharmacyName}/list-all-medicines`,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      withCredentials: true,
-    }
-  );
-  return response.data;
+  try {
+    const response = await api.get(
+      `/pharmacy/${pharmacyName}/list-all-medicines`
+    );
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || error.message;
+  }
 };
