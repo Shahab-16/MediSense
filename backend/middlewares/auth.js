@@ -5,19 +5,30 @@ const Doctor = require("../models/Doctors");
 const MedicalStore = require("../models/MedicalStore");
 
 // General Auth Middleware
+const jwt = require("jsonwebtoken");
+const User = require("../models/User");
+const Hospital = require("../models/Hospitals");
+const Doctor = require("../models/Doctors");
+const MedicalStore = require("../models/MedicalStore");
+
 exports.authMiddleware = async (req, res, next) => {
   try {
+    // 1. Check for token in multiple locations
     const token =
-    req.cookies.token || req.headers["authorization"]?.replace("Bearer ", "") || req.body.token || req.query.token || req.headers.token;
-  console.log("Token is getting printed and present in backend of auth middleware", token);
+      req.cookies.token ||
+      req.headers["authorization"]?.replace("Bearer ", "") ||
+      req.body.token ||
+      req.query.token ||
+      req.headers.token;
 
     if (!token) {
       return res.status(401).json({
         success: false,
-        message: "Token is required in authMiddleware",
+        message: "Token is required",
       });
     }
 
+    // 2. Verify token
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     let user;
 
@@ -33,10 +44,8 @@ exports.authMiddleware = async (req, res, next) => {
         break;
       case "pharmacy":
         user = await MedicalStore.findById(decoded.id);
-        console.log("Printing pharmacy details", user);
         break;
       case "admin":
-        // Hardcoded admin object
         user = { id: decoded.id, role: "admin" };
         break;
       default:
@@ -53,21 +62,22 @@ exports.authMiddleware = async (req, res, next) => {
       });
     }
 
-    // Attach user and role to the request object
     req.user = {
-      ...(user.toObject ? user.toObject() : user), // Convert Mongoose document to plain object if it exists
-      role: decoded.role, // Explicitly add the role from the token
+      ...(user.toObject ? user.toObject() : user),
+      role: decoded.role,
     };
 
     next();
   } catch (err) {
-    console.error("Error in authMiddleware:", err); // Log the error for debugging
+    console.error("Auth error:", err);
     return res.status(401).json({
       success: false,
-      message: "Token is invalid",
+      message: "Invalid token",
     });
   }
 };
+
+// [Keep all existing role-specific middlewares: isAdminMiddleware, etc.]
 // Role-Specific Middlewares
 exports.isAdminMiddleware = (req, res, next) => {
   if (req.user.role !== "admin") {

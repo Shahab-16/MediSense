@@ -10,17 +10,9 @@ const OTP = require("../models/OTP");
 // Signup (Only for User/Patient)
 exports.Signup = async (req, res) => {
   try {
-    const { firstName, lastName, email, password, confirmPassword, otp } =
-      req.body;
+    const { firstName, lastName, email, password, confirmPassword, otp } = req.body;
 
-    if (
-      !firstName ||
-      !lastName ||
-      !email ||
-      !password ||
-      !confirmPassword ||
-      !otp
-    ) {
+    if (!firstName || !lastName || !email || !password || !confirmPassword || !otp) {
       return res.status(400).json({
         success: false,
         message: "All fields are required",
@@ -34,7 +26,6 @@ exports.Signup = async (req, res) => {
       });
     }
 
-    // Check if the user already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({
@@ -43,7 +34,6 @@ exports.Signup = async (req, res) => {
       });
     }
 
-    // Fetch the most recent OTP for the given email
     const response = await OTP.find({ email }).sort({ createdAt: -1 }).limit(1);
     if (response.length === 0 || response[0].OTP !== otp) {
       return res.status(400).json({
@@ -52,10 +42,7 @@ exports.Signup = async (req, res) => {
       });
     }
 
-    // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
-
-    // Create the user
     const user = await User.create({
       firstName,
       lastName,
@@ -77,8 +64,7 @@ exports.Signup = async (req, res) => {
   }
 };
 
-// Login for All Roles (User, Hospital, Doctor, Pharmacy, Admin)
-
+// Login for All Roles (Updated for cross-app auth)
 exports.Login = async (req, res) => {
   try {
     const { email, password, role } = req.body;
@@ -170,26 +156,28 @@ exports.Login = async (req, res) => {
 
     const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "2h" });
 
-    // Set cookies with proper domain configuration
-    const isProduction = process.env.NODE_ENV === 'production';
-    const cookieOptions = {
+    // Set secure cross-domain cookies
+    res.cookie('token', token, {
       httpOnly: true,
-      secure: isProduction,
-      sameSite: isProduction ? 'none' : 'lax',
-      maxAge: 2 * 60 * 60 * 1000,
-      path: '/',
-      // Remove domain for Vercel to work properly
-    };
+      secure: true,
+      sameSite: 'none',
+      domain: '.vercel.app', // Main domain for all apps
+      maxAge: 2 * 60 * 60 * 1000, // 2 hours
+      path: '/'
+    });
 
-    res.cookie('token', token, cookieOptions);
     res.cookie('user', JSON.stringify(payload), {
-      ...cookieOptions,
-      httpOnly: false
+      httpOnly: false,
+      secure: true,
+      sameSite: 'none',
+      domain: '.vercel.app',
+      maxAge: 2 * 60 * 60 * 1000,
+      path: '/'
     });
 
     return res.status(200).json({
       success: true,
-      token: token,
+      token: token, // Still return token for localStorage
       user: payload,
       message: `${role.charAt(0).toUpperCase() + role.slice(1)} Login Success`,
     });

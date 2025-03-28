@@ -1,34 +1,44 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
+import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
 
 const AdminAuthHandler = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const handleAuthMessage = (event) => {
-      if (event.data.type === 'AUTH_TOKEN') {
-        const { token, user } = event.data;
-        localStorage.setItem('token', token);
-        localStorage.setItem('user', JSON.stringify(user));
-        toast.success('Admin login successful!');
-        navigate('/admin/dashboard');
-        event.source.postMessage({ type: 'AUTH_SUCCESS' }, event.origin);
+    const verifyAuth = async () => {
+      try {
+        // 1. Try with cookie first
+        await axios.get('https://medisense-backend.vercel.app/user/verify', {
+          withCredentials: true
+        });
+        
+        // 2. If successful, proceed to dashboard
+        navigate('/dashboard');
+      } catch (error) {
+        // 3. If failed, try with localStorage token
+        const localToken = localStorage.getItem('token');
+        if (localToken) {
+          try {
+            await axios.get('https://medisense-backend.vercel.app/user/verify', {
+              headers: { Authorization: `Bearer ${localToken}` }
+            });
+            navigate('/dashboard');
+            return;
+          } catch (err) {
+            console.error("Token verification failed:", err);
+          }
+        }
+        
+        // 4. Redirect to login if both methods fail
+        window.location.href = 'https://medisense-frontend.vercel.app/login';
       }
     };
 
-    window.addEventListener('message', handleAuthMessage);
-    return () => window.removeEventListener('message', handleAuthMessage);
+    verifyAuth();
   }, [navigate]);
 
-  return (
-    <div className="flex justify-center items-center h-screen">
-      <div className="text-center">
-        <h1 className="text-2xl font-bold mb-4">Admin Authentication</h1>
-        <p>Please wait while we verify your admin credentials.</p>
-      </div>
-    </div>
-  );
+  return <div>Verifying authentication...</div>;
 };
 
 export default AdminAuthHandler;

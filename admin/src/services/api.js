@@ -1,95 +1,68 @@
 import axios from 'axios';
-const API_URL = `${process.env.BACKEND_URL}/admin`;
 
-// Function to get the token from localStorage
-const getToken = () => {
-  // Check localStorage first
-  const tokenFromLocalStorage = localStorage.getItem('token');
-  console.log('Token from localStorage:', tokenFromLocalStorage);
-  if (tokenFromLocalStorage) return tokenFromLocalStorage;
+const API_URL = "https://medisense-backend.vercel.app/admin";
 
-  // Check cookies
-  const tokenFromCookies = document.cookie
-    .split('; ')
-    .find(row => row.startsWith('token='))
-    ?.split('=')[1];
-  console.log('Token from cookies:', tokenFromCookies);
-  if (tokenFromCookies) return tokenFromCookies;
+// Create axios instance with default config
+const api = axios.create({
+  baseURL: API_URL,
+  withCredentials: true
+});
 
-  // Check headers
-  const tokenFromHeaders = axios.defaults.headers.common['Authorization']?.replace('Bearer ', '');
-  console.log('Token from headers:', tokenFromHeaders);
-  if (tokenFromHeaders) return tokenFromHeaders;
+// Request interceptor to add token
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem('token') || 
+                document.cookie.split('; ').find(row => row.startsWith('token='))?.split('=')[1];
+  
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
 
-  console.log('No token found');
-  return null; // No token found
-};
+// Response interceptor to handle 401 errors
+api.interceptors.response.use(
+  response => response,
+  error => {
+    if (error.response?.status === 401) {
+      // Redirect to login if token is invalid
+      window.location.href = 'https://medisense-frontend.vercel.app/login';
+    }
+    return Promise.reject(error);
+  }
+);
 
-// Hospitals
+// Hospital API calls
 export const addHospital = async (hospitalData) => {
-  const token = getToken();
-  console.log("Token present in service api folder", token);
-  const response = await axios.post(`${API_URL}/hospital/add-hospital`, hospitalData, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'multipart/form-data', // Ensure proper content type for file uploads
-    },
-    withCredentials: true,
+  const response = await api.post('/hospital/add-hospital', hospitalData, {
+    headers: { 'Content-Type': 'multipart/form-data' }
   });
   return response.data;
 };
 
 export const removeHospital = async (id) => {
-  const token = getToken();
-  const response = await axios.delete(`${API_URL}/hospital/remove-hospital/${id}`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+  const response = await api.delete(`/hospital/remove-hospital/${id}`);
   return response.data;
 };
 
 export const listHospitals = async () => {
-  const token = getToken();
-  const response = await axios.get(`${API_URL}/hospital/list-hospitals`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+  const response = await api.get('/hospital/list-hospitals');
   return response.data;
 };
 
-// Pharmacies
+// Pharmacy API calls
 export const addPharmacy = async (pharmacyData) => {
-  const token = getToken();
-  const response = await axios.post(`${API_URL}/pharmacy/add-pharmacy`, pharmacyData, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'multipart/form-data', // Add this line
-    },
+  const response = await api.post('/pharmacy/add-pharmacy', pharmacyData, {
+    headers: { 'Content-Type': 'multipart/form-data' }
   });
   return response.data;
 };
-
 
 export const removePharmacy = async (id) => {
-  const token = getToken();
-  console.log("Removing pharmacy with ID in service api folder:", id);
-  const response = await axios.delete(`${API_URL}/pharmacy/remove-pharmacy/${id}`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-  console.log("Response data after backend call and printing in service api folder:", response.data);
+  const response = await api.delete(`/pharmacy/remove-pharmacy/${id}`);
   return response.data;
 };
 
 export const listPharmacies = async () => {
-  const token = getToken();
-  const response = await axios.get(`${API_URL}/pharmacy/list-all-pharmacies`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+  const response = await api.get('/pharmacy/list-all-pharmacies');
   return response.data;
 };
