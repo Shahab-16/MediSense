@@ -119,7 +119,7 @@ exports.Login = async (req, res) => {
           name: user.name,
           email: user.email,
           role: "hospital",
-          hospitalName: user.name // Add hospitalName for frontend
+          hospitalName: user.name
         };
         break;
 
@@ -170,31 +170,36 @@ exports.Login = async (req, res) => {
 
     const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "2h" });
 
-    // Set secure cross-domain cookies
+    // Set cookies with proper domain configuration
+    const isProduction = process.env.NODE_ENV === 'production';
     const cookieOptions = {
       httpOnly: true,
-      secure: true, // Required for HTTPS
-      sameSite: 'none', // Required for cross-site
-      maxAge: 2 * 60 * 60 * 1000, // 2 hours
-      domain: '.vercel.app' // Key for cross-subdomain
+      secure: isProduction,
+      sameSite: isProduction ? 'none' : 'lax',
+      maxAge: 2 * 60 * 60 * 1000,
+      path: '/',
+      // Remove domain for Vercel to work properly
     };
 
-    res.cookie('auth_token', token, cookieOptions);
-    res.cookie('user_data', JSON.stringify(payload), {
+    res.cookie('token', token, cookieOptions);
+    res.cookie('user', JSON.stringify(payload), {
       ...cookieOptions,
-      httpOnly: false // Allow frontend to read
+      httpOnly: false
     });
 
     return res.status(200).json({
       success: true,
-      token,
+      token: token,
       user: payload,
       message: `${role.charAt(0).toUpperCase() + role.slice(1)} Login Success`,
     });
 
   } catch (error) {
     console.error("Login error:", error);
-    return res.status(500).json({ success: false, message: "Login failed" });
+    return res.status(500).json({
+      success: false,
+      message: "Login failed",
+    });
   }
 };
 

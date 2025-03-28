@@ -1,12 +1,11 @@
 import axios from "axios";
 
-const BASE_URL = `${process.env.BACKEND_URL}`;
+const BASE_URL = "https://medisense-backend.vercel.app";
 
 // Function to get the token from localStorage, cookies, or headers
 const getToken = () => {
   // Check localStorage first
   const tokenFromLocalStorage = localStorage.getItem("token");
-  console.log("Token from localStorage:", tokenFromLocalStorage);
   if (tokenFromLocalStorage) return tokenFromLocalStorage;
 
   // Check cookies
@@ -14,18 +13,13 @@ const getToken = () => {
     .split("; ")
     .find((row) => row.startsWith("token="))
     ?.split("=")[1];
-  console.log("Token from cookies:", tokenFromCookies);
   if (tokenFromCookies) return tokenFromCookies;
 
   // Check headers
-  const tokenFromHeaders = axios.defaults.headers.common[
-    "Authorization"
-  ]?.replace("Bearer ", "");
-  console.log("Token from headers:", tokenFromHeaders);
+  const tokenFromHeaders = axios.defaults.headers.common["Authorization"]?.replace("Bearer ", "");
   if (tokenFromHeaders) return tokenFromHeaders;
 
-  console.log("No token found");
-  return null; // No token found
+  return null;
 };
 
 // Add Medicine
@@ -39,7 +33,7 @@ export const addMedicine = async (pharmacyName, formData) => {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'multipart/form-data',
       },
-      withCredentials: true, // Include credentials (cookies) if needed
+      withCredentials: true,
     }
   );
   return response.data;
@@ -54,7 +48,7 @@ export const removeMedicine = async (pharmacyName, medicineId) => {
       headers: {
         Authorization: `Bearer ${token}`,
       },
-      withCredentials: true, // Include credentials (cookies) if needed
+      withCredentials: true,
     }
   );
   return response.data;
@@ -63,16 +57,14 @@ export const removeMedicine = async (pharmacyName, medicineId) => {
 // List All Medicines
 export const listAllMedicine = async (pharmacyName) => {
   const token = getToken();
-  console.log("printing name of pharmacy in service api folder:", pharmacyName);
   const response = await axios.get(
     `${BASE_URL}/pharmacy/${pharmacyName}/list-all-medicines`,
     {
       headers: {
         Authorization: `Bearer ${token}`,
       },
-      withCredentials: true, // Include credentials (cookies) if needed
+      withCredentials: true,
     }
   );
-  console.log("Response data after backend call and printing in service api folder:", response.data);
   return response.data;
 };

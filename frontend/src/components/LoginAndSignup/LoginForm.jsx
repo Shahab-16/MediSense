@@ -53,25 +53,21 @@ const LoginForm = () => {
           { email: data.email, password: data.password, role: role },
           { withCredentials: true }
         );
-
+  
         if (response.data.success) {
           toast.success("Login success");
-
+  
           // Store the token in localStorage
           localStorage.setItem("token", response.data.token);
           localStorage.setItem("user", JSON.stringify(response.data.user));
-
+  
           if (role === "hospital") {
             localStorage.setItem("hospitalName", response.data.hospitalName);
           }
-
-          // Set cookies with proper Vercel domain
-          document.cookie = `token=${response.data.token}; path=/; domain=.vercel.app; Secure; SameSite=None`;
-          document.cookie = `user=${encodeURIComponent(JSON.stringify(response.data.user))}; path=/; domain=.vercel.app; Secure; SameSite=None`;
-
+  
           // Set axios headers
           axios.defaults.headers.common["Authorization"] = `Bearer ${response.data.token}`;
-
+  
           // Redirect based on role
           const redirectUrls = {
             admin: "https://medisense-admin-section.vercel.app/",
@@ -80,7 +76,7 @@ const LoginForm = () => {
             hospital: "https://medisense-hospital.vercel.app/",
             user: "/dashboard/home"
           };
-
+  
           const targetUrl = redirectUrls[role];
           if (role === "user") {
             navigate(targetUrl);
@@ -91,6 +87,7 @@ const LoginForm = () => {
           toast.error(response.data.message);
         }
       } else if (currState === "Signup") {
+        // Keep your existing signup logic exactly the same
         if (!isOtpSent) {
           const response = await axios.post(`${url}/user/send-otp`, {
             email: data.email,
@@ -99,7 +96,7 @@ const LoginForm = () => {
             password: data.password,
             confirmPassword: data.confirmPassword,
           });
-
+  
           if (response.data.success) {
             toast.success("OTP sent successfully");
             setIsOtpSent(true);
