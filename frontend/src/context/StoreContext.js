@@ -1,11 +1,12 @@
 import { createContext, useState } from "react";
 import { doctors } from "../assets/asset";
+import axios from "axios";
 export const StoreContext = createContext();
 
 const StoreContextProvider = ({ children }) => {
-    
+    const BACKEND_URL = "https://medisense-backend.vercel.app"; 
     const [login, setLogin] = useState(false);
-
+    const [token,setToken]=useState("");
     const [loading, setLoading] = useState(false);
 
     const [stats, setStats] = useState({
@@ -24,6 +25,9 @@ const StoreContextProvider = ({ children }) => {
         else if(medicineCart[itemId]>=1){
             setMedicineCart(prev=>({...prev,[itemId]:prev[itemId]+1}));
         }
+        if(token){
+            await axios.post(`${BACKEND_URL}/user/medicines/add-to-cart`,{medicineId:itemId},{headers:{Authorization:`Bearer ${token}`}});
+        }
     }
 
     const removeFromMedicineCart=async(itemId)=>{
@@ -38,6 +42,13 @@ const StoreContextProvider = ({ children }) => {
         setStats,
         login,
         setLogin,
+        loading,
+        setLoading,
+        addToMedicineCart,
+        removeFromMedicineCart,
+        medicineCart,
+        token,
+        setToken
     };
 
     return (
