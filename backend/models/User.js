@@ -34,8 +34,14 @@ const UserSchema = new mongoose.Schema(
     },
     medicineCart: [
       {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Medicines",
+        medicine: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Medicines",
+        },
+        quantity: {
+          type: Number,
+          default: 1,
+        },
       },
     ],
     token: {

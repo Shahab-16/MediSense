@@ -1,20 +1,11 @@
 import React, { useState } from 'react';
 import { FaCartPlus, FaTrash, FaPlusCircle, FaMinusCircle } from 'react-icons/fa';
+import { useContext } from 'react';
+import { StoreContext } from '../../context/StoreContext';
 
-const MedicinesList = ({ image, name, category, price, description }) => {
-  const [count, setCount] = useState(0);
+const MedicinesList = ({ _id,image, name, category, price, description }) => {
 
-  const handleAddToCart = () => {
-    setCount(1); // Start with 1 when adding
-  };
-
-  const handleIncrement = () => {
-    setCount((prevCount) => prevCount + 1);
-  };
-
-  const handleDecrement = () => {
-    setCount((prevCount) => (prevCount > 1 ? prevCount - 1 : 0));
-  };
+  const {addToMedicineCart,removeFromMedicineCart,medicineCart}=useContext(StoreContext);
 
   return (
     <div className="bg-white shadow-lg rounded-lg p-5 max-w-xs mx-auto transition-all duration-300 hover:shadow-xl">
@@ -31,9 +22,9 @@ const MedicinesList = ({ image, name, category, price, description }) => {
         <p className="text-xl font-semibold text-blue-600 mt-4">₹{price}</p>
 
         {/* Cart Buttons */}
-        {count === 0 ? (
+        {!medicineCart[_id] ? (
           <button
-            onClick={handleAddToCart}
+            onClick={()=> addToMedicineCart(_id)}
             className="mt-4 w-full flex items-center justify-center gap-2 p-2 rounded bg-blue-700 text-white transition-all duration-300 hover:bg-blue-800 hover:shadow-md"
           >
             <FaCartPlus className="text-lg" />
@@ -42,14 +33,14 @@ const MedicinesList = ({ image, name, category, price, description }) => {
         ) : (
           <div className="mt-4 flex items-center justify-between bg-gray-100 p-2 rounded shadow-inner">
             <button
-              onClick={handleDecrement}
+              onClick={()=> removeFromMedicineCart(_id)}
               className="text-red-600 text-2xl hover:text-red-700 transition-all"
             >
-              {count === 1 ? <FaTrash /> : <FaMinusCircle />}
+              {medicineCart[_id] === 1 ? <FaTrash /> : <FaMinusCircle />}
             </button>
-            <span className="text-lg font-semibold text-gray-800">{count}</span>
+            <span className="text-lg font-semibold text-gray-800">{medicineCart[_id]}</span>
             <button
-              onClick={handleIncrement}
+              onClick={() => addToMedicineCart(_id)}
               className="text-green-600 text-2xl hover:text-green-700 transition-all"
             >
               <FaPlusCircle />
