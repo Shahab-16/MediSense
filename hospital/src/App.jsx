@@ -16,6 +16,7 @@ const App = () => {
   return (
     <div className="flex flex-col min-h-screen">
       <ToastContainer />
+      console.log('App');
       <>
         <HospitalNavbar />
         <div className="flex flex-1">

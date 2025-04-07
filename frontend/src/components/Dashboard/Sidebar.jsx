@@ -1,7 +1,7 @@
 // Sidebar.jsx
 import React, { useState } from 'react';
 import { images } from '../../assets/asset';
-import { FaHome, FaUserCircle, FaUserMd, FaPills, FaCogs, FaCube, FaStethoscope, FaTachometerAlt } from 'react-icons/fa';
+import { FaHome, FaUserCircle, FaUserMd, FaPills, FaCogs, FaCube, FaStethoscope, FaTachometerAlt, FaRobot } from 'react-icons/fa';
 import { BsChevronLeft, BsChevronRight, BsThreeDots } from 'react-icons/bs';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -28,7 +28,7 @@ const Sidebar = () => {
 
   return (
     <div className="flex h-full min-h-screen">
-      <div className={`fixed bg-blue-800 h-screen sm:h-auto w-16 flex flex-col items-center gap-2 py-4 relative`}>
+      <div className={`bg-blue-800 h-screen sm:h-auto w-16 flex flex-col items-center gap-2 py-4 relative`}>
         <button
           onClick={toggleSidebar}
           className="absolute top-4 left-1/2 transform -translate-x-1/2 text-white p-2 rounded flex items-center"
@@ -41,7 +41,7 @@ const Sidebar = () => {
         </button>
 
         {/* Profile Icon */}
-        <FaUserCircle onClick={()=>navigate('/dashboard/userInfo')} className="text-white text-4xl mt-12 cursor-pointer" />
+        <FaUserCircle onClick={()=>navigate('/dashboard/userInfo')} className="text-white text-4xl mt-18 cursor-pointer" />
       </div>
 
       {/* Sidebar Content */}
@@ -54,36 +54,41 @@ const Sidebar = () => {
             </div>
 
             <div className="space-y-4">
-              <button onClick={() => navigate('/dashboard/home')} className="w-full py-2 flex items-center rounded hover:bg-blue-700 px-4">
+              <button onClick={() => navigate('/dashboard/home')} className="w-full py-2 flex items-center rounded hover:bg-blue-700 hover:text-white px-4 transition-colors">
                 <FaTachometerAlt className="mr-3" />
                 Dashboard
               </button>
 
-              <button onClick={() => navigate('/dashboard/doctors')} className="w-full py-2 flex items-center rounded hover:bg-blue-700 px-4">
+              <button onClick={() => navigate('/dashboard/doctors')} className="w-full py-2 flex items-center rounded hover:bg-blue-700 hover:text-white px-4 transition-colors">
                 <FaUserMd className="mr-3" />
                 Doctors
               </button>
 
-              <button onClick={() => navigate('/dashboard/medicines')} className="w-full py-2 flex items-center rounded hover:bg-blue-700 px-4">
+              <button onClick={() => navigate('/dashboard/medicines')} className="w-full py-2 flex items-center rounded hover:bg-blue-700 hover:text-white px-4 transition-colors">
                 <FaPills className="mr-3" />
                 Medicines
               </button>
 
-              <button onClick={() => navigate('/dashboard/models')} className="w-full py-2 flex items-center rounded hover:bg-blue-700 px-4">
+              <button onClick={() => navigate('/dashboard/models')} className="w-full py-2 flex items-center rounded hover:bg-blue-700 hover:text-white px-4 transition-colors">
                 <FaCube className="mr-3" />
                 Models
               </button>
-              <button
-                onClick={() => logoutHandler()}
-                className="w-full py-2 flex items-center justify-center rounded bg-red-500 text-white font-semibold hover:bg-red-700 transition duration-300"
-              >
-                Logout
+              
+              <button onClick={() => navigate('/dashboard/artificial-doctor')} className="w-full py-2 flex items-center rounded hover:bg-blue-700 hover:text-white px-4 transition-colors">
+                <FaRobot className="mr-3" />
+                Artificial Doctor
               </button>
             </div>
           </div>
 
           <div className="p-4">
-            <img src={images.sidebarImg} alt="Sidebar Bottom" className="w-full rounded" />
+            <img src={images.sidebarImg} alt="Sidebar Bottom" className="w-full h-36 object-fit rounded mb-4" />
+            <button
+              onClick={() => logoutHandler()}
+              className="w-full py-2 flex items-center justify-center rounded bg-red-500 text-white font-semibold hover:bg-red-700 transition duration-300"
+            >
+              Logout
+            </button>
           </div>
         </div>
       )}

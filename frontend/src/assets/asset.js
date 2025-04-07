@@ -68,6 +68,9 @@ import contact_img from "./contact_image.png"
 import hospital from "./hospital.jpg"
 import healthcare_logo from "./healthcare_logo.png";
 import health_logo from "./health_logo.jpg"
+import DoctorChatbot from "./DoctorChatbot.png";
+
+
 export const speciality_data = [
   {
     speciality: "General physician",
@@ -131,7 +134,8 @@ export const images = {
   contact_img,
   hospital,
   healthcare_logo,
-  health_logo
+  health_logo,
+  DoctorChatbot
 };
 
 export const model_list = {
