@@ -4,7 +4,7 @@ import Chatbot from ".././chatbot/Chatbot";
 
 const DashboardHome = () => {
   return (
-    <div className="relative h-screen w-screen flex items-center justify-center">
+    <div className="relative h-screen w-[100%] flex items-center justify-center">
       {/* Video Background */}
       <video
         className="absolute top-0 left-0 rounded-lg w-full h-full object-cover"

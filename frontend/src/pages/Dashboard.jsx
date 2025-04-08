@@ -7,6 +7,8 @@ import Doctors from './Doctors/DoctorApp';
 import MedicinesApp from './Medicines/MedicinesApp';
 import Models from './Models';
 import UserInfoApp from './UserInfo/UserInfoApp';
+import ArtificialDoctor from '../components/Dashboard/ArtificialDoctor';
+
 const Dashboard = () => {
   const [isSidebarOpen, setIsSidebarOpen] = React.useState(true);
 
@@ -16,8 +18,8 @@ const Dashboard = () => {
       
       <div
         className={`flex-1 ${
-          isSidebarOpen ? 'ml-16' : 'ml-16 lg:ml-80'
-        } transition-all duration-300 ease-in-out p-4 overflow-y-auto h-screen`}
+          isSidebarOpen ? 'ml-16' : 'ml-16 lg:ml-100'
+        } transition-all duration-300 ease-in-out overflow-x-hidden p-2 h-screen`}
       >
         <Routes>
           <Route path="/home" element={<DashboardHome />} />
@@ -25,6 +27,7 @@ const Dashboard = () => {
           <Route path="/medicines/*" element={<MedicinesApp />} />
           <Route path="/models" element={<Models />} />
           <Route path="/userInfo/*" element={<UserInfoApp/>}/>
+          <Route path='/artificial-doctor' element={<ArtificialDoctor/>} />
           <Route path="*" element={<Navigate to="/dashboard/home" />} />
         </Routes>
       </div>
