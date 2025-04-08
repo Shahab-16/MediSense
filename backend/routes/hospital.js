@@ -7,6 +7,8 @@ const {
   listAllDoctors,
   deleteDoctor,
   bookAppointment,
+  getAllDoctors,
+  getAllHopitals
 } = require("../controllers/hospital/Hospital");
 const { authMiddleware, isHospitalMiddleware } = require("../middlewares/auth");
 
@@ -31,8 +33,8 @@ router.post(
 );
 router.get(
   "/:hospitalName/list-all-doctors",
-  authMiddleware,
-  isHospitalMiddleware,
+  // authMiddleware,
+  // isHospitalMiddleware,
   listAllDoctors
 );
 router.delete(
@@ -47,5 +49,16 @@ router.post(
   isHospitalMiddleware,
   bookAppointment
 );
-
+router.get(
+  "/get-all-doctors",
+  //  authMiddleware,
+  //  isHospitalMiddleware,
+   getAllDoctors
+);
+router.get(
+  "/get-all-hospitals",
+   //  authMiddleware,
+  //  isHospitalMiddleware,
+   getAllHopitals
+)
 module.exports = router;

@@ -163,3 +163,27 @@ exports.listAllMedicines = async (req, res) => {
     res.status(500).json({ message: "Server error", error: err.message });
   }
 };
+
+
+exports.getAllMedicinesFromAllStores=async(req,res)=>{
+  try{
+    const allMedicines=await Medicine.find({});
+    if(!allMedicines){
+      return res.status(400).json({
+        success:false,
+        message:"Medicines list is empty"
+      })
+    }
+    return res.status(200).json({
+      success:true,
+      data:allMedicines
+    })
+  }
+  catch(err){
+    console.log("error in getting all medicines", err);
+    return res.status(404).json({
+      success:false,
+      message:"Error in finding the medicines from all medicine stores"
+    })
+  }
+};

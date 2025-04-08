@@ -2,7 +2,7 @@ const Hospital = require("../../models/Hospitals");
 const cloudinary = require("cloudinary").v2;
 const bcrypt = require("bcryptjs");
 const fs = require("fs");
-
+const Doctors =require("../../models/Doctors");
 exports.addHospital = async (req, res) => {
   console.log("Add Hospital called in the backend");
   try {
@@ -179,3 +179,5 @@ exports.removeHospital = async (req, res) => {
     });
   }
 };
+
+

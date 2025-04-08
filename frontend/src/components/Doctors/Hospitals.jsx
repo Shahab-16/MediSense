@@ -1,11 +1,25 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { FaHospital } from "react-icons/fa";
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { images } from '../../assets/asset';
 import { AllHospitals } from '../../assets/asset';  
+import { axiosInstance } from '../../services/axios';
 export default function Hospitals() {
   const navigate=useNavigate();
+  const [hospitalFromDatabase,setHospital]=useState([]);
+  useEffect(()=>{
+    const fetchHospitals= async()=>{
+      try{
+        const res=await axiosInstance.get("/hospital/get-all-hospitals");
+        console.log("fetched hospitals",res.data.data);
+        setHospital(res.data.data);
+      } catch(error){
+        console.log("error in calling from frontend",error);
+      }
+    }
+    fetchHospitals();
+  },[])
   return (
     <div className="container mx-auto px-8 py-8 max-w-screen-xl">
       <div className='flex flex-col items-center text-center'>
@@ -13,13 +27,11 @@ export default function Hospitals() {
         <p className='text-3xl font-bold text-blacl'>Find the Best Hospitals Near You</p>
       </div>
       <div className='mt-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8'>
-        {AllHospitals
-        .sort((a, b) => b.rating - a.rating)
-        .slice(0,8)
+        {hospitalFromDatabase
         .map((hospital) => (
           <div key={hospital.id} className='bg-white shadow-lg rounded-xl overflow-hidden transform transition-all hover:scale-105 hover:shadow-xl hover:cursor-pointer'>
-            <Link to={`/dashboard/doctors/hospital/${hospital.hospitalId}`}>
-            <img  src={images.hospital} alt={hospital.name} className="h-48 w-full object-cover " />
+            <Link to={`/dashboard/doctors/hospital/${hospital.name}`}>
+            <img  src={hospital.hospitalImage} alt={hospital.name} className="h-48 w-full object-cover " />
             </Link>
             <div className='p-4'>
               <h2 className='text-xl font-bold text-gray-800'>{hospital.name}</h2>

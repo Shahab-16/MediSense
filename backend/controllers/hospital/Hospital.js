@@ -6,9 +6,7 @@ const Appointment = require("../../models/Appointment");
 const Doctors = require("../../models/Doctors");
 const User = require("../../models/User");
 const fs = require("fs");
-
 const mongoose = require("mongoose");
-
 exports.addDoctor = async (req, res) => {
   try {
     const {
@@ -245,3 +243,49 @@ exports.bookAppointment = async (req, res) => {
     res.json({ success: false, message: error.message });
   }
 };
+
+exports.getAllDoctors = async (req, res) => {
+  try {
+    const allDoctors = await Doctors.find();
+
+    if (!allDoctors || allDoctors.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "No doctors found",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      data: allDoctors,
+    });
+  } catch (err) {
+    console.log("error in get all doctors controllers", err);
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error while fetching doctors",
+    });
+  }
+};
+
+exports.getAllHopitals = async (req,res)=>{
+  try{
+    const allHospitals=await Hospital.find();
+    if(!allHospitals || allHospitals.length===0){
+      return res.status(404).json({
+        success:false,
+        message:"could not find all all hospitals"
+      })
+    }
+    return res.status(200).json({
+      succes:true,
+      data:allHospitals
+    })
+  } catch(error){
+    console.log("error in get all hospitals controller", error);
+    return res.status(500).json({
+      success:false,
+      message:"Internal server error"
+    });
+  }
+}

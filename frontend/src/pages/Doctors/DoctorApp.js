@@ -31,7 +31,7 @@ const Doctors = () => {
           <Route path="/appointment/:docId" element={<AppointmentPage/>}/>
           <Route path="/appointment/booking/:docId" element={<MyAppointmentPage/>}/>
           <Route path="/contactUs" element={<ContactPage/>}/>
-          <Route path="/hospital/:hospitalId" element={<HospitalPage/>}/>
+          <Route path="/hospital/:hospitalName" element={<HospitalPage/>}/>
           <Route path="/hospital/:hospitalId/:speciality" element={<HospitalPage/>}/>
           <Route path="/allhospitals" element={<AllHosptalsPage/>}/>
         </Routes>
