@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState ,useEffect} from 'react';
 import { Link } from 'react-router-dom';
 import { FaCrown, FaStar, FaFilter, FaSearch, FaMapMarkerAlt, FaPhoneAlt } from 'react-icons/fa';
+import { getMedicalStores } from '../../services/axios';
 
 // Updated dummy data with premium status
 const stores = [
@@ -18,8 +19,20 @@ const stores = [
 const AllMedicineStoresPage = () => {
   const [filter, setFilter] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
-
-  const filteredStores = stores.filter(store => {
+const [allStores,setStores]=useState([]);
+  useEffect(()=>{
+    const fecthMedicals=async()=>{
+      try{
+        const res=await getMedicalStores();
+        console.log("fetched medicals",res);
+        setStores(res);
+      } catch(error){
+        console.log("can not fetch the medical from backend",error);
+      }
+    }
+    fecthMedicals();
+  },[])
+  const filteredStores = allStores.filter(store => {
     const matchesSearch = store.name.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesFilter = filter === 'all' || 
                          (filter === 'premium' && store.premium) || 
@@ -79,7 +92,7 @@ const AllMedicineStoresPage = () => {
 
               <div className="h-48 bg-gray-100 rounded-t-xl overflow-hidden">
                 <img 
-                  src="https://uniquekiosk.com/wp-content/uploads/2020/08/39-10-1536x877.jpg"
+                  src={store.pharmacyImage}
                   alt={store.name} 
                   className="w-full h-full object-cover"
                 />

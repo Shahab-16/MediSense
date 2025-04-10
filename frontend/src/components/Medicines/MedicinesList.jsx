@@ -3,15 +3,15 @@ import { FaCartPlus, FaTrash, FaPlusCircle, FaMinusCircle } from 'react-icons/fa
 import { useContext } from 'react';
 import { StoreContext } from '../../context/StoreContext';
 
-const MedicinesList = ({ _id,image, name, category, price, description }) => {
-
+const MedicinesList = ({ _id, medicineImage, name, category, price, description }) => {
+ 
   const {addToMedicineCart,removeFromMedicineCart,medicineCart}=useContext(StoreContext);
 
   return (
     <div className="bg-white shadow-lg rounded-lg p-5 max-w-xs mx-auto transition-all duration-300 hover:shadow-xl">
       {/* Image Section */}
       <div className="h-48 w-full bg-gray-100 rounded-t-lg flex items-center justify-center overflow-hidden">
-        <img src={image} alt={name} className="h-full object-contain" />
+        <img src={medicineImage} alt={name} className="h-full object-contain" />
       </div>
 
       {/* Details Section */}

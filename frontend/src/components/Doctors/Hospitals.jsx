@@ -5,15 +5,15 @@ import { useNavigate } from 'react-router-dom';
 import { images } from '../../assets/asset';
 import { AllHospitals } from '../../assets/asset';  
 import { axiosInstance } from '../../services/axios';
+import { getAllHopitals } from '../../services/axios';
 export default function Hospitals() {
-  const navigate=useNavigate();
   const [hospitalFromDatabase,setHospital]=useState([]);
   useEffect(()=>{
     const fetchHospitals= async()=>{
       try{
-        const res=await axiosInstance.get("/hospital/get-all-hospitals");
-        console.log("fetched hospitals",res.data.data);
-        setHospital(res.data.data);
+        const res=await getAllHopitals();
+        console.log("fetched hospitals",res);
+        setHospital(res);
       } catch(error){
         console.log("error in calling from frontend",error);
       }

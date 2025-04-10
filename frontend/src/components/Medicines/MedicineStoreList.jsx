@@ -1,101 +1,115 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { axiosInstance } from '../../services/axios';
 import { FaClinicMedical, FaPills, FaStar, FaMapMarkerAlt, FaPhoneAlt } from 'react-icons/fa';
-
+import { getMedicalStores } from '../../services/axios';
 const MedicineStoreList = () => {
-  const stores = [
-    { 
-      id: 1, 
-      name: "HealthCare Mumbai", 
-      image: "https://source.unsplash.com/random/400x300/?pharmacy,clinic1",
-      address: "Marine Drive, Mumbai",
-      contact: "+91 22 2654 7890",
-      rating: 4.8,
-      medicinesAvailable: 245,
-      yearsActive: 12
-    },
-    { 
-      id: 2, 
-      name: "Delhi Meds Corner", 
-      image: "https://source.unsplash.com/random/400x300/?pharmacy,clinic2",
-      address: "Connaught Place, Delhi",
-      contact: "+91 11 4356 7890",
-      rating: 4.6,
-      medicinesAvailable: 215,
-      yearsActive: 8
-    },
-    { 
-      id: 3, 
-      name: "Bangalore Pharma Hub", 
-      image: "https://source.unsplash.com/random/400x300/?pharmacy,clinic3",
-      address: "MG Road, Bangalore",
-      contact: "+91 80 2678 9012",
-      rating: 4.9,
-      medicinesAvailable: 278,
-      yearsActive: 15
-    },
-    { 
-      id: 4, 
-      name: "Chennai Medicals", 
-      image: "https://source.unsplash.com/random/400x300/?pharmacy,clinic4",
-      address: "Anna Salai, Chennai",
-      contact: "+91 44 2890 1234",
-      rating: 4.4,
-      medicinesAvailable: 198,
-      yearsActive: 10
-    },
-    { 
-      id: 5, 
-      name: "Hyderabad Health Plus", 
-      image: "https://source.unsplash.com/random/400x300/?pharmacy,clinic5",
-      address: "Banjara Hills, Hyderabad",
-      contact: "+91 40 2789 0123",
-      rating: 4.7,
-      medicinesAvailable: 234,
-      yearsActive: 9
-    },
-    { 
-      id: 6, 
-      name: "Pune Wellness Pharmacy", 
-      image: "https://source.unsplash.com/random/400x300/?pharmacy,clinic6",
-      address: "FC Road, Pune",
-      contact: "+91 20 2678 3456",
-      rating: 4.3,
-      medicinesAvailable: 187,
-      yearsActive: 7
-    },
-    { 
-      id: 7, 
-      name: "Kolkata Care Meds", 
-      image: "https://source.unsplash.com/random/400x300/?pharmacy,clinic7",
-      address: "Park Street, Kolkata",
-      contact: "+91 33 2456 7890",
-      rating: 4.5,
-      medicinesAvailable: 205,
-      yearsActive: 11
-    },
-    { 
-      id: 8, 
-      name: "Ahmedabad Medico", 
-      image: "https://source.unsplash.com/random/400x300/?pharmacy,clinic8",
-      address: "CG Road, Ahmedabad",
-      contact: "+91 79 2789 0123",
-      rating: 4.2,
-      medicinesAvailable: 176,
-      yearsActive: 6
-    },
-    // Continue adding more entries up to 20...
-    { 
-      id: 20, 
-      name: "Goa Pharma Solutions", 
-      image: "https://source.unsplash.com/random/400x300/?pharmacy,clinic20",
-      address: "Panaji, Goa",
-      contact: "+91 832 245 6789",
-      rating: 4.6,
-      medicinesAvailable: 221,
-      yearsActive: 8
+  const [allStores,setStores]=useState([]);
+  useEffect(()=>{
+    const fecthMedicals=async()=>{
+      try{
+        const res=await getMedicalStores();
+        console.log("fetched medicals",res);
+        setStores(res);
+      } catch(error){
+        console.log("can not fetch the medical from backend",error);
+      }
     }
-  ];
+    fecthMedicals();
+  },[])
+  // const stores = [
+  //   { 
+  //     id: 1, 
+  //     name: "HealthCare Mumbai", 
+  //     image: "https://source.unsplash.com/random/400x300/?pharmacy,clinic1",
+  //     address: "Marine Drive, Mumbai",
+  //     contact: "+91 22 2654 7890",
+  //     rating: 4.8,
+  //     medicinesAvailable: 245,
+  //     yearsActive: 12
+  //   },
+  //   { 
+  //     id: 2, 
+  //     name: "Delhi Meds Corner", 
+  //     image: "https://source.unsplash.com/random/400x300/?pharmacy,clinic2",
+  //     address: "Connaught Place, Delhi",
+  //     contact: "+91 11 4356 7890",
+  //     rating: 4.6,
+  //     medicinesAvailable: 215,
+  //     yearsActive: 8
+  //   },
+  //   { 
+  //     id: 3, 
+  //     name: "Bangalore Pharma Hub", 
+  //     image: "https://source.unsplash.com/random/400x300/?pharmacy,clinic3",
+  //     address: "MG Road, Bangalore",
+  //     contact: "+91 80 2678 9012",
+  //     rating: 4.9,
+  //     medicinesAvailable: 278,
+  //     yearsActive: 15
+  //   },
+  //   { 
+  //     id: 4, 
+  //     name: "Chennai Medicals", 
+  //     image: "https://source.unsplash.com/random/400x300/?pharmacy,clinic4",
+  //     address: "Anna Salai, Chennai",
+  //     contact: "+91 44 2890 1234",
+  //     rating: 4.4,
+  //     medicinesAvailable: 198,
+  //     yearsActive: 10
+  //   },
+  //   { 
+  //     id: 5, 
+  //     name: "Hyderabad Health Plus", 
+  //     image: "https://source.unsplash.com/random/400x300/?pharmacy,clinic5",
+  //     address: "Banjara Hills, Hyderabad",
+  //     contact: "+91 40 2789 0123",
+  //     rating: 4.7,
+  //     medicinesAvailable: 234,
+  //     yearsActive: 9
+  //   },
+  //   { 
+  //     id: 6, 
+  //     name: "Pune Wellness Pharmacy", 
+  //     image: "https://source.unsplash.com/random/400x300/?pharmacy,clinic6",
+  //     address: "FC Road, Pune",
+  //     contact: "+91 20 2678 3456",
+  //     rating: 4.3,
+  //     medicinesAvailable: 187,
+  //     yearsActive: 7
+  //   },
+  //   { 
+  //     id: 7, 
+  //     name: "Kolkata Care Meds", 
+  //     image: "https://source.unsplash.com/random/400x300/?pharmacy,clinic7",
+  //     address: "Park Street, Kolkata",
+  //     contact: "+91 33 2456 7890",
+  //     rating: 4.5,
+  //     medicinesAvailable: 205,
+  //     yearsActive: 11
+  //   },
+  //   { 
+  //     id: 8, 
+  //     name: "Ahmedabad Medico", 
+  //     image: "https://source.unsplash.com/random/400x300/?pharmacy,clinic8",
+  //     address: "CG Road, Ahmedabad",
+  //     contact: "+91 79 2789 0123",
+  //     rating: 4.2,
+  //     medicinesAvailable: 176,
+  //     yearsActive: 6
+  //   },
+  //   // Continue adding more entries up to 20...
+  //   { 
+  //     id: 20, 
+  //     name: "Goa Pharma Solutions", 
+  //     image: "https://source.unsplash.com/random/400x300/?pharmacy,clinic20",
+  //     address: "Panaji, Goa",
+  //     contact: "+91 832 245 6789",
+  //     rating: 4.6,
+  //     medicinesAvailable: 221,
+  //     yearsActive: 8
+  //   }
+  // ];
 
   return (
     <div className="container mx-auto px-4 py-12 max-w-7xl">
@@ -135,7 +149,7 @@ const MedicineStoreList = () => {
 
       {/* Stores Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-12">
-        {stores.map((store) => (
+        {allStores.map((store) => (
           <div key={store.id} className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 group relative overflow-hidden">
             {store.rating > 4.5 && (
               <div className="absolute top-2 right-2 bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm font-semibold flex items-center gap-1">
@@ -145,7 +159,7 @@ const MedicineStoreList = () => {
             
             <div className="h-48 bg-gray-100 flex items-center justify-center overflow-hidden">
               <img 
-                src="https://uniquekiosk.com/wp-content/uploads/2020/08/39-10-1536x877.jpg"
+                src={store.pharmacyImage}
                 alt={store.name} 
                 className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105" 
               />
@@ -181,7 +195,7 @@ const MedicineStoreList = () => {
               </div>
 
               <Link 
-                to={`/dashboard/medicines/store/${store.id}`}
+                to={`/dashboard/medicines/store/${store.name}`}
                 className="mt-4 w-full block text-center bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg transition-colors flex items-center justify-center gap-2"
               >
                 <FaClinicMedical /> Visit Store

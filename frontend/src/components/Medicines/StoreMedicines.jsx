@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { FaCartPlus, FaTrash, FaPlusCircle, FaMinusCircle, FaFilter, FaSearch, FaPills, FaCapsules, FaSyringe, FaHeartbeat } from 'react-icons/fa';
 import { GiMedicinePills } from 'react-icons/gi';
-
+import { axiosInstance } from '../../services/axios';
 // Hospital names from AllMedicineStoresPage
 const hospitalNames = [
   "Elite Meds Mumbai", 
@@ -34,17 +34,32 @@ const medicines = Array.from({ length: 48 }, (_, i) => ({
 }));
 
 const StoreMedicinesList = () => {
-  const { storeId } = useParams();
+  const { storeName } = useParams();
+  console.log("hello");
+  console.log("storeName",storeName);
   const [selectedDisease, setSelectedDisease] = useState('All');
   const [selectedBrand, setSelectedBrand] = useState('All');
   const [sortBy, setSortBy] = useState('price');
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [cart, setCart] = useState({});
+  const [medicinesInStores,setMedicinesInStore]=useState([]);
   const itemsPerPage = 12;
-
+  useEffect(()=>{
+     const fetchMedicinesFromStore=async()=>{
+      try{
+        const res=await axiosInstance.get(`/pharmacy/${storeName}/list-all-medicines`);
+        console.log("fetched medicines in medical store",res.data.medicines);
+        console.log("type",typeof medicinesInStores);
+        setMedicinesInStore(res.data.medicines);
+      } catch(error){
+        console.log("error in fetching the medicines from the store",error);
+      }
+     }
+     fetchMedicinesFromStore();
+  },[storeName])
   // Filter and sort logic
-  const filteredMedicines = medicines.filter(medicine => {
+  const filteredMedicines = medicinesInStores.filter(medicine => {
     const matchesSearch = medicine.name.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesDisease = selectedDisease === 'All' || medicine.disease === selectedDisease;
     const matchesBrand = selectedBrand === 'All' || medicine.brand === selectedBrand;
@@ -81,7 +96,7 @@ const StoreMedicinesList = () => {
       <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-2xl p-8 mb-8 shadow-xl">
         <div className="max-w-4xl mx-auto text-center">
           <GiMedicinePills className="text-6xl mx-auto mb-6 animate-pulse" />
-          <h1 className="text-4xl font-bold mb-4">Welcome to {hospitalNames[storeId % hospitalNames.length]}</h1>
+          <h1 className="text-4xl font-bold mb-4">Welcome to {hospitalNames[storeName % hospitalNames.length]}</h1>
           <p className="text-xl mb-6">Your Trusted Partner in Health & Wellness</p>
           <div className="flex justify-center gap-6 text-sm">
             <div className="bg-white/20 p-3 rounded-lg">
@@ -180,7 +195,7 @@ const StoreMedicinesList = () => {
           <div key={medicine.id} className="bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden flex flex-col h-[420px]">
             <div className="h-48 bg-gray-100 relative overflow-hidden">
               <img 
-                src="http://worldfertilityservices.com/wp-content/uploads/2016/04/meddici.jpg"
+                src={medicine.medicineImage}
                 alt={medicine.name}
                 className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
               />

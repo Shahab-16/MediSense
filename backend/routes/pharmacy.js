@@ -7,6 +7,7 @@ const {
   listAllMedicines,
   deleteMedicine,
   getAllMedicinesFromAllStores,
+  getAllMedicalStores
 } = require("../controllers/pharmacy/MedicineStore");
 const { authMiddleware, isPharmacyMiddleware } = require("../middlewares/auth");
 
@@ -31,8 +32,8 @@ router.post(
 );
 router.get(
   "/:pharmacyName/list-all-medicines",
-  authMiddleware,
-  isPharmacyMiddleware,
+  // authMiddleware,
+  // isPharmacyMiddleware,
   listAllMedicines
 );
 router.delete(
@@ -43,9 +44,13 @@ router.delete(
 );
 router.get(
   "/get-all-medicines",
-  authMiddleware,
-  isPharmacyMiddleware,
+  // authMiddleware,
+  // isPharmacyMiddleware,
   getAllMedicinesFromAllStores
+)
+router.get(
+  "/get-all-stores",
+  getAllMedicalStores
 )
 
 module.exports = router;

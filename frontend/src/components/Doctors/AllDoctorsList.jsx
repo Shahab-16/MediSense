@@ -6,6 +6,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { useEffect } from 'react';
 import axios from 'axios';
 import { axiosInstance } from '../../services/axios';
+import { getDoctors } from '../../services/axios';
 export default function AllDoctorsList() {
     const {speciality}=useParams();
     const navigate=useNavigate();
@@ -14,9 +15,9 @@ export default function AllDoctorsList() {
        useEffect(() => {
          const fetchDoctors = async () => {
            try {
-             const res = await axiosInstance.get("/hospital/get-all-doctors");
-             console.log("Fetched doctors:", res.data.data);
-             setAllDoctors(res.data.data);
+             const res = await getDoctors();
+             console.log("Fetched doctors:", res);
+             setAllDoctors(res);
            } catch (error) {
              console.error("Error fetching doctors", error);
            }
@@ -49,7 +50,7 @@ export default function AllDoctorsList() {
         </div>
       <div className='w-full grid grid-cols-4 gap-4 gap-y-6'>
         {filterDoc.map((item,index)=>(
-            <div onClick={()=>navigate(`/dashboard/doctors/appointment/${item._id}`)} className='border border-[#C9D8FF] rounded-xl overflow-hidden cursor-pointer hover:translate-y-[-10px] transition-all duration-500'>
+            <div onClick={()=>navigate(`/dashboard/doctors/appointment/${item.name}`)} className='border border-[#C9D8FF] rounded-xl overflow-hidden cursor-pointer hover:translate-y-[-10px] transition-all duration-500'>
                 <img  className='bg-blue-100' src={item.profileImage}></img>
                 <div className='p-4'>
                     <div className='flex flex-cols gap-4 items-center text-sm text-center'>

@@ -3,8 +3,10 @@ import { useParams } from "react-router-dom";
 import { doctors } from "../../assets/asset";
 import { StoreContext } from "../../context/StoreContext";
 import { useNavigate } from "react-router-dom";
+import { getDoctors } from "../../services/axios";
 const Appointment = () => {
-    const { docId } = useParams();
+    const { docName } = useParams();
+    console.log("doc name",docName);
     const navigate=useNavigate()
     const [docInfo, setDocInfo] = useState(null);
     const [docSlots, setDocSlots] = useState([]);
@@ -12,12 +14,30 @@ const Appointment = () => {
     const [slotTime,setSlotTime]=useState(' ');
     const {doctors}=useContext(StoreContext);
     const daysOfWeek=['SUN','MON','TUE','WED','THU','FRI','SAT'];
+    const [allDoctorsInfo,setAllDoctorsInfo]=useState([]);
+    //getting all doctors from databse and filtering info by name
+    useEffect(()=>{
+        const fectchDoctors=async()=>{
+            try{
+                const res=await getDoctors();
+                console.log("fetched doctors in appointent section",res);
+                setAllDoctorsInfo(res);
+            } catch(error){
+                console.log("error in fetching data in appointment section",error);
+            } 
+        }
+       fectchDoctors();
+    },[docName])
 
-    const fetchDocInfo = async () => {
-        const docInfo = doctors.find(doc => doc._id == docId);
-        setDocInfo(docInfo);
-        console.log(docInfo);
-    };
+    //fetch info of the doctor who is getting appointmented
+    useEffect(()=>{
+        const fetchDocInfo = async () => {
+            const docInfo = allDoctorsInfo.find(doc => doc.name == docName);
+            setDocInfo(docInfo);
+            console.log("dcotors Info",docInfo);
+        };
+        fetchDocInfo();
+    },[docName,allDoctorsInfo])
 
     const getAvailableSlots = async () => {
         let today = new Date();
@@ -66,9 +86,6 @@ const Appointment = () => {
         if (docInfo) getAvailableSlots();
     }, [docInfo]);
 
-    useEffect(() => {
-        fetchDocInfo();
-    }, [docId]);
 
     useEffect(() => {
         console.log(docSlots);
@@ -79,20 +96,20 @@ const Appointment = () => {
             <div className="flex flex-col mx-[10%]">
                 <div className="flex flex-col sm:flex-row gap-4">
                     <div>
-                        <img className="bg-blue-600 w-full sm:max-w-72 rounded-lg" src={docInfo.img} alt="Doctor" />
+                        <img className="bg-blue-600 w-full sm:max-w-72 rounded-lg" src={docInfo.profileImage} alt="Doctor" />
                     </div>
                     <div className="flex-1 border border-[#ADADAD] rounded-lg p-8 py-5 bg-white mx-2 sm:mx-0 mt-[80px] sm:mt-0">
                         <p className="flex items-center gap-2 text-3xl font-medium text-gray-700">{docInfo.name}</p>
                         <div className="flex items-center gap-2 text-xl font-medium text-gray-700">
                             <p className="text-gray-600">{docInfo.specialization}</p>
-                            <button className="border rounded-xl text-sm text-center">{docInfo.experience} Years</button>
+                            <button className="border rounded-xl text-sm text-center">8 Years</button>
                         </div>
                         <div>
                             <p className="flex items-center gap-1 text-sm font-medium text-[#262626] mt-3">About</p>
-                            <p className="text-sm text-gray-600 max-w-[700px] mt-1">{docInfo.about}</p>
+                            <p className="text-sm text-gray-600 max-w-[700px] mt-1">{docInfo.name} is a highly respected cardiothoracic surgeon with over 25 years of experience in the field. Known for his compassionate approach and outstanding surgical skills, Dr. Shetty has performed thousands of successful heart surgeries.</p>
                         </div>
                         <p className="text-gray-600 font-medium mt-4">
-                            Appointment Fee <span className="text-gray-800">${docInfo.fee}</span>
+                            Appointment Fee <span className="text-gray-800">₹{docInfo.fees}</span>
                         </p>
                     </div>
                 </div>

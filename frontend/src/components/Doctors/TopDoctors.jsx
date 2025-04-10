@@ -1,28 +1,23 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { getDoctors } from '../../services/axios'
 import axios from 'axios'
 
 const TopDoctors = () => {
   const navigate = useNavigate();
-  const [allDoctors, setAllDoctors] = useState([]);
-
-  useEffect(() => {
-    const fetchDoctors = async () => {
-      try {
-        const res = await axios.get("http://localhost:5000/hospital/get-all-doctors", {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-        console.log("Fetched doctors:", res.data.data);
-        setAllDoctors(res.data.data);
-      } catch (error) {
-        console.error("Error fetching doctors", error);
+  const [allDoctors,setAllDoctors]=useState([]);
+  useEffect(()=>{
+      const fetchDoctors=async()=>{
+        try{
+          const res=await getDoctors();
+          console.log("fetched data from services",res);
+          setAllDoctors(res);
+        } catch(error){
+          console.log("error in calling getAlldoctors",error);
+        }
       }
-    };
-
-    fetchDoctors();
-  }, []);
+      fetchDoctors();
+  },[]);
 
   return (
     <div className='flex flex-col items-center gap-4 my-16 text-[#262626] md:mx-10'>
@@ -35,7 +30,7 @@ const TopDoctors = () => {
         {allDoctors?.slice(0, 8).map((item, index) => (
           <div 
             key={item._id} 
-            onClick={() => navigate(`/dashboard/doctors/appointment/${item._id}`)}
+            onClick={() => navigate(`/dashboard/doctors/appointment/${item.name}`)}
             className='border border-[#C9D8FF] rounded-xl overflow-hidden cursor-pointer hover:translate-y-[-10px] transition-all duration-500'
           >
             <img 

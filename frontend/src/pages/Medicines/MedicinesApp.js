@@ -14,7 +14,7 @@ const MedicinesApp = () => {
       <Routes>
         <Route path="/" element={<MedicinesHomepage />} />
         <Route path="/allstores" element={<AllMedicineStoresPage />} />
-        <Route path="/store/:storeId" element={<StoreMedicines />} />
+        <Route path="/store/:storeName" element={<StoreMedicines />} />
         <Route path="/cart" element={<MedicinesCart/>} />
         <Route path="/checkout" element={<MedicineCheckout />} />
         <Route path="*" element={<Navigate to="/medicines/homepage" />} />

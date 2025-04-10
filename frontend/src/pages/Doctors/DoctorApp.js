@@ -28,8 +28,8 @@ const Doctors = () => {
           <Route path="/alldoctors/:speciality" element={<DoctorsListPage/>}/>
           <Route path="*" element={<Navigate to="/" />} />
           <Route path="/my-appointment" element={<MyAppointmentPage/>}/>
-          <Route path="/appointment/:docId" element={<AppointmentPage/>}/>
-          <Route path="/appointment/booking/:docId" element={<MyAppointmentPage/>}/>
+          <Route path="/appointment/:docName" element={<AppointmentPage/>}/>
+          <Route path="/appointment/booking/:docName" element={<MyAppointmentPage/>}/>
           <Route path="/contactUs" element={<ContactPage/>}/>
           <Route path="/hospital/:hospitalName" element={<HospitalPage/>}/>
           <Route path="/hospital/:hospitalId/:speciality" element={<HospitalPage/>}/>

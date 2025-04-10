@@ -41,14 +41,14 @@ exports.addMedicine = async (req, res) => {
       "https://cdn.pixabay.com/photo/2014/03/25/16/59/medicine-297778_1280.png";
 
     if (req.file) {
-      try{
-        const result = await cloudinary.uploader.upload(req.file.path,{
-          folder:"MEDISENSE/Medicines_Images"
+      try {
+        const result = await cloudinary.uploader.upload(req.file.path, {
+          folder: "MEDISENSE/Medicines_Images"
         });
         medicineImage = result.secure_url;
         console.log("medicineImage:", medicineImage);
       }
-      catch(err){
+      catch (err) {
         console.error("Error uploading image to Cloudinary:", err);
         return res.status(500).json({
           success: false,
@@ -165,25 +165,46 @@ exports.listAllMedicines = async (req, res) => {
 };
 
 
-exports.getAllMedicinesFromAllStores=async(req,res)=>{
-  try{
-    const allMedicines=await Medicine.find({});
-    if(!allMedicines){
+exports.getAllMedicinesFromAllStores = async (req, res) => {
+  try {
+    const allMedicines = await Medicine.find({});
+    if (!allMedicines) {
       return res.status(400).json({
-        success:false,
-        message:"Medicines list is empty"
+        success: false,
+        message: "Medicines list is empty"
       })
     }
     return res.status(200).json({
-      success:true,
-      data:allMedicines
+      success: true,
+      data: allMedicines
     })
   }
-  catch(err){
+  catch (err) {
     console.log("error in getting all medicines", err);
     return res.status(404).json({
-      success:false,
-      message:"Error in finding the medicines from all medicine stores"
+      success: false,
+      message: "Error in finding the medicines from all medicine stores"
     })
   }
 };
+
+exports.getAllMedicalStores = async (req, res) => {
+  try {
+    const allMedicals = await MedicalStore.find();
+    if (!allMedicals) {
+      return res.status(404).json({
+        succes: false,
+        message: "can not find all medicals"
+      })
+    }
+    return res.status(200).json({
+      success: true,
+      data: allMedicals
+    })
+  } catch (error) {
+    console.log("error in finding all medicals in pharmacy controller", error);
+    return res.status(500).json({
+      message: "Internal server error"
+    })
+  }
+}
