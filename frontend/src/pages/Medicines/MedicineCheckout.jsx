@@ -4,6 +4,11 @@ import { MdEmail } from "react-icons/md";
 import {images} from "../../assets/asset"; // Replace with your image path
 
 const MedicineCheckout = () => {
+
+
+ const submitHandler = (e) => {
+    e.preventDefault();
+  };
   return (
     <div className="h-min-screen flex flex-col items-center bg-gray-100 mt-8 m-4 pb-8 rounded-lg">
       <h1 className="text-4xl font-bold text-blue-700 mt-6 mb-4">Welcome to Medicine Checkout</h1>
@@ -129,6 +134,7 @@ const MedicineCheckout = () => {
 
           <button
             type="submit"
+            onClick={submitHandler}
             className="bg-blue-600 hover:bg-blue-700 text-white text-lg font-semibold w-full py-3 rounded-lg mt-4 transition"
           >
             Proceed to Payment
