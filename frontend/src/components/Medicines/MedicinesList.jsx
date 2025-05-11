@@ -1,11 +1,21 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FaCartPlus, FaTrash, FaPlusCircle, FaMinusCircle } from 'react-icons/fa';
 import { useContext } from 'react';
 import { StoreContext } from '../../context/StoreContext';
 
 const MedicinesList = ({ _id, medicineImage, name, category, price, description }) => {
  
-  const {addToMedicineCart,removeFromMedicineCart,medicineCart}=useContext(StoreContext);
+  const {addToMedicineCart,removeFromMedicineCart,medicineCart,token}=useContext(StoreContext)
+
+
+  const payload = JSON.parse(atob(token.split('.')[1]));
+  const userId = payload.id;
+
+  console.log("Printing the userId in medicinesList",userId);
+
+  useEffect(() => {
+    return () => console.log("Cleanup before next effect or unmount");
+  }, [medicineCart]);
 
   return (
     <div className="bg-white shadow-lg rounded-lg p-5 max-w-xs mx-auto transition-all duration-300 hover:shadow-xl">
@@ -24,7 +34,7 @@ const MedicinesList = ({ _id, medicineImage, name, category, price, description 
         {/* Cart Buttons */}
         {!medicineCart[_id] ? (
           <button
-            onClick={()=> addToMedicineCart(_id)}
+            onClick={()=> addToMedicineCart(_id,userId)}
             className="mt-4 w-full flex items-center justify-center gap-2 p-2 rounded bg-blue-700 text-white transition-all duration-300 hover:bg-blue-800 hover:shadow-md"
           >
             <FaCartPlus className="text-lg" />
@@ -33,14 +43,14 @@ const MedicinesList = ({ _id, medicineImage, name, category, price, description 
         ) : (
           <div className="mt-4 flex items-center justify-between bg-gray-100 p-2 rounded shadow-inner">
             <button
-              onClick={()=> removeFromMedicineCart(_id)}
+              onClick={()=> removeFromMedicineCart(_id,userId)}
               className="text-red-600 text-2xl hover:text-red-700 transition-all"
             >
               {medicineCart[_id] === 1 ? <FaTrash /> : <FaMinusCircle />}
             </button>
             <span className="text-lg font-semibold text-gray-800">{medicineCart[_id]}</span>
             <button
-              onClick={() => addToMedicineCart(_id)}
+              onClick={() => addToMedicineCart(_id, userId)}
               className="text-green-600 text-2xl hover:text-green-700 transition-all"
             >
               <FaPlusCircle />

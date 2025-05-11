@@ -4,7 +4,6 @@ import { images } from "../../assets/asset";
 
 const LoginOptions = () => {
   const navigate = useNavigate();
-
   const handleOptionClick = (role) => {
     navigate(`/login/${role}`);
   };

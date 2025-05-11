@@ -7,6 +7,8 @@ export const axiosInstance = axios.create({
   },
 });
 
+const backendUrl="https://medisense-backend.vercel.app";
+
 export const getDoctors=async()=>{
     const response=await axiosInstance.get("/hospital/get-all-doctors");
     console.log("fetched doctors in services",response.data.data);
@@ -33,4 +35,46 @@ export const getAllMedicines=async()=>{
 export const listAllMedicinesInMedicalStore=async()=>{
   const response=await axiosInstance.get("")
 }
-// export default axiosInstance;
+
+
+export const getAllMedicinesInCart=async(id)=>{
+  const response=await axios.get(`${backendUrl}/user/medicine/get-all-medicines-in-cart`,{params:{id}});
+  console.log("fetched all medicines in cart in services", response.data.data);
+  return response.data.data;
+}
+
+
+/*This code is not used (StoreContext code is used)*/
+export const addMedicineToCart=async(medicineId,id)=>{
+  console.log("Printing the userId in the axios of addMedicineToCart",id)
+  const response=await axios.post(`${backendUrl}/user/medicine/add-to-cart`,{medicineId},{id});
+  console.log("fetched all medicines in cart in services", response.data.data);
+  return response.data.data;
+}
+
+
+/*This code is not used (StoreContext code is used)*/
+export const removeMedicineFromCart=async(medicineId,id)=>{
+  const response=await axios.post(`${backendUrl}/user/medicine/remove-from-cart`,{medicineId});
+  console.log("fetched all medicines in cart in services", response.data.data);
+  return response.data.data;
+}
+
+
+
+
+export const placeMedicineOrder = async (orderData) => {
+  try {
+    console.log("Inside placeMedicineOrder in axios services"); 
+    const response = await axios.post(`${backendUrl}/user/medicine/place-order`, orderData, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error placing medicine order:', error);
+    throw error;
+  }
+};

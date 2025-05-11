@@ -19,7 +19,7 @@ const LoginForm = () => {
   });
   const [otp, setOtp] = useState("");
   const [currState, setCurrState] = useState("Login");
-  const { login, setLogin } = useContext(StoreContext);
+  const { login, setLogin,token,setToken} = useContext(StoreContext);
   const navigate = useNavigate();
   const [isOtpSent, setIsOtpSent] = useState(false);
 
@@ -58,8 +58,9 @@ const LoginForm = () => {
         if (response.data.success) {
           toast.success("Login success");
 
-          localStorage.setItem("user", JSON.stringify(response.data.user));
-
+          localStorage.setItem("user", JSON.stringify(response.data.user))
+          setToken(response.data.token)
+          console.log("Printing the token(StoreContext) in loginForm",token)
           localStorage.setItem("token", response.data.token);
 
           // Store in cookie as backup

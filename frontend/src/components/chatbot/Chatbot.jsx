@@ -1,65 +1,22 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useContext } from 'react';
 import { AiOutlineMessage, AiOutlineClose } from 'react-icons/ai';
 import ChatMessage from './ChatMessage';
+import axios from 'axios';
+import { StoreContext } from '../../context/StoreContext';
 
 const Chatbot = () => {
+  console.log("Hii i m in Chatbot");  
   const [isOpen, setIsOpen] = useState(false);
+  const {BACKEND_URL} = useContext(StoreContext);
   const [messages, setMessages] = useState([
-    { text: "Hi there! I'm your healthcare assistant. How can I help you today?", isBot: true },
+    { 
+      text: "Hi there! I'm Medibot, your healthcare assistant from Medisense. How can I help you today?", 
+      isBot: true 
+    },
   ]);
   const [inputMessage, setInputMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef(null);
-
-  const botResponses = {
-    // Greetings & Small Talk
-    'hello': 'Hello! How can I assist you today?',
-    'hi': 'Hi there! I’m here to help. What do you need assistance with?',
-    'hey': 'Hey! How’s your day going? Let me know how I can help.',
-    'how are you': 'I’m just a chatbot, but I’m here to make your experience smooth! How can I assist you today?',
-    'good morning': 'Good morning! Wishing you a healthy day ahead. How can I help?',
-    'good afternoon': 'Good afternoon! Hope you’re having a great day. How may I assist you?',
-    'good evening': 'Good evening! How can I help you with your healthcare needs?',
-
-    // Booking & Consultation
-    'appointment': 'You can book an appointment with a doctor online or offline. Just visit the "Appointments" section.',
-    'consultation': 'We offer both online and offline consultations. Choose your preferred mode while booking.',
-    'doctor': 'You can find and consult doctors from various specialties on our platform.',
-    'follow-up': 'For follow-up consultations, simply log in to your account and schedule another session with your doctor.',
-
-    // Medicine Orders & Delivery
-    'medicine': 'You can order medicines online and get them delivered to your doorstep.',
-    'delivery': 'Medicine delivery usually takes 2-3 days, depending on your location.',
-    'order status': 'You can track your medicine order under "My Orders" in your account.',
-    'prescription': 'To order prescription medicines, you can upload your prescription while placing the order.',
-    'pharmacy': 'We have partnered with trusted pharmacies across India to ensure genuine medicines.',
-
-    // Disease Prediction & AI Services
-    'disease prediction': 'Our AI-based system helps predict diseases based on past data. Try it in the "Disease Prediction" section.',
-    'health checkup': 'We provide AI-powered health risk analysis to help you stay ahead of potential health issues.',
-
-    // Emergency & Support
-    'emergency': 'For medical emergencies, please contact your nearest hospital or dial 108 for an ambulance.',
-    'hospitals': 'We connect hospitals, clinics, and pharmacies across India to provide you seamless healthcare services.',
-    'contact': 'You can reach our support team at support@healthcare.com or call +91 9876543210.',
-    'help': 'Sure! I can assist you with appointments, doctor consultations, medicine orders, and more.',
-    
-    // Payments & Technical Issues
-    'payment': 'We accept various payment methods including credit/debit cards, UPI, and net banking.',
-    'refund': 'If you have issues with a payment or refund, please contact our support team.',
-    'technical issue': 'Oops! If you’re facing a technical issue, try refreshing the page or reaching out to support.',
-    
-    // Additional Healthcare Services
-    'lab test': 'You can book diagnostic lab tests through our platform and get reports online.',
-    'insurance': 'We provide information about health insurance plans. Check our "Insurance" section for details.',
-    'specialist': 'Looking for a specialist? We have expert doctors in cardiology, dermatology, neurology, and more.',
-    
-    // User Experience
-    'thank you': 'You’re welcome! Stay healthy and take care. 😊',
-    'thanks': 'Glad I could help! Let me know if you need anything else.',
-    'bye': 'Goodbye! Take care and stay healthy. If you need help, I’m always here!',
-    'default': 'I can assist you with healthcare services, appointments, and medicines. Ask me anything!'
-};
-
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -69,20 +26,44 @@ const Chatbot = () => {
     scrollToBottom();
   }, [messages]);
 
-  const handleSendMessage = () => {
-    if (!inputMessage.trim()) return;
+  const handleSendMessage = async () => {
+    if (!inputMessage.trim() || isLoading) return;
 
-    setMessages(prev => [...prev, { text: inputMessage, isBot: false }]);
-
-    setTimeout(() => {
-      const lowerMessage = inputMessage.toLowerCase();
-      const responseKey = Object.keys(botResponses).find(key => lowerMessage.includes(key));
-      const response = responseKey ? botResponses[responseKey] : botResponses.default;
-      
-      setMessages(prev => [...prev, { text: response, isBot: true }]);
-    }, 1000);
-
+    // Add user message to chat
+    const userMessage = inputMessage;
+    setMessages(prev => [...prev, { text: userMessage, isBot: false }]);
     setInputMessage('');
+    setIsLoading(true);
+
+    try {
+      // Prepare chat history for context
+      const chatHistory = messages
+        .filter(msg => msg.text) // Filter out any empty messages
+        .map(msg => ({
+          role: msg.isBot ? "model" : "user",
+          parts: [{ text: msg.text }],
+        }));
+
+      // Call backend API
+      const response = await axios.post(`${BACKEND_URL}/user/api/chatbot/chat`, {
+        message: userMessage,
+        history: chatHistory.slice(-10), // Send last 10 messages for context
+      });
+
+      // Add bot response to chat
+      setMessages(prev => [...prev, { 
+        text: response.data.response || "Sorry, I couldn't process that request.", 
+        isBot: true 
+      }]);
+    } catch (error) {
+      console.error('Chat error:', error);
+      setMessages(prev => [...prev, { 
+        text: "Sorry, I'm having trouble responding. Please try again later.", 
+        isBot: true 
+      }]);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -92,8 +73,8 @@ const Chatbot = () => {
           {/* Chatbot Header */}
           <div className="bg-blue-700 text-white rounded-t-xl p-4 flex items-center justify-between">
             <div>
-              <h3 className="font-semibold text-lg">Healthcare Assistant</h3>
-              <p className="text-xs opacity-90">Ask me about appointments, medicines, and more.</p>
+              <h3 className="font-semibold text-lg">Medibot Assistant</h3>
+              <p className="text-xs opacity-90">Ask me about healthcare services</p>
             </div>
             <button 
               onClick={() => setIsOpen(false)}
@@ -112,6 +93,17 @@ const Chatbot = () => {
                 isBot={msg.isBot}
               />
             ))}
+            {isLoading && (
+              <div className="flex justify-start mb-4">
+                <div className="bg-gray-200 text-gray-800 rounded-lg p-3 max-w-[70%]">
+                  <div className="flex space-x-2">
+                    <div className="w-2 h-2 rounded-full bg-gray-400 animate-bounce"></div>
+                    <div className="w-2 h-2 rounded-full bg-gray-400 animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                    <div className="w-2 h-2 rounded-full bg-gray-400 animate-bounce" style={{ animationDelay: '0.4s' }}></div>
+                  </div>
+                </div>
+              </div>
+            )}
             <div ref={messagesEndRef} />
           </div>
 
@@ -125,12 +117,18 @@ const Chatbot = () => {
                 onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
                 placeholder="Type your message..."
                 className="flex-1 border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-700"
+                disabled={isLoading}
               />
               <button
                 onClick={handleSendMessage}
-                className="bg-blue-700 text-white px-4 py-2 rounded-lg hover:bg-blue-800 transition-colors text-sm"
+                disabled={isLoading}
+                className={`px-4 py-2 rounded-lg transition-colors text-sm ${
+                  isLoading 
+                    ? 'bg-gray-400 cursor-not-allowed' 
+                    : 'bg-blue-700 text-white hover:bg-blue-800'
+                }`}
               >
-                Send
+                {isLoading ? '...' : 'Send'}
               </button>
             </div>
           </div>
@@ -140,6 +138,7 @@ const Chatbot = () => {
       {/* Chat Icon */}
       <button
         onClick={() => setIsOpen(!isOpen)}
+        className="transition-transform hover:scale-110"
       >
         {isOpen ? null : (
           <div className="bg-blue-700 text-white w-14 h-14 rounded-full shadow-lg hover:bg-blue-800 transition-all flex items-center justify-center">

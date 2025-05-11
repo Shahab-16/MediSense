@@ -1,10 +1,11 @@
 import './App.css';
 import Home from './pages/Home';
 import { Routes, Route } from 'react-router-dom';
-import LoginOptions from './components/LoginAndSignup/LoginOptions';  // Import LoginOptions component
-import LoginForm from './components/LoginAndSignup/LoginForm';        // Import LoginForm component
+import LoginOptions from './components/LoginAndSignup/LoginOptions'; 
+import LoginForm from './components/LoginAndSignup/LoginForm';        
 import Otp from './components/LoginAndSignup/Otp';
 import Dashboard from './pages/Dashboard';
+import MedicineOrderVerify from './pages/Medicines/MedicineOrderVerify';
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
         } />
         
         <Route path="/dashboard/*" element={<Dashboard />} />
+<Route path="/medicine/verify-order" element={<MedicineOrderVerify/>} />
       </Routes>
     </div>
   );

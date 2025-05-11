@@ -32,18 +32,11 @@ const UserSchema = new mongoose.Schema(
       enum: ["user", "doctor", "admin", "hospital", "pharmacy"],
       default: "user",
     },
-    medicineCart: [
+    medicineCart: 
       {
-        medicine: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "Medicines",
-        },
-        quantity: {
-          type: Number,
-          default: 1,
-        },
+        type:Object,
+        default:{}
       },
-    ],
     token: {
       type: String,
       trim: true,

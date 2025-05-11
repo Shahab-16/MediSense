@@ -166,15 +166,6 @@ exports.Login = async (req, res) => {
       path: '/'
     });
 
-    res.cookie('user', JSON.stringify(payload), {
-      httpOnly: false,
-      secure: true,
-      sameSite: 'none',
-      domain: '.vercel.app',
-      maxAge: 2 * 60 * 60 * 1000,
-      path: '/'
-    });
-
     return res.status(200).json({
       success: true,
       token: token, // Still return token for localStorage

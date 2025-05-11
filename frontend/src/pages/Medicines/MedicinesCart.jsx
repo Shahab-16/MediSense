@@ -1,121 +1,173 @@
-import { medicines_for_cart } from "../../assets/asset";
 import { AiOutlineDelete } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
-
-const cartItems = {
-  1: 2, // Paracetamol
-  2: 1, // Aspirin
-  3: 1, // Ibuprofen
-  4: 1, // Dextromethorphan
-  5: 3, // Aspirin
-};
-
-const totalCartAmount = () => {
-  return medicines_for_cart.reduce((total, medicine) => {
-    const quantity = cartItems[medicine._id] || 0;
-    return total + medicine.price * quantity;
-  }, 0);
-};
-
-const removeFromCart = (id) => {
-  delete cartItems[id];
-  console.log("Item removed:", id);
-};
-
+import { getAllMedicinesInCart} from "../../services/axios";
+import { useEffect, useState, useContext } from "react";
+import { StoreContext } from "../../context/StoreContext";
 
 const MedicinesCart = () => {
+  const [cartMedicines, setCartMedicines] = useState([]);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const { token, removeFromMedicineCart, medicineCart } = useContext(StoreContext);
+
+  const payload = JSON.parse(atob(token.split('.')[1]));
+  const userId = payload.id;
+
+  const fetchCartItems = async () => {
+    try {
+      setLoading(true);
+      const response = await getAllMedicinesInCart({ userId });
+      console.log("Printing medicines in cart",response);
+      setCartMedicines(response);
+    } catch (error) {
+      console.error("Error fetching cart items:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchCartItems();
+  }, [medicineCart]);
+
+  const handleRemove = async (medicineId) => {
+    try {
+      console.log("Printing the medicineId and userId in handleRemove",medicineId," ",userId);
+      await removeFromMedicineCart(medicineId, userId);
+      fetchCartItems(); // Refresh cart
+    } catch (err) {
+      console.error("Error removing from cart", err);
+    }
+  };
+
+  const totalCartAmount = cartMedicines.reduce((total, medicine) => {
+    return total + (medicine.price * medicine.quantity);
+  }, 0);
+
+  const deliveryFee = 20;
+  const grandTotal = totalCartAmount > 0 ? totalCartAmount + deliveryFee : 0;
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-64">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+      </div>
+    );
+  }
+
+  if (cartMedicines.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[50vh] text-center">
+        <div className="max-w-md p-6 bg-white rounded-lg shadow">
+          <h2 className="text-2xl font-bold text-gray-800 mb-4">Your cart is empty</h2>
+          <p className="text-gray-600 mb-6">Looks like you haven't added any medicines yet</p>
+          <button 
+            onClick={() => navigate("/dashboard/medicines")}
+            className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-lg transition duration-300"
+          >
+            Browse Medicines
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="flex flex-col max-w-[1320px] mx-auto gap-8 p-4 sm:p-8">
-    {/* Header */}
-    <div className="grid grid-cols-6 gap-10 text-lg font-semibold border-b pb-2">
-      <p className="text-center">Item</p>
-      <p className="text-left">Title</p>
-      <p className="text-right">Price</p>
-      <p className="text-right">Quantity</p>
-      <p className="text-right">Total</p>
-      <p className="text-center">Remove</p>
-    </div>
-  
-    {/* Items */}
-    <div className="flex flex-col gap-10">
-      {medicines_for_cart.map((medicine) => {
-        if (cartItems[medicine._id]) {
-          return (
-            <div key={medicine._id} className="grid grid-cols-6 gap-10 items-center text-sm sm:text-base">
-              <img
-                src={medicine.image}
-                alt="medicine_item"
-                className="w-[50px] h-[50px] rounded-md mx-auto"
+    <div className="container mx-auto px-4 py-8">
+      <h1 className="text-3xl font-bold text-gray-800 mb-8">Your Medicine Cart</h1>
+      
+      {/* Cart Items */}
+      <div className="bg-white rounded-lg shadow overflow-hidden mb-8">
+        {/* Table Header */}
+        <div className="grid grid-cols-12 gap-4 bg-gray-50 p-4 border-b font-medium text-gray-700">
+          <div className="col-span-5 md:col-span-6">Product</div>
+          <div className="col-span-2 text-center">Price</div>
+          <div className="col-span-2 text-center">Quantity</div>
+          <div className="col-span-2 text-center">Subtotal</div>
+          <div className="col-span-1 text-center">Action</div>
+        </div>
+
+        {/* Cart Items */}
+        {cartMedicines.map((medicine) => (
+          <div key={medicine._id} className="grid grid-cols-12 gap-4 p-4 border-b items-center hover:bg-gray-50 transition">
+            <div className="col-span-5 md:col-span-6 flex items-center">
+              <img 
+                src={medicine.medicineImage || "/default-medicine.jpg"} 
+                alt={medicine.name} 
+                className="w-16 h-16 rounded-md object-cover mr-4"
               />
-              <p className="text-left">{medicine.name}</p>
-              <p className="text-right">₹{medicine.price}</p>
-              <p className="text-right">{cartItems[medicine._id]}</p>
-              <p className="text-right">₹{cartItems[medicine._id] * medicine.price}</p>
-              <div className="text-center">
-                <button
-                  onClick={() => removeFromCart(medicine._id)}
-                  className="text-red-600 hover:text-red-800"
-                >
-                  <AiOutlineDelete size={24} />
-                </button>
+              <div>
+                <h3 className="font-medium text-gray-800">{medicine.name}</h3>
+                <p className="text-sm text-gray-500">{medicine.strength}</p>
               </div>
             </div>
-          );
-        }
-        return null;
-      })}
-    </div>
-  
-    {/* Cart Totals and Promo Code */}
-    <div className="flex flex-col lg:flex-row justify-between gap-6 mt-[3rem]">
-      {/* Cart Totals */}
-      <div className="flex flex-col gap-4 w-full lg:w-[500px] p-4 border rounded-md shadow-md">
-        <p className="text-2xl font-semibold text-gray-700">Cart Totals</p>
-        <div className="flex justify-between">
-          <p>Subtotal</p>
-          <p>₹{totalCartAmount()}</p>
-        </div>
-        <div className="h-[1px] w-full bg-gray-300 mx-auto"></div>
-  
-        <div className="flex justify-between mt-2">
-          <p>Delivery Fee</p>
-          <p>₹{totalCartAmount() > 0 ? 2 : 0}</p>
-        </div>
-        <div className="h-[1px] w-full bg-gray-300 mx-auto"></div>
-  
-        <div className="flex justify-between mt-2 font-semibold">
-          <p>Total</p>
-          <p>₹{totalCartAmount() > 0 ? totalCartAmount() + 2 : 0}</p>
-        </div>
-  
-        <button
-          onClick={() => navigate("/dashboard/medicines/checkout")}
-          className="bg-blue-600 hover:bg-blue-700 text-white font-semibold w-full h-[50px] text-center rounded-lg mt-4"
-        >
-          Proceed to Checkout
-        </button>
+            <div className="col-span-2 text-center text-gray-700">₹{medicine.price.toFixed(2)}</div>
+            <div className="col-span-2 text-center text-gray-700">
+              <span className="inline-block w-10 text-center border rounded py-1">
+                {medicine.quantity}
+              </span>
+            </div>
+            <div className="col-span-2 text-center font-medium text-gray-800">
+              ₹{(medicine.price * medicine.quantity).toFixed(2)}
+            </div>
+            <div className="col-span-1 text-center">
+              <button
+                onClick={() => handleRemove(medicine._id)}
+                className="text-red-500 hover:text-red-700 transition"
+                aria-label="Remove item"
+              >
+                <AiOutlineDelete size={20} />
+              </button>
+            </div>
+          </div>
+        ))}
       </div>
-  
-      {/* Promo Code */}
-      <div className="flex flex-col w-full h-[8rem] lg:w-[400px] gap-4 p-4 border rounded-md shadow-md">
-        <p className="text-lg font-medium text-gray-700">
-          If you have a promo code, enter it here:
-        </p>
-        <div className="flex gap-2">
-          <input
-            type="text"
-            placeholder="Enter promo code"
-            className="bg-gray-200 border-none h-[40px] w-full rounded-md px-4 placeholder-black placeholder-opacity-60"
-          />
-          <button className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 rounded-md">
-            Submit
+
+      {/* Cart Summary */}
+      <div className="flex flex-col md:flex-row gap-8">
+        <div className="md:w-2/3">
+          <button 
+            onClick={() => navigate("/dashboard/medicines")}
+            className="flex items-center text-blue-600 hover:text-blue-800 transition"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+              <path fillRule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clipRule="evenodd" />
+            </svg>
+            Continue Shopping
+          </button>
+        </div>
+
+        <div className="md:w-1/3 bg-white rounded-lg shadow p-6">
+          <h2 className="text-xl font-bold text-gray-800 mb-6">Order Summary</h2>
+          
+          <div className="space-y-4">
+            <div className="flex justify-between">
+              <span className="text-gray-600">Subtotal</span>
+              <span className="font-medium">₹{totalCartAmount.toFixed(2)}</span>
+            </div>
+            
+            <div className="flex justify-between">
+              <span className="text-gray-600">Delivery Fee</span>
+              <span className="font-medium">₹{totalCartAmount > 0 ? deliveryFee.toFixed(2) : '0.00'}</span>
+            </div>
+            
+            <div className="border-t pt-4 mt-4">
+              <div className="flex justify-between">
+                <span className="font-bold text-lg">Total</span>
+                <span className="font-bold text-lg text-blue-600">₹{grandTotal.toFixed(2)}</span>
+              </div>
+            </div>
+          </div>
+
+          <button
+            onClick={() => navigate("/dashboard/medicines/checkout")}
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 rounded-lg mt-6 transition duration-300"
+          >
+            Proceed to Checkout
           </button>
         </div>
       </div>
     </div>
-  </div>
-  
   );
 };
 

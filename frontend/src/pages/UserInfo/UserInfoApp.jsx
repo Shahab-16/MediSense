@@ -12,10 +12,10 @@ const UserInfoApp = () => {
     <div>
     <Routes>
         <Route path="/" element={<UserInfo />}/>
-        <Route path="/ordered-medicines" element={<OrderedMedicines/>}/>
         <Route path='/delivered-medicines' element={<DeliveredMedicines/>}/>
         <Route path='/consulted-doctors' element={<ConsultedDoctors/>}/>
         <Route path='/my-appointments' element={<MyAppointments/>}/>
+        <Route path='/my-ordered-medicines' element={<OrderedMedicines/>}/>
         <Route path="*" element={<Navigate to="/userinfo/home"/>} />
     </Routes>  
     </div>

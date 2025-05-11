@@ -109,7 +109,7 @@ const UserInfo = () => {
         )}
       </div>
       <div className="mt-8 flex space-x-4">
-        <Link to="/dashboard/userinfo/ordered-medicines" className="flex items-center px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700">
+        <Link to="/dashboard/userinfo/my-ordered-medicines" className="flex items-center px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700">
           <FaPills className="mr-2" /> Ordered Medicines
         </Link>
         <Link to="/dashboard/userinfo/delivered-medicines" className="flex items-center px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700">

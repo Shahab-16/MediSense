@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactMarkdown from 'react-markdown';
 
 const ChatMessage = ({ message, isBot }) => {
   return (
@@ -10,7 +11,15 @@ const ChatMessage = ({ message, isBot }) => {
             : 'bg-blue-700 text-white'
         }`}
       >
-        <p className="text-sm">{message}</p>
+        <ReactMarkdown
+          components={{
+            // You can customize specific markdown elements here if needed
+            p: ({ node, ...props }) => <p className="mb-2 last:mb-0" {...props} />,
+            // Add other element customizations as needed
+          }}
+        >
+          {message}
+        </ReactMarkdown>
       </div>
     </div>
   );

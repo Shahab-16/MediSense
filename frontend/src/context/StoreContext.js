@@ -4,7 +4,7 @@ import axios from "axios";
 export const StoreContext = createContext();
 
 const StoreContextProvider = ({ children }) => {
-    const BACKEND_URL = "https://medisense-backend.vercel.app"; 
+    const BACKEND_URL = "http://localhost:5000"; 
     const [login, setLogin] = useState(false);
     const [token,setToken]=useState("");
     const [loading, setLoading] = useState(false);
@@ -18,23 +18,31 @@ const StoreContextProvider = ({ children }) => {
     const [medicineCart,setMedicineCart] = useState([]);
 
 
-    const addToMedicineCart=async(itemId)=>{
+    const addToMedicineCart=async(itemId,userId)=>{
         if(!medicineCart[itemId]){
             setMedicineCart(prev=>({...prev,[itemId]:1}));
         }
         else if(medicineCart[itemId]>=1){
             setMedicineCart(prev=>({...prev,[itemId]:prev[itemId]+1}));
         }
+        console.log("Printing the userId in storeContext in addMedicineToCart",userId);
         if(token){
-            await axios.post(`${BACKEND_URL}/user/medicines/add-to-cart`,{medicineId:itemId},{headers:{Authorization:`Bearer ${token}`}});
+            await axios.post(`${BACKEND_URL}/user/medicine/add-to-cart`,{medicineId:itemId,userId:userId},{headers:{Authorization:`Bearer ${token}`}});
         }
     }
 
-    const removeFromMedicineCart=async(itemId)=>{
+    const removeFromMedicineCart=async(itemId,userId)=>{
+        console.log("Printing the userId and itemId in storeContext in removeFromMedicineCart",userId," ",itemId);
         if(medicineCart[itemId]>=1){
             setMedicineCart(prev=>({...prev,[itemId]:prev[itemId]-1}));
         }
+        if(token){
+            await axios.post(`${BACKEND_URL}/user/medicine/remove-from-cart`,{medicineId:itemId,userId:userId},{headers:{Authorization:`Bearer ${token}`}});
+        }
     }
+
+
+    
 
     const contextValue = {
         doctors,

@@ -1,203 +1,362 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { FaRobot, FaUser, FaPaperPlane, FaMicrophone, FaStethoscope } from 'react-icons/fa';
-import { IoIosArrowDown } from 'react-icons/io';
-import { motion } from 'framer-motion';
-import { images } from '../../assets/asset';
+import React, { useState, useRef, useEffect, useContext } from "react";
+import { FaMicrophone, FaVolumeUp, FaStethoscope } from "react-icons/fa";
+import { motion } from "framer-motion";
+import axios from "axios";
+import { toast } from "react-toastify";
+import { StoreContext } from "../../context/StoreContext";
 
 const ArtificialDoctor = () => {
-  const [messages, setMessages] = useState([
-    { id: 1, text: "Hello! I'm Dr. MediAI. How can I assist with your health concerns today?", sender: 'ai' }
-  ]);
-  const [inputValue, setInputValue] = useState('');
-  const messagesEndRef = useRef(null);
-  const [isTyping, setIsTyping] = useState(false);
+  const {BACKEND_URL} = useContext(StoreContext);
+  const [isRecording, setIsRecording] = useState(false);
+  const [doctorMessage, setDoctorMessage] = useState(
+    "Hello! I'm Dr. MediAI. Press the microphone to describe your symptoms."
+  );
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [currentAudio, setCurrentAudio] = useState(null);
+  const [error, setError] = useState(null);
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
+  const recognitionRef = useRef(null);
+  const audioRef = useRef(null);
+  const synthRef = useRef(null);
+  const timeoutRef = useRef(null);
 
+  // Initialize speech recognition and synthesis
   useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
+    // Initialize speech synthesis
+    synthRef.current = window.speechSynthesis;
 
-  const handleSendMessage = () => {
-    if (inputValue.trim() === '') return;
+    // Initialize speech recognition
+    const SpeechRecognition =
+      window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (SpeechRecognition) {
+      recognitionRef.current = new SpeechRecognition();
+      recognitionRef.current.continuous = false;
+      recognitionRef.current.interimResults = false;
+      recognitionRef.current.lang = "en-US";
 
-    const newUserMessage = {
-      id: messages.length + 1,
-      text: inputValue,
-      sender: 'user'
-    };
-    setMessages([...messages, newUserMessage]);
-    setInputValue('');
-    setIsTyping(true);
+      recognitionRef.current.onstart = () => {
+        setIsRecording(true);
+        setDoctorMessage("Listening...");
+        setError(null);
 
-    setTimeout(() => {
-      const aiResponses = [
-        "I understand your concern. Could you describe your symptoms in more detail?",
-        "Based on your description, I recommend hydration and rest. Monitor your symptoms.",
-        "This sounds like it may need professional attention. When did these symptoms start?",
-        "Many patients report relief with basic care, but consult a doctor if symptoms worsen.",
-        "How long have these symptoms persisted? Duration helps with accurate assessment."
-      ];
-      const randomResponse = aiResponses[Math.floor(Math.random() * aiResponses.length)];
-      
-      const newAiMessage = {
-        id: messages.length + 2,
-        text: randomResponse,
-        sender: 'ai'
+        // Set a timeout for no speech detection
+        timeoutRef.current = setTimeout(() => {
+          if (isRecording) {
+            setError("No speech detected. Please try again.");
+            recognitionRef.current.stop();
+          }
+        }, 5000); // 5 seconds timeout
       };
-      setMessages(prev => [...prev, newAiMessage]);
-      setIsTyping(false);
-    }, 1500);
+
+      recognitionRef.current.onresult = async (event) => {
+        clearTimeout(timeoutRef.current);
+        const transcript = event.results[0][0].transcript;
+        await processUserInput(transcript);
+      };
+
+      recognitionRef.current.onerror = (event) => {
+        clearTimeout(timeoutRef.current);
+        console.error("Speech recognition error:", event.error);
+
+        let errorMessage = "Sorry, I didn't catch that. Please try again.";
+        if (event.error === "no-speech") {
+          errorMessage = "No speech detected. Please speak clearly.";
+        } else if (event.error === "audio-capture") {
+          errorMessage =
+            "Microphone not found. Please check your microphone settings.";
+        } else if (event.error === "not-allowed") {
+          errorMessage =
+            "Microphone access denied. Please allow microphone permissions.";
+        }
+
+        setError(errorMessage);
+        setIsRecording(false);
+        setIsProcessing(false);
+      };
+
+      recognitionRef.current.onend = () => {
+        clearTimeout(timeoutRef.current);
+        setIsRecording(false);
+      };
+    } else {
+      setError(
+        "Speech recognition is not supported in your browser. Please use Chrome or Edge."
+      );
+    }
+
+    return () => {
+      clearTimeout(timeoutRef.current);
+      if (recognitionRef.current) {
+        recognitionRef.current.stop();
+      }
+      if (synthRef.current?.speaking) {
+        synthRef.current.cancel();
+      }
+    };
+  }, []);
+
+  const startRecording = () => {
+    if (recognitionRef.current && !isRecording && !isProcessing) {
+      try {
+        recognitionRef.current.start();
+      } catch (err) {
+        console.error("Error starting recognition:", err);
+        setError("Error starting voice recognition. Please refresh the page.");
+      }
+    }
   };
 
-  const handleKeyPress = (e) => {
-    if (e.key === 'Enter') {
-      handleSendMessage();
+  const stopRecording = () => {
+    if (recognitionRef.current && isRecording) {
+      recognitionRef.current.stop();
+    }
+  };
+
+  const processUserInput = async (userText) => {
+    setIsProcessing(true);
+    setDoctorMessage("Processing your symptoms...");
+    setError(null);
+
+    try {
+      // Step 1: Get AI doctor response
+      console.log(
+        "inside artificial doctor component and the symptoms are",
+        userText
+      );
+      const aiResponse = await axios.post(
+        `${BACKEND_URL}/user/api/artificial-doctor`,
+        {
+          text: userText,
+        }
+      );
+
+      const responseText = aiResponse.data.response;
+      setDoctorMessage(responseText);
+
+      // Step 2: Convert response to speech using Web Speech API
+      speakResponse(responseText);
+    } catch (error) {
+      console.error("Error processing request:", error);
+      setError("Sorry, I couldn't process your request. Please try again.");
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
+  const speakResponse = (text) => {
+    if (synthRef.current) {
+      // Cancel any ongoing speech
+      synthRef.current.cancel();
+
+      // Wait for voices to be loaded
+      const voices = synthRef.current.getVoices();
+      let voice = voices.find((v) => v.lang.includes("en"));
+
+      if (!voice) {
+        // If voices aren't loaded yet, wait for them
+        synthRef.current.onvoiceschanged = () => {
+          const voices = synthRef.current.getVoices();
+          voice = voices.find((v) => v.lang.includes("en"));
+          if (voice) {
+            const utterance = createUtterance(text, voice);
+            synthRef.current.speak(utterance);
+          }
+        };
+      } else {
+        const utterance = createUtterance(text, voice);
+        synthRef.current.speak(utterance);
+      }
+    }
+  };
+
+  const createUtterance = (text, voice) => {
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.voice = voice;
+    utterance.rate = 0.9;
+    utterance.pitch = 1;
+    utterance.onerror = (event) => {
+      console.error("Speech synthesis error:", event.error);
+      setError("Error playing the response. Please try again.");
+    };
+    return utterance;
+  };
+
+  const playAudioResponse = () => {
+    if (synthRef.current && doctorMessage) {
+      speakResponse(doctorMessage);
     }
   };
 
   return (
-    <div className="flex flex-col h-screen bg-gradient-to-br from-blue-50 to-indigo-50 p-2 ">
-      {/* Main Chat Container */}
-      <div className="flex flex-col flex-1 max-w-2xl mx-auto w-full h-full bg-white shadow-lg overflow-hidden mt-2">
-        {/* Header with Doctor Image */}
-        <div className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white p-3 flex items-center justify-between">
+    <div className="flex h-screen bg-gradient-to-br from-blue-50 to-indigo-50 p-4">
+      {/* Audio element for playing responses */}
+      <audio ref={audioRef} src={currentAudio} />
+
+      {/* Main Container */}
+      <div className="flex flex-col flex-1 mx-auto w-full max-w-md h-full bg-white rounded-3xl shadow-2xl overflow-hidden">
+        {/* Header */}
+        <div className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white p-6 flex items-center justify-center rounded-t-3xl">
           <div className="flex items-center space-x-3">
             <div className="relative">
-              <div className="w-10 h-10 rounded-full border-2 border-white overflow-hidden bg-white">
-                <img 
-                  src={images.DoctorChatbot} 
-                  alt="AI Doctor" 
-                  className="w-full h-full object-cover"
-                />
+              <div className="w-12 h-12 rounded-full border-2 border-white overflow-hidden bg-white shadow-lg flex items-center justify-center">
+                <FaStethoscope className="text-blue-600 text-xl" />
               </div>
-              <div className="absolute -bottom-1 -right-1 bg-blue-400 rounded-full p-1">
-                <FaRobot className="text-xs text-white" />
+              <div className="absolute -bottom-1 -right-1 bg-blue-400 rounded-full p-1 shadow-md">
+                <FaVolumeUp className="text-xs text-white" />
               </div>
             </div>
             <div>
-              <h1 className="text-lg font-bold">Dr. MediAI</h1>
-              <p className="text-xs text-blue-100">AI Health Assistant</p>
+              <h1 className="text-xl font-bold">Dr. MediAI</h1>
+              <p className="text-sm text-blue-100">Voice Health Assistant</p>
             </div>
-          </div>
-          <div className="flex items-center space-x-2">
-            <div className="p-2 bg-blue-500 bg-opacity-30 rounded-full">
-              <FaStethoscope className="text-xs" />
-            </div>
-            <button className="p-1 rounded-full hover:bg-blue-700 transition">
-              <IoIosArrowDown className="text-lg" />
-            </button>
           </div>
         </div>
 
-        {/* Chat Messages Area */}
-        <div className="flex-1 overflow-y-auto p-4 space-y-3">
-          {/* Welcome Illustration */}
-          <div className="flex justify-center mb-4">
-            <div className="relative w-40 h-40">
-              <img 
-                src={images.DoctorChatbot} 
-                alt="AI Doctor" 
-                className="w-full h-full object-contain animate-float"
-              />
-              <div className="absolute inset-0 bg-blue-200 rounded-full opacity-10 blur-sm"></div>
-            </div>
-          </div>
-
-          {messages.map((message) => (
+        {/* Doctor Animation Area */}
+        <div className="flex-1 flex flex-col items-center justify-center p-6 bg-gradient-to-b from-blue-50 to-white">
+          <div className="relative w-64 h-64 mb-8">
             <motion.div
-              key={message.id}
-              className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.2 }}
+              className="absolute inset-0 bg-blue-100 rounded-full flex items-center justify-center shadow-lg"
+              animate={
+                isRecording
+                  ? {
+                      scale: [1, 1.05, 1],
+                      rotate: [0, -5, 5, 0],
+                    }
+                  : {}
+              }
+              transition={{
+                duration: 2,
+                repeat: isRecording ? Infinity : 0,
+                ease: "easeInOut",
+              }}
             >
-              <div
-                className={`max-w-xs rounded-xl p-3 ${message.sender === 'user'
-                  ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-br-sm shadow'
-                  : 'bg-white text-gray-800 rounded-bl-sm shadow border border-gray-100'
-                  }`}
-              >
-                <div className="flex items-start space-x-2">
-                  {message.sender === 'ai' ? (
-                    <div className="bg-blue-100 p-1 rounded-full flex-shrink-0">
-                      <FaRobot className="text-blue-600 text-xs" />
-                    </div>
-                  ) : (
-                    <div className="bg-white bg-opacity-20 p-1 rounded-full flex-shrink-0">
-                      <FaUser className="text-white text-xs" />
-                    </div>
-                  )}
-                  <div className="flex-1">
-                    <p className="text-xs font-medium mb-1">
-                      {message.sender === 'ai' ? 'Dr. MediAI' : 'You'}
-                    </p>
-                    <p className="text-sm">{message.text}</p>
+              <div className="w-48 h-48 bg-white rounded-full border-4 border-blue-300 flex items-center justify-center relative">
+                {/* Eyes */}
+                <div className="flex space-x-8 absolute top-16">
+                  <div className="w-6 h-6 bg-blue-600 rounded-full relative">
+                    <div className="w-2 h-2 bg-white rounded-full absolute top-1 left-1"></div>
+                  </div>
+                  <div className="w-6 h-6 bg-blue-600 rounded-full relative">
+                    <div className="w-2 h-2 bg-white rounded-full absolute top-1 left-1"></div>
                   </div>
                 </div>
+
+                {/* Mouth - animates when speaking */}
+                <div
+                  className={`absolute bottom-10 left-1/2 transform -translate-x-1/2 
+                  ${
+                    isRecording
+                      ? "w-8 h-4 bg-red-300 rounded-full"
+                      : "w-6 h-2 bg-red-300 rounded-full"
+                  }`}
+                  style={
+                    isRecording
+                      ? { animation: "mouthMove 0.5s infinite alternate" }
+                      : {}
+                  }
+                ></div>
               </div>
+
+              {/* Stethoscope */}
+              <FaStethoscope className="absolute -top-2 -left-2 text-blue-500 text-3xl rotate-45" />
             </motion.div>
-          ))}
-          
-          {isTyping && (
-            <div className="flex justify-start">
-              <div className="bg-white text-gray-800 rounded-xl rounded-bl-sm shadow p-3 flex items-center space-x-2 border border-gray-100">
-                <div className="bg-blue-100 p-1 rounded-full">
-                  <FaRobot className="text-blue-600 text-xs" />
+          </div>
+
+          {/* Doctor's Message */}
+          <div className="bg-white p-4 rounded-xl shadow-md max-w-md w-full mb-8 min-h-20 max-h-48 flex items-center justify-center relative">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.3 }}
+              className="text-center text-gray-700 w-full h-full"
+            >
+              {isProcessing ? (
+                <div className="flex items-center justify-center space-x-2 h-full">
+                  <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce"></div>
+                  <div
+                    className="w-2 h-2 bg-blue-400 rounded-full animate-bounce"
+                    style={{ animationDelay: "0.2s" }}
+                  ></div>
+                  <div
+                    className="w-2 h-2 bg-blue-400 rounded-full animate-bounce"
+                    style={{ animationDelay: "0.4s" }}
+                  ></div>
                 </div>
-                <div className="flex space-x-1">
-                  <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                  <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                  <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+              ) : error ? (
+                <div className="h-full flex items-center justify-center">
+                  <span className="text-red-500 px-2">{error}</span>
                 </div>
-              </div>
-            </div>
-          )}
-          
-          <div ref={messagesEndRef} />
+              ) : (
+                <div className="overflow-y-auto max-h-40 px-2 py-1 w-full text-left">
+                  {doctorMessage}
+                </div>
+              )}
+            </motion.div>
+            <div className="absolute -bottom-3 left-1/2 transform -translate-x-1/2 w-6 h-6 bg-white rotate-45"></div>
+          </div>
+
+          {/* Audio Controls */}
+          <div className="flex flex-col items-center w-full px-6">
+            <motion.button
+              onClick={isRecording ? stopRecording : startRecording}
+              whileTap={{ scale: 0.95 }}
+              className={`relative rounded-full p-6 shadow-xl ${
+                isRecording
+                  ? "bg-red-500 hover:bg-red-600"
+                  : "bg-blue-500 hover:bg-blue-600"
+              } text-white transition-colors`}
+              disabled={isProcessing}
+            >
+              <FaMicrophone className="text-2xl" />
+              {isRecording && (
+                <span className="absolute inset-0 rounded-full border-2 border-white animate-ping opacity-75"></span>
+              )}
+            </motion.button>
+
+            <p className="mt-4 text-sm text-gray-500">
+              {isRecording
+                ? "Speak now..."
+                : isProcessing
+                ? "Processing..."
+                : "Press and hold to speak"}
+            </p>
+
+            {doctorMessage && !isRecording && !isProcessing && !error && (
+              <button
+                onClick={playAudioResponse}
+                className="mt-4 flex items-center text-blue-600 hover:text-blue-800"
+              >
+                <FaVolumeUp className="mr-2" /> Hear response again
+              </button>
+            )}
+          </div>
         </div>
 
-        {/* Input Area */}
-        <div className="bg-white border-t border-gray-200 p-3">
-          <div className="flex items-center space-x-2">
-            <button className="p-2 rounded-full text-blue-600 hover:bg-blue-50 transition">
-              <FaMicrophone className="text-base" />
-            </button>
-            <input
-              type="text"
-              value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
-              onKeyPress={handleKeyPress}
-              placeholder="Describe your symptoms..."
-              className="flex-1 border border-gray-200 rounded-full py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            />
-            <button
-              onClick={handleSendMessage}
-              disabled={inputValue.trim() === ''}
-              className={`p-2 rounded-full transition ${inputValue.trim() === '' 
-                ? 'text-gray-400 bg-gray-100' 
-                : 'text-white bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 shadow'
-              }`}
-            >
-              <FaPaperPlane className="text-base" />
-            </button>
-          </div>
-          <p className="text-xs text-gray-500 mt-2 text-center">
-            <span className="font-medium text-blue-600">Note:</span> For emergencies, contact healthcare providers directly.
+        {/* Footer */}
+        <div className="bg-white border-t border-gray-200 p-4 text-center">
+          <p className="text-xs text-gray-500">
+            <span className="font-medium text-blue-600">Note:</span> For
+            emergencies, contact healthcare providers directly.
           </p>
         </div>
       </div>
 
-      {/* Floating Animation */}
+      {/* CSS for mouth animation */}
       <style jsx>{`
-        @keyframes float {
-          0%, 100% { transform: translateY(0px); }
-          50% { transform: translateY(-8px); }
-        }
-        .animate-float {
-          animation: float 4s ease-in-out infinite;
+        @keyframes mouthMove {
+          0% {
+            height: 4px;
+            width: 8px;
+          }
+          50% {
+            height: 6px;
+            width: 10px;
+          }
+          100% {
+            height: 4px;
+            width: 8px;
+          }
         }
       `}</style>
     </div>

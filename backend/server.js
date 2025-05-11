@@ -6,7 +6,7 @@ const userRoute = require('./routes/userRoute');
 const adminRoute = require('./routes/admin');
 const hospitalRoute = require('./routes/hospital');
 const pharmacyRoute = require('./routes/pharmacy');
-
+const chatbotRoutes = require('./routes/userRoute');
 require('dotenv').config(); // Load environment variables
 
 // Cloudinary Configuration
@@ -76,6 +76,8 @@ app.use('/user', userRoute);
 app.use('/admin', adminRoute);
 app.use('/hospital', hospitalRoute);
 app.use('/pharmacy', pharmacyRoute);
+
+app.use('/chatbot', chatbotRoutes);
 
 // Default route
 app.get('/', (req, res) => {

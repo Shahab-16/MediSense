@@ -69,6 +69,7 @@ import hospital from "./hospital.jpg"
 import healthcare_logo from "./healthcare_logo.png";
 import health_logo from "./health_logo.jpg"
 import DoctorChatbot from "./DoctorChatbot.png";
+import AnimatedDoctor from "./animated_doctor.mp4";
 
 
 export const speciality_data = [
@@ -135,7 +136,8 @@ export const images = {
   hospital,
   healthcare_logo,
   health_logo,
-  DoctorChatbot
+  DoctorChatbot,
+  AnimatedDoctor
 };
 
 export const model_list = {
