@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const API_URL = "https://medisense-backend.vercel.app/admin";
+//const API_URL = "https://medisense-backend.vercel.app/admin";
+const API_URL = "http://localhost:5000/admin";
 
 // Create axios instance with default config
 const api = axios.create({

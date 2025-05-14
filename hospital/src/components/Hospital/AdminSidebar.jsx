@@ -13,13 +13,28 @@ import { BsListCheck, BsAward } from "react-icons/bs";
 import { FaHospital } from "react-icons/fa";
 import { toast } from "react-toastify";
 import Cookies from "js-cookie"; // Import js-cookie
+import {jwtDecode} from "jwt-decode";
 
 const HospitalSidebar = () => {
   const [isDoctorsDropdownOpen, setDoctorsDropdownOpen] = useState(false);
   const [isHospitalDropdownOpen, setHospitalDropdownOpen] = useState(false);
   
-  const userPayload = Cookies.get("user"); // Get the user payload from the cookie
-  const hospitalName = userPayload ? JSON.parse(userPayload).name : "";
+ const token = Cookies.get('token');
+
+ console.log("Token:", token);
+  
+  // Decode the token to get user data
+  let hospitalName = "";
+  if (token) {
+    try {
+      const decoded = jwtDecode(token);
+      hospitalName = decoded.hospitalName || "";
+    } catch (error) {
+      console.error("Error decoding token:", error);
+    }
+  }
+
+  console.log("Hospital name:", hospitalName);
 
   // Replace spaces with hyphens in hospitalName
   const formattedHospitalName = hospitalName.replace(/\s+/g, "-");

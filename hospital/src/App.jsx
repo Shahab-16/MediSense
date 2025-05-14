@@ -27,7 +27,7 @@ const App = () => {
             <Route path="/hospital/:hospitalName/settings" element={<HospitalSettings />} />
             <Route path="/hospital/:hospitalName/doctors/list-doctors" element={<ListDoctors />} />
             <Route path="/hospital/:hospitalName/doctors/add-doctor" element={<AddDoctor />} />
-            <Route path="*" element={<Navigate to="/hospital/dashboard" />} />
+            <Route path="*" element={<Navigate to="/hospital/:hospitalName/dashboard" />} />
           </Routes>
         </div>
       </>

@@ -14,14 +14,29 @@ import { FaHospital } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Cookies from "js-cookie";
+import {jwtDecode} from "jwt-decode";
 
 const PharmacySidebar = () => {
   const [isDoctorsDropdownOpen, setDoctorsDropdownOpen] = useState(false);
   const [isHospitalDropdownOpen, setHospitalDropdownOpen] = useState(false);
   const navigate = useNavigate();
 
-  const userPayload = Cookies.get("user"); // Get the user payload from the cookie
-  let pharmacyName = userPayload ? JSON.parse(userPayload).name : "";
+  const token = Cookies.get('token');
+  
+   console.log("Token:", token);
+    
+    // Decode the token to get user data
+    let pharmacyName = "";
+    if (token) {
+      try {
+        const decoded = jwtDecode(token);
+        pharmacyName = decoded.name || "";
+      } catch (error) {
+        console.error("Error decoding token:", error);
+      }
+    }
+  
+    console.log("Pharmacy name:", pharmacyName);
 
   pharmacyName = pharmacyName.replace(/\s+/g, "-");
   console.log(pharmacyName);
@@ -69,7 +84,7 @@ const PharmacySidebar = () => {
             <p>Pharmacy Information</p>
           </NavLink>
           <NavLink
-            to={`/pharmacy/${pharmacyName}/achievements`}
+            to={`/pharmacy/${pharmacyName}/achievement`}
             className="flex items-center gap-3 text-base text-gray-700 p-2 rounded-md hover:bg-gray-100 transition-all duration-300"
           >
             <BsAward size={18} />

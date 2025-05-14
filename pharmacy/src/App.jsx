@@ -9,6 +9,7 @@ import ListMedicines from './pages/Medicines/ListMedicines';
 import OrderedMedicines from './pages/Medicines/OrderedMedicines';
 import PharmacySettings from './pages/Pharmacy/Settings';
 import PharmacyInformation from './pages/Pharmacy/PharmacyInformation';
+import PharmacyAchievement from './pages/Pharmacy/PharmacyAcheivement';
 
 const App = () => {
   return (
@@ -25,7 +26,8 @@ const App = () => {
             <Route path="/pharmacy/:pharmacyName/medicines/ordered-medicines" element={<OrderedMedicines />} />
             <Route path="/pharmacy/:pharmacyName/settings" element={<PharmacySettings />} />
             <Route path="/pharmacy/:pharmacyName/information" element={<PharmacyInformation />} />
-            <Route path="*" element={<Navigate to="/pharmacy/dashboard" />} />
+            <Route path="/pharmacy/:pharmacyName/achievement" element={<PharmacyAchievement />} />
+            <Route path="*" element={<Navigate to="/pharmacy/:pharmacyName/dashboard" />} />
           </Routes>
         </div>
       </>

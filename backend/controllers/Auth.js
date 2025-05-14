@@ -163,7 +163,8 @@ exports.Login = async (req, res) => {
       sameSite: 'none',
       domain: '.vercel.app', // Main domain for all apps
       maxAge: 2 * 60 * 60 * 1000, // 2 hours
-      path: '/'
+      path: '/',
+      user: payload
     });
 
     return res.status(200).json({

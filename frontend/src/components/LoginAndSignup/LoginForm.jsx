@@ -23,7 +23,7 @@ const LoginForm = () => {
   const navigate = useNavigate();
   const [isOtpSent, setIsOtpSent] = useState(false);
 
-  const url = "https://medisense-backend.vercel.app";
+  const url = "http://localhost:5000";
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -62,6 +62,7 @@ const LoginForm = () => {
           setToken(response.data.token)
           console.log("Printing the token(StoreContext) in loginForm",token)
           localStorage.setItem("token", response.data.token);
+          console.log("Printing the token(localStorage) in loginForm",localStorage.getItem("token"));
 
           // Store in cookie as backup
           document.cookie = `token=${response.data.token}; path=/; secure; samesite=none`;
@@ -88,10 +89,14 @@ const LoginForm = () => {
 
           // Redirect based on role
           const redirectUrls = {
-            admin: "https://medisense-admin-section.vercel.app/",
-            doctor: "https://medisense-doctor-section.vercel.app/",
-            pharmacy: "https://medisense-pharmacy.vercel.app/",
-            hospital: "https://medisense-hospital.vercel.app/",
+            //admin:"https://medisense-admin.vercel.app/",
+            admin: "http://localhost:3001/",
+            //doctor: "https://medisense-doctor-section.vercel.app/",
+            doctor: "http://localhost:3002/",
+           //pharmacy: "https://medisense-pharmacy.vercel.app/",
+            pharmacy: "http://localhost:5173/",
+            //hospital:"https://medisense-hospital.vercel.app/",
+            hospital: "http://localhost:5174/",
             user: "/dashboard/home",
           };
 

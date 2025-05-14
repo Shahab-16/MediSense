@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BASE_URL = `${process.env.BACKEND_URL}`;
+const BASE_URL = "http://localhost:5000";
 
 // Function to get the token from localStorage, cookies, or headers
 const getToken = () => {
