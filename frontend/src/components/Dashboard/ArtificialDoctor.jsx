@@ -5,7 +5,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 const ArtificialDoctor = () => {
-  const BACKEND_URL = "https://medisense-backend.vercel.app";
+  const BACKEND_URL = "http://localhost:5000";
   console.log("BACKEND_URL",BACKEND_URL); 
   const [isRecording, setIsRecording] = useState(false);
   const [doctorMessage, setDoctorMessage] = useState(

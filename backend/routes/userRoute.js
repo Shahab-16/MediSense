@@ -28,8 +28,8 @@ router.post('/medicine/place-order',placeMedicineOrder)
 router.post('/medicine/verify-order',verifyMedicineOrder)
 
 
-router.post('/api/chatbot/chat',authMiddleware,isUserMiddleware, chatbotController.chatWithBot);
-router.post('/api/artificial-doctor',authMiddleware,isUserMiddleware,artificialDoctor.ArtificialDoctorResponse);
+router.post('/api/chatbot/chat',chatbotController.chatWithBot);
+router.post('/api/artificial-doctor',artificialDoctor.ArtificialDoctorResponse);
 
 
 
