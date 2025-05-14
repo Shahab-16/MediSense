@@ -4,7 +4,7 @@ import axios from "axios";
 export const StoreContext = createContext();
 
 const StoreContextProvider = ({ children }) => {
-    const BACKEND_URL = "http://localhost:5000"; 
+    const BACKEND_URL = "https://medisense-backend.vercel.app"; 
     const [login, setLogin] = useState(false);
     const [token,setToken]=useState("");
     const [loading, setLoading] = useState(false);
@@ -56,7 +56,8 @@ const StoreContextProvider = ({ children }) => {
         removeFromMedicineCart,
         medicineCart,
         token,
-        setToken
+        setToken,
+        BACKEND_URL
     };
 
     return (

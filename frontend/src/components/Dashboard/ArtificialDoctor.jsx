@@ -3,10 +3,10 @@ import { FaMicrophone, FaVolumeUp, FaStethoscope } from "react-icons/fa";
 import { motion } from "framer-motion";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { StoreContext } from "../../context/StoreContext";
 
 const ArtificialDoctor = () => {
-  const {BACKEND_URL} = useContext(StoreContext);
+  const BACKEND_URL = "https://medisense-backend.vercel.app";
+  console.log("BACKEND_URL",BACKEND_URL); 
   const [isRecording, setIsRecording] = useState(false);
   const [doctorMessage, setDoctorMessage] = useState(
     "Hello! I'm Dr. MediAI. Press the microphone to describe your symptoms."
