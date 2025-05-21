@@ -1,13 +1,13 @@
 import axios from "axios";
 
 export const axiosInstance = axios.create({
-  baseURL: "https://medisense-backend.vercel.app/",
+  baseURL: "http://localhost:5000",
   headers: {
     "Content-Type": "application/json",
   },
 });
 
-const backendUrl="https://medisense-backend.vercel.app";
+const backendUrl="http://localhost:5000";
 
 export const getDoctors=async()=>{
     const response=await axiosInstance.get("/hospital/get-all-doctors");

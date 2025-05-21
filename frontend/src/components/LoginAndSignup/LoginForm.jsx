@@ -49,67 +49,54 @@ const LoginForm = () => {
     setloading(true);
     try {
       if (currState === "Login") {
-        const response = await axios.post(
-          `${url}/user/login`,
-          { email: data.email, password: data.password, role: role },
-          { withCredentials: true }
-        );
+      const response = await axios.post(
+        `${url}/user/login`,
+        { email: data.email, password: data.password, role: role },
+        { withCredentials: true }
+      );
 
-        if (response.data.success) {
-          toast.success("Login success");
+      if (response.data.success) {
+        toast.success("Login success");
+        
+        // Store common user data
+        localStorage.setItem("user", JSON.stringify(response.data.user));
+        setToken(response.data.token);
+        localStorage.setItem("token", response.data.token);
+        console.log("Printing the response in login", response.data);
 
-          localStorage.setItem("user", JSON.stringify(response.data.user))
-          setToken(response.data.token)
-          console.log("Printing the token(StoreContext) in loginForm",token)
-          localStorage.setItem("token", response.data.token);
-          console.log("Printing the token(localStorage) in loginForm",localStorage.getItem("token"));
-
-          // Store in cookie as backup
-          document.cookie = `token=${response.data.token}; path=/; secure; samesite=none`;
-
-          // Set axios default headers
-          axios.defaults.headers.common[
-            "Authorization"
-          ] = `Bearer ${response.data.token}`;
-
-          console.log("Token storage verified:", {
-            localStorage: localStorage.getItem("token"),
-            cookies: document.cookie,
-            axiosHeaders: axios.defaults.headers.common["Authorization"],
-          });
-
-          if (role === "hospital") {
-            localStorage.setItem("hospitalName", response.data.hospitalName);
-          }
-
-          // Set axios headers
-          axios.defaults.headers.common[
-            "Authorization"
-          ] = `Bearer ${response.data.token}`;
-
-          // Redirect based on role
-          const redirectUrls = {
-            //admin:"https://medisense-admin.vercel.app/",
-            admin: "http://localhost:3001/",
-            //doctor: "https://medisense-doctor-section.vercel.app/",
-            doctor: "http://localhost:3002/",
-           //pharmacy: "https://medisense-pharmacy.vercel.app/",
-            pharmacy: "http://localhost:5173/",
-            //hospital:"https://medisense-hospital.vercel.app/",
-            hospital: "http://localhost:5174/",
-            user: "/dashboard/home",
-          };
-
-          const targetUrl = redirectUrls[role];
-          if (role === "user") {
-            navigate(targetUrl);
-          } else {
-            window.location.href = targetUrl;
-          }
-        } else {
-          toast.error(response.data.message);
+        // Store role-specific identifiers
+        switch(role) {
+          case 'pharmacy':
+            localStorage.setItem('pharmacyName', response.data.pharmacyName);
+            console.log("pharmacyName", response.data.pharmacyName);
+            break;
+          case 'hospital':
+            localStorage.setItem('hospitalName', response.data.hospitalName);
+            break;
+          case 'doctor':
+            localStorage.setItem('doctorId', response.data.doctorId);
+            break;
+          case 'admin':
+            localStorage.setItem('adminId', response.data.adminId);
+            break;
         }
-      } else if (currState === "Signup") {
+
+        // Set axios headers
+        axios.defaults.headers.common["Authorization"] = `Bearer ${response.data.token}`;
+
+        // Configure redirect URLs
+        const redirectConfig = {
+          admin: `http://localhost:3002/admin/${response.data.adminId}/dashboard`,
+          doctor: `http://localhost:3001/doctor/${response.data.doctorId}/dashboard`,
+          pharmacy: `http://localhost:5174/pharmacy/${response.data.pharmacyName}/dashboard`,
+          hospital: `http://localhost:5173/hospital/${response.data.hospitalName}/dashboard`,
+          user: "/dashboard/home"
+        };
+
+        const targetUrl = redirectConfig[role];
+        role === "user" ? navigate(targetUrl) : window.location.href = targetUrl;
+      }
+    } else if (currState === "Signup") {
         // Keep your existing signup logic exactly the same
         if (!isOtpSent) {
           const response = await axios.post(`${url}/user/send-otp`, {

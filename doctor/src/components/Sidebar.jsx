@@ -3,13 +3,32 @@ import { Link } from 'react-router-dom';
 import { FaTachometerAlt, FaUsers, FaVideo, FaCalendar, FaSignOutAlt } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import {toast} from "react-toastify";
+import Cookies from "js-cookie"; // Import js-cookie
+import {jwtDecode} from "jwt-decode";
 const Sidebar = () => {
   const navigate = useNavigate();
+
+  const token=Cookies.get('token');
+
+  let doctorName = "";
+  if (token) {
+    try {
+      const decoded = jwtDecode(token);
+      doctorName = decoded.name || "";
+    } catch (error) {
+      console.error("Error decoding token:", error);
+    }
+  }
+
+  doctorName = doctorName.replace(/\s+/g, "-");
+  console.log("DoctorName in sidebar",doctorName);
+
+
   const logoutHandler = () => {
     localStorage.removeItem("token");
     toast.success("Logout done successfully");
     setTimeout(() => {
-      window.location.href = "https://medisense-frontend.vercel.app/";
+      window.location.href = "http://localhost:3000/";
     }, 2000);
   };
   
@@ -24,28 +43,28 @@ const Sidebar = () => {
       <ul>
         <li className="mb-6">
           <Link 
-            to="/" 
+            to={`/doctor/${doctorName}/dashboard`} 
             className="flex items-center text-lg hover:bg-blue-700 py-2 px-4 rounded-lg transition-all ease-in-out duration-300">
             <FaTachometerAlt className="mr-3 text-xl" /> Dashboard
           </Link>
         </li>
         <li className="mb-6">
           <Link 
-            to="/patients" 
+            to={`/doctor/${doctorName}/patients`} 
             className="flex items-center text-lg hover:bg-blue-700 py-2 px-4 rounded-lg transition-all ease-in-out duration-300">
             <FaUsers className="mr-3 text-xl" /> Patients
           </Link>
         </li>
         <li className="mb-6">
           <Link 
-            to="/appointments" 
+            to={`/doctor/${doctorName}/appointments`} 
             className="flex items-center text-lg hover:bg-blue-700 py-2 px-4 rounded-lg transition-all ease-in-out duration-300">
             <FaCalendar className="mr-3 text-xl" /> Appointments
           </Link>
         </li>
         <li className="mb-6">
           <Link 
-            to="/video-consultation" 
+            to={`/doctor/${doctorName}/video-consultation`} 
             className="flex items-center text-lg hover:bg-blue-700 py-2 px-4 rounded-lg transition-all ease-in-out duration-300">
             <FaVideo className="mr-3 text-xl" /> Video Consultation
           </Link>
