@@ -208,3 +208,18 @@ exports.getAllMedicalStores = async (req, res) => {
     })
   }
 }
+exports.getStoreByName=async(req,res)=>{
+  try{
+    const storeName=req.params.name;
+    const medicinestore=await MedicalStore.findOne({name:storeName});
+    if(!medicinestore){
+      return res.json({sucess:false,message:"store not found"});
+    }
+    else{
+      return res.json({success:true,data:medicinestore});
+    }
+  } catch(error){
+    console.log("error in finding store by name in backend",error);
+    return res.json({sucess:false,message:error.message});
+  }
+}

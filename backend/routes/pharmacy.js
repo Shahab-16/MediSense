@@ -7,7 +7,8 @@ const {
   listAllMedicines,
   deleteMedicine,
   getAllMedicinesFromAllStores,
-  getAllMedicalStores
+  getAllMedicalStores,
+  getStoreByName
 } = require("../controllers/pharmacy/MedicineStore");
 const { authMiddleware, isPharmacyMiddleware } = require("../middlewares/auth");
 
@@ -52,5 +53,8 @@ router.get(
   "/get-all-stores",
   getAllMedicalStores
 )
-
+router.get(
+  "/:name",
+  getStoreByName
+)
 module.exports = router;

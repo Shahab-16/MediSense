@@ -1,46 +1,30 @@
 import React from "react";
+import { useEffect } from "react";
+import { useState } from "react";
+import { listPharmacies } from "../../services/api";
 
 const TotalPharmaciesInfo = () => {
+  const [pharmacies,setAllpharmacy]=useState([]);
+  useEffect(()=>{
+    const fetchPharmacy=async()=>{
+      try{
+        const  res=await listPharmacies();
+        console.log("API RESPONSE",res.pharmaciesList);
+        setAllpharmacy(res.pharmaciesList);
+      }
+      catch(error){
+        console.log("error in fetching the pharmacies",error);
+      }
+    }
+    fetchPharmacy();
+  },[])
   // Dummy data for registered pharmacies
-  const pharmacies = [
-    {
-      id: 1,
-      name: "MedISENSE Pharmacy",
-      address: "123 Health Street, Medical City, MC 45001",
-      contact: "911-222-3333",
-      established: 2000,
-      medicinesAvailable: 1200,
-      deliveryService: true,
-      workingHours: "8:00 AM - 10:00 PM",
-    },
-    {
-      id: 2,
-      name: "City Central Drugstore",
-      address: "456 Wellness Avenue, Metro City, MC 67002",
-      contact: "922-333-4444",
-      established: 2010,
-      medicinesAvailable: 800,
-      deliveryService: true,
-      workingHours: "9:00 AM - 9:00 PM",
-    },
-    {
-      id: 3,
-      name: "Northside Meds",
-      address: "789 Care Road, Suburbia, SB 88005",
-      contact: "933-444-5555",
-      established: 2015,
-      medicinesAvailable: 500,
-      deliveryService: false,
-      workingHours: "10:00 AM - 8:00 PM",
-    },
-  ];
-
   // Calculate totals
   const totalPharmacies = pharmacies.length;
-  const totalMedicines = pharmacies.reduce(
-    (sum, pharmacy) => sum + pharmacy.medicinesAvailable,
-    0
-  );
+  let totalMedicines=0;
+  for(let i=0;i<pharmacies.length;i++){
+    totalMedicines+=pharmacies[i].medicines.length;
+  }
   const pharmaciesWithDelivery = pharmacies.filter(
     (pharmacy) => pharmacy.deliveryService
   ).length;
@@ -85,11 +69,11 @@ const TotalPharmaciesInfo = () => {
             <div className="space-y-2 text-gray-600">
               <p>
                 <span className="font-medium">Established:</span>{" "}
-                {pharmacy.established}
+                {pharmacy.establishedYear}
               </p>
               <p>
                 <span className="font-medium">Medicines Available:</span>{" "}
-                {pharmacy.medicinesAvailable}
+                {pharmacy.medicines.length}
               </p>
               <p>
                 <span className="font-medium">Delivery Service:</span>{" "}

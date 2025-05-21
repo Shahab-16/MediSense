@@ -1,5 +1,5 @@
-const Doctor = require("../../models/Doctors");
 const Hospital = require("../../models/Hospitals");
+const Doctor = require("../../models/Doctors");
 const bcrypt = require("bcryptjs");
 const cloudinary = require("cloudinary").v2;
 const Appointment = require("../../models/Appointment");
@@ -289,3 +289,31 @@ exports.getAllHopitals = async (req,res)=>{
     });
   }
 }
+exports.getHospitalByName = async (req, res) => {
+  try {
+    const HosName = req.params.name; 
+
+    const hospital = await Hospital.findOne({ name: HosName }); 
+    console.log("Hospital found:", hospital);
+
+    if (!hospital) {
+      return res.status(404).json({
+        message: "Could not find this hospital",
+        success: false
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      data: hospital
+    });
+
+  } catch (error) {
+    console.error("Error finding hospital by name:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error"
+    });
+  }
+};
+
