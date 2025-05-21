@@ -8,7 +8,8 @@ const {
   deleteDoctor,
   bookAppointment,
   getAllDoctors,
-  getAllHopitals
+  getAllHopitals,
+  getHospitalByName
 } = require("../controllers/hospital/Hospital");
 const { authMiddleware, isHospitalMiddleware } = require("../middlewares/auth");
 
@@ -60,5 +61,9 @@ router.get(
    //  authMiddleware,
   //  isHospitalMiddleware,
    getAllHopitals
+)
+router.get(
+  "/:get-name",
+  getHospitalByName
 )
 module.exports = router;

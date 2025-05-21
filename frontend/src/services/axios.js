@@ -1,7 +1,8 @@
 import axios from "axios";
-
+// const BASE_URL = "http://localhost:5000";
+// 
 export const axiosInstance = axios.create({
-  baseURL: "https://medisense-backend.vercel.app/",
+  baseURL: "http://localhost:5000",
   headers: {
     "Content-Type": "application/json",
   },

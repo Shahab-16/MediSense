@@ -73,7 +73,7 @@ app.use(cookieParser());
 
 // Routes
 app.use('/user', userRoute);
-app.use('/admin', adminRoute);
+app.use('/admin', adminRoute);  
 app.use('/hospital', hospitalRoute);
 app.use('/pharmacy', pharmacyRoute);
 

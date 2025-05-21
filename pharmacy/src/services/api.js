@@ -1,4 +1,5 @@
 import axios from "axios";
+import { useActionState } from "react";
 
 //const BASE_URL = "https://medisense-backend.vercel.app";
 const BASE_URL = "http://localhost:5000";
@@ -68,3 +69,15 @@ export const listAllMedicine = async (pharmacyName) => {
   );
   return response.data;
 };
+
+
+export const getStore=async(storeName)=>{
+  const token=getToken();
+  const response=await axios.get(
+    `${BASE_URL}/pharmacy/${storeName}`,{
+      headers:{Authorization:`Beared ${token}`},
+      withCredentials:true,
+    }
+  );
+  return response;
+}

@@ -63,3 +63,13 @@ export const listAllDoctors = async (hospitalName) => {
   });
   return response.data;
 };
+export const getHospitalInfoByName=async(hospitalName)=>{
+  const response=await axios.get(`${BASE_URL}/hospital/${hospitalName}`,{
+    headers:{
+      "Content-Type": "application/json",
+    },
+    withCredentials:true,
+  });
+  console.log("response from the api",response);
+  return response;
+}
