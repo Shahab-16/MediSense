@@ -6,7 +6,8 @@ const {Signup,Login,SendOTP}=require('../controllers/Auth')
 const {authMiddleware,isUserMiddleware}=require('../middlewares/auth')
 const {addToCart,removeFromCart,getAllMedicinesInCart}=require('../controllers/medicineOrder/cartController')
 const {placeMedicineOrder,verifyMedicineOrder,getOrderedMedicinesOfUsers}=require('../controllers/medicineOrder/orderController')
-const artificialDoctor=require('../controllers/artificialDoctor')
+const artificialDoctor=require('../controllers/artificialDoctor');
+const { bookAppointment } = require('../controllers/hospital/Hospital');
 
 
 
@@ -14,7 +15,7 @@ const artificialDoctor=require('../controllers/artificialDoctor')
 router.post('/signup',Signup)
 router.post('/login',Login)
 router.post('/send-otp',SendOTP)
-
+router.post( "/book-appoinment",authMiddleware,isUserMiddleware,bookAppointment)
 
 router.post('/medicine/add-to-cart',authMiddleware,isUserMiddleware,addToCart)
 router.post('/medicine/remove-from-cart',authMiddleware,isUserMiddleware,removeFromCart)

@@ -6,13 +6,16 @@ import { BrowserRouter } from "react-router-dom";
 import StoreContextProvider from "./context/StoreContext";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
+// import { ChatProvider } from "./context/chatContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <BrowserRouter>
+    <ToastContainer />
     <StoreContextProvider>
-      <App />
-      <ToastContainer/>
+      {/* <ChatProvider> */}
+        <App />
+      {/* </ChatProvider> */}
     </StoreContextProvider>
   </BrowserRouter>
 );

@@ -13,6 +13,8 @@ import InsideHospital from '../../components/Doctors/InsideHospital';
 import HospitalPage from './HospitalPage';
 import Payment from './Payment';
 import AllHosptalsPage from './AllHospitalsPage';
+import MyAppointment from '../../components/Doctors/MyAppointment';
+import ChatPage from './ChatPage';
 const Doctors = () => {
   return (
     <div className="min-h-screen flex flex-col">
@@ -27,13 +29,14 @@ const Doctors = () => {
           <Route path="/about" element={<AbouPage/>}/>
           <Route path="/alldoctors/:speciality" element={<DoctorsListPage/>}/>
           <Route path="*" element={<Navigate to="/" />} />
-          <Route path="/my-appointment" element={<MyAppointmentPage/>}/>
+          <Route path="/my-appointments" element={<MyAppointment/>}/>
           <Route path="/appointment/:docName" element={<AppointmentPage/>}/>
           <Route path="/appointment/booking/:docName" element={<MyAppointmentPage/>}/>
           <Route path="/contactUs" element={<ContactPage/>}/>
           <Route path="/hospital/:hospitalName" element={<HospitalPage/>}/>
           <Route path="/hospital/:hospitalId/:speciality" element={<HospitalPage/>}/>
           <Route path="/allhospitals" element={<AllHosptalsPage/>}/>
+          <Route path='/chat-with-doctor' element={<ChatPage/>}/>
         </Routes>
       </div>
 

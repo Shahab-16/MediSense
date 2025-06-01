@@ -6,8 +6,11 @@ import { images } from "../../assets/asset";
 import { ImCross, ImArrowLeft2 } from "react-icons/im";
 import { toast } from "react-toastify";
 import Spinner from "../spinner/spinner";
+// import { ChatContext } from "../../context/chatContext";
+
 
 const LoginForm = () => {
+  // const {connectSocket} = useContext(ChatContext);
   const { role } = useParams();
   const [loading, setloading] = useState(false);
   const [data, setData] = useState({
@@ -19,7 +22,7 @@ const LoginForm = () => {
   });
   const [otp, setOtp] = useState("");
   const [currState, setCurrState] = useState("Login");
-  const { login, setLogin,token,setToken} = useContext(StoreContext);
+  const { login, setLogin,token,setToken,connectSocket} = useContext(StoreContext);
   const navigate = useNavigate();
   const [isOtpSent, setIsOtpSent] = useState(false);
 
@@ -63,7 +66,10 @@ const LoginForm = () => {
         setToken(response.data.token);
         localStorage.setItem("token", response.data.token);
         console.log("Printing the response in login", response.data);
-
+        console.log("token after logging in",token);
+        console.log("response after login",response.data.user.id);
+        connectSocket(response.data.user.id);
+        // connectSocket(response.data);
         // Store role-specific identifiers
         switch(role) {
           case 'pharmacy':

@@ -6,7 +6,7 @@ const MedicalStore = require("../models/MedicalStore");
 
 exports.authMiddleware = async (req, res, next) => {
   try {
-    // 1. Check for token in multiple locations
+    // 1. Get token from various sources
     const token =
       req.cookies.token ||
       req.headers["authorization"]?.replace("Bearer ", "") ||
@@ -23,6 +23,9 @@ exports.authMiddleware = async (req, res, next) => {
 
     // 2. Verify token
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    console.log("Decoded JWT:", decoded); // ✅ Debug: verify structure
+
     let user;
 
     switch (decoded.role) {
@@ -39,7 +42,7 @@ exports.authMiddleware = async (req, res, next) => {
         user = await MedicalStore.findById(decoded.id);
         break;
       case "admin":
-        user = { id: decoded.id, role: "admin" };
+        user = { _id: decoded.id, role: "admin" }; // admin doesn't need DB
         break;
       default:
         return res.status(401).json({
@@ -55,7 +58,9 @@ exports.authMiddleware = async (req, res, next) => {
       });
     }
 
+    // ✅ Always include user ID and role
     req.user = {
+      id: user._id?.toString(),
       ...(user.toObject ? user.toObject() : user),
       role: decoded.role,
     };
@@ -65,60 +70,44 @@ exports.authMiddleware = async (req, res, next) => {
     console.error("Auth error:", err);
     return res.status(401).json({
       success: false,
-      message: "Invalid token",
+      message: "Invalid or expired token",
     });
   }
 };
 
-// [Keep all existing role-specific middlewares: isAdminMiddleware, etc.]
-// Role-Specific Middlewares
+// Role-based guards
+
 exports.isAdminMiddleware = (req, res, next) => {
   if (req.user.role !== "admin") {
-    return res.status(403).json({
-      success: false,
-      message: "Access denied. You are not an admin.",
-    });
+    return res.status(403).json({ success: false, message: "Access denied. Admin only." });
   }
   next();
 };
 
 exports.isHospitalMiddleware = (req, res, next) => {
   if (req.user.role !== "hospital") {
-    return res.status(403).json({
-      success: false,
-      message: "Access denied. You are not a hospital.",
-    });
+    return res.status(403).json({ success: false, message: "Access denied. Hospital only." });
   }
   next();
 };
 
 exports.isPharmacyMiddleware = (req, res, next) => {
-  console.log("User role:", req.user.role);
   if (req.user.role !== "pharmacy" && req.user.role !== "hospital") {
-    return res.status(403).json({
-      success: false,
-      message: "Access denied. You are not a pharmacy or hospital.",
-    });
+    return res.status(403).json({ success: false, message: "Access denied. Pharmacy or hospital only." });
   }
   next();
 };
 
 exports.isDoctorMiddleware = (req, res, next) => {
   if (req.user.role !== "doctor") {
-    return res.status(403).json({
-      success: false,
-      message: "Access denied. You are not a doctor.",
-    });
+    return res.status(403).json({ success: false, message: "Access denied. Doctor only." });
   }
   next();
 };
 
 exports.isUserMiddleware = (req, res, next) => {
   if (req.user.role !== "user") {
-    return res.status(403).json({
-      success: false,
-      message: "Access denied. You are not a user.",
-    });
+    return res.status(403).json({ success: false, message: "Access denied. User only." });
   }
   next();
 };

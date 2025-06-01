@@ -66,4 +66,5 @@ router.get(
   "/:get-name",
   getHospitalByName
 )
+
 module.exports = router;

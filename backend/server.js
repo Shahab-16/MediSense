@@ -7,6 +7,10 @@ const adminRoute = require('./routes/admin');
 const hospitalRoute = require('./routes/hospital');
 const pharmacyRoute = require('./routes/pharmacy');
 const chatbotRoutes = require('./routes/userRoute');
+const messageRoutes=require('./routes/messageRoutes');
+const {Server}=require('socket.io');
+const http=require('http');
+
 require('dotenv').config(); // Load environment variables
 
 // Cloudinary Configuration
@@ -24,6 +28,8 @@ console.log('Cloudinary Config:', {
 });
 
 const app = express();
+
+const server=http.createServer(app);
 
 // Connect to the database
 connectDB()
@@ -79,6 +85,8 @@ app.use('/pharmacy', pharmacyRoute);
 
 app.use('/chatbot', chatbotRoutes);
 
+app.use('/message',messageRoutes);
+
 // Default route
 app.get('/', (req, res) => {
   res.send('Hello, MediSense Backend is Running!');
@@ -90,8 +98,30 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: 'Internal Server Error' });
 });
 
+const io=new Server(server,{
+  cors:{
+    origin:allowedOrigins,
+    methods:['GET','POST'],
+    credentials:true,
+  }
+})
+const userSocketMap={};
+io.on('connection',(socket)=>{
+  console.log("Patient got connected",socket.id);
+  const userId=socket.handshake.query.userId;
+  console.log("user connected with user Id",userId);
+  userSocketMap[userId]=socket.id;
+  io.emit('getOnlineUser',Object.keys(userSocketMap));
+  //lsten for the jpin room event from the patent side
+  socket.on('disconnect',()=> {
+    console.log("User disconnected",userId);
+    delete userSocketMap[userId];
+  })
+})
+module.exports = { io, userSocketMap };
+
 // Start the server
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
