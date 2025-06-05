@@ -1,16 +1,27 @@
 const mongoose = require("mongoose");
 
 const AppointmentSchema = new mongoose.Schema({
-  userId:{type:String,required:true},
-  doctorId:{type:String,required:true},
-  slotDate:{type:String,required:true},
-  slotTime:{type:String,required:true},
-  userData:{type:Object,required:true},
-  docData:{type:Object,required:true},
-  amount:{type:Number,required:true},
-  date:{type:Number,required:true},
-  createdAt: { type: Date, default: Date.now },
-  updatedAt: { type: Date, default: Date.now },
+  userId: { type: String, required: true },
+  doctorId: { type: String, required: true },
+  date: { type: String, required: true },       // Changed to string (YYYY-MM-DD)
+  time: { type: String, required: true },       // Renamed from slotTime
+  doctorName: { type: String, required: true }, // New field
+  specialization: { type: String, required: true }, // New field
+  fees: { type: Number, required: true },       // Renamed from amount
+  profileImage: { type: String, required: true }, // New field
+  paymentStatus: { 
+    type: String, 
+    enum: ['pending', 'completed', 'failed'], 
+    default: 'pending'
+  },
+  status: { 
+    type: String, 
+    enum: ['pending', 'confirmed', 'cancelled'], 
+    default: 'pending'
+  },
+}, { 
+  timestamps: true, // Automatically adds createdAt and updatedAt
+  versionKey: false // Disable the __v field
 });
 
 module.exports = mongoose.model("Appointment", AppointmentSchema);

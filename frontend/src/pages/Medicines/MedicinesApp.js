@@ -6,6 +6,7 @@ import AllMedicineStoresPage from '../../components/Medicines/AllMedicineStoresP
 import StoreMedicines from '../../components/Medicines/StoreMedicines';
 import MedicineCheckout from './MedicineCheckout';
 import MedicinesCart from './MedicinesCart';
+import MedicineOrderVerify from './MedicineOrderVerify';
 
 const MedicinesApp = () => {
   return (
@@ -17,7 +18,8 @@ const MedicinesApp = () => {
         <Route path="/store/:storeName" element={<StoreMedicines />} />
         <Route path="/cart" element={<MedicinesCart/>} />
         <Route path="/checkout" element={<MedicineCheckout />} />
-        <Route path="*" element={<Navigate to="/medicines/homepage" />} />
+        <Route path="/verify-order" element={<MedicineOrderVerify />} />
+        <Route path="*" element={<Navigate to="/medicines" />} />
       </Routes>
     </>
   );

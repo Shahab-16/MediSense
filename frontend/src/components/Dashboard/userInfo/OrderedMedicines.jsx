@@ -8,6 +8,8 @@ import { StoreContext } from '../../../context/StoreContext';
 const OrderedMedicines = () => {
 
   const { BACKEND_URL,token } = useContext(StoreContext);
+  console.log("Printing the backend url",BACKEND_URL);
+  console.log("Printing the token",token);
   
   let userId = null;
   try {

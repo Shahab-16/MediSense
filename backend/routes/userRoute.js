@@ -7,7 +7,7 @@ const {authMiddleware,isUserMiddleware}=require('../middlewares/auth')
 const {addToCart,removeFromCart,getAllMedicinesInCart}=require('../controllers/medicineOrder/cartController')
 const {placeMedicineOrder,verifyMedicineOrder,getOrderedMedicinesOfUsers}=require('../controllers/medicineOrder/orderController')
 const artificialDoctor=require('../controllers/artificialDoctor');
-const { bookAppointment } = require('../controllers/hospital/Hospital');
+const { bookAppointment, getAppointments,verifyAppointment } = require('../controllers/doctorAppointment/appointmentControllers');
 
 
 
@@ -15,7 +15,6 @@ const { bookAppointment } = require('../controllers/hospital/Hospital');
 router.post('/signup',Signup)
 router.post('/login',Login)
 router.post('/send-otp',SendOTP)
-router.post( "/book-appoinment",authMiddleware,isUserMiddleware,bookAppointment)
 
 router.post('/medicine/add-to-cart',authMiddleware,isUserMiddleware,addToCart)
 router.post('/medicine/remove-from-cart',authMiddleware,isUserMiddleware,removeFromCart)
@@ -27,6 +26,10 @@ router.post('/medicine/get-all-ordered-medicines',getOrderedMedicinesOfUsers);
 
 router.post('/medicine/place-order',placeMedicineOrder)
 router.post('/medicine/verify-order',verifyMedicineOrder)
+
+router.post('/doctors/book-appointment',bookAppointment)
+router.get('/doctors/get-all-appointments',getAppointments);
+router.post('/doctors/verify-appointment',verifyAppointment);
 
 
 router.post('/api/chatbot/chat',chatbotController.chatWithBot);

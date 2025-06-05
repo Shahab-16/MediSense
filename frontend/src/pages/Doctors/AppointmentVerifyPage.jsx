@@ -3,28 +3,30 @@ import { useSearchParams, useNavigate } from 'react-router-dom';
 import { StoreContext } from '../../context/StoreContext';
 import axios from 'axios';
 
-const Verify = () => {
+const AppointmentVerifyPage = () => {
   const [searchParams] = useSearchParams();
   const success = searchParams.get("success");
-  const orderId = searchParams.get("orderId");
+  const appointmentId = searchParams.get("appointmentId");
   const navigate = useNavigate();
   const { BACKEND_URL } = useContext(StoreContext);
 
-  const verifyPayment = async () => {
+  const verifyAppointmentPayment = async () => {
     try {
-      console.log("Verifying medicine order:", success, orderId);
-      const response = await axios.post(`${BACKEND_URL}/user/medicine/verify-order`, { success, orderId });
-      console.log("Medicine order verification response:", response.data);
+      console.log("Verifying appointment:", success, appointmentId);
+      const response = await axios.get(`${BACKEND_URL}/user/doctors/verify-appointment`, {
+        params: { success, appointmentId }
+      });
+      console.log("Appointment verification response:", response.data);
 
-      navigate("/dashboard/userInfo/my-ordered-medicines");
+      navigate("/dashboard/userInfo/my-appointments");
     } catch (error) {
-      console.error("Error verifying medicine order:", error);
-      navigate("/dashboard/medicines");
+      console.error("Error verifying appointment:", error);
+      navigate("/dashboard/appointments");
     }
   };
 
   useEffect(() => {
-    verifyPayment();
+    verifyAppointmentPayment();
   }, []);
 
   return (
@@ -34,4 +36,4 @@ const Verify = () => {
   );
 };
 
-export default Verify;
+export default AppointmentVerifyPage;

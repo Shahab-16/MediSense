@@ -30,7 +30,7 @@ const logoutHandler = () => {
     localStorage.removeItem("token");
     toast.success("Logout done successfully");
     setTimeout(() => {
-      window.location.href = "https://medisense-frontend.vercel.app/";
+      window.location.href = "http://localhost:3000/";  
     }, 2000);
   };
 

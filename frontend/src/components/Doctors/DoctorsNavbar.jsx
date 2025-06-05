@@ -1,24 +1,26 @@
-// import React from 'react'
-import { useNavigate } from 'react-router-dom'
-import { Link } from 'react-router-dom'
-import { images } from '../../assets/asset'
-import {React,useState,useRef,useEffect} from 'react';
+import React, { useState, useRef, useEffect } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+import { images } from '../../assets/asset';
+
 export default function DoctorsNavbar() {
     const navigate = useNavigate();
-    const [isDropdown,setIsDropdown]=useState(false);
-    const handleToggle=()=>{
+    const [isDropdown, setIsDropdown] = useState(false);
+    const dropdownref = useRef(null);
+
+    const handleToggle = () => {
         setIsDropdown(!isDropdown);
     }
-    const dropdownref=useRef(null);
-    useEffect(()=>{
-        const handleClickOutside=(event)=>{
-            if(dropdownref.current && !dropdownref.current.contains(event.target)){
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (dropdownref.current && !dropdownref.current.contains(event.target)) {
                 setIsDropdown(false);
             }
         };
-            document.addEventListener('mousedown', handleClickOutside); 
-            return () => document.removeEventListener('mousedown', handleClickOutside);
-    },[]);
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
+
     return (
         <div>
             {/* Navbar */}
@@ -50,13 +52,21 @@ export default function DoctorsNavbar() {
                         onClick={handleToggle} 
                     />
                     {isDropdown && (
-                        <div className=' absolute right-0 mt-2 w-46 bg-white border shadow-lg'>
-                              <ul className="py-2">
-                                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer w-40">
-                                    <Link to="/dashboard/doctors/my-appointment">My Appointments</Link>
+                        <div className='absolute right-0 mt-2 w-48 bg-white border shadow-lg rounded-md z-50'>
+                            <ul className="py-2">
+                                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                                    <Link to="/dashboard/doctors/my-appointment-cart" className="block w-full">Appointment Cart</Link>
+                                </li>
+                                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                                    <Link to="/dashboard/doctors/my-appointment-cart" className="block w-full">My Appointments</Link>
                                 </li>
                                 <li 
                                     className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-red-600"
+                                    onClick={() => {
+                                        // Add your logout logic here
+                                        console.log("Logging out...");
+                                        navigate('/login');
+                                    }}
                                 >
                                     Logout
                                 </li>
@@ -65,7 +75,7 @@ export default function DoctorsNavbar() {
                     )}
                 </div>
             </nav>
-            <div class="border-b border-gray-300"></div>
+            <div className="border-b border-gray-300"></div>
         </div>
     )
 }

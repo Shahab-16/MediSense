@@ -108,8 +108,8 @@ exports.placeMedicineOrder = async (req, res) => {
       payment_method_types: ["card"],
       line_items,
       mode: "payment",
-      success_url: `${frontend_url}/medicine/verify-order?success=true&orderId=${order._id}`,
-      cancel_url: `${frontend_url}/medicine/verify-order?success=false&orderId=${order._id}`,
+      success_url: `${frontend_url}/dashboard/medicines/verify-order?success=true&orderId=${order._id}`,
+      cancel_url: `${frontend_url}/dashboard/medicines/verify-order?success=false&orderId=${order._id}`,
       metadata: {
         orderId: order._id.toString(),
       },
@@ -177,7 +177,10 @@ exports.verifyMedicineOrder = async(req,res)=>{
 exports.getOrderedMedicinesOfUsers=async(req,res)=>{
   try{
     const patientId=req.body.patientId;
+    console.log("Inside getOrderedMedicinesOfUsers in orderController");
     const orders=await Order.find({patientId:patientId});
+    console.log("Printing the order medicines",orders);
+    console.log("Printing the patientId",patientId);
     if(!orders || orders.length===0){
       return res.status(404).json({
         success:false,

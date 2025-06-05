@@ -65,9 +65,9 @@ const LoginForm = () => {
         localStorage.setItem("user", JSON.stringify(response.data.user));
         setToken(response.data.token);
         localStorage.setItem("token", response.data.token);
-        console.log("Printing the response in login", response.data);
-        console.log("token after logging in",token);
-        console.log("response after login",response.data.user.id);
+        //console.log("Printing the response in login", response.data);
+        //console.log("token after logging in",token);
+        //console.log("response after login",response.data.user.id);
         connectSocket(response.data.user.id);
         // connectSocket(response.data);
         // Store role-specific identifiers

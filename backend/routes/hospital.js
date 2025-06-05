@@ -44,12 +44,6 @@ router.delete(
   isHospitalMiddleware,
   deleteDoctor
 );
-router.post(
-  "/:hospitalName/book-appointment/:doctorId",
-  authMiddleware,
-  isHospitalMiddleware,
-  bookAppointment
-);
 router.get(
   "/get-all-doctors",
   //  authMiddleware,

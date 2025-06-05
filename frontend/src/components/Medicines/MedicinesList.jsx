@@ -8,8 +8,15 @@ const MedicinesList = ({ _id, medicineImage, name, category, price, description 
   const {addToMedicineCart,removeFromMedicineCart,medicineCart,token}=useContext(StoreContext)
 
 
+  let userId = null;
+try {
   const payload = JSON.parse(atob(token.split('.')[1]));
-  const userId = payload.id;
+  userId = payload.id;
+  console.log("Printing the userId in medicinesList", userId);
+} catch (err) {
+  console.error("Invalid token or decoding error:", err);
+}
+
 
   console.log("Printing the userId in medicinesList",userId);
 

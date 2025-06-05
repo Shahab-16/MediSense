@@ -81,11 +81,11 @@ export const placeMedicineOrder = async (orderData) => {
 };
 
 
-export const bookAppointmentAPI=async({doctorName,dateTime,time})=>{
+export const bookAppointmentAPI=async(doctor,userId)=>{
   try{
-    console.log("inside the bookAppointment API");
-     const token = localStorage.getItem("token");
-    const res=await axios.post(`${backendUrl}/user/book-appointment`,{doctorName,dateTime,time},
+    const token = localStorage.getItem("token");
+    console.log("inside the bookAppointment API in services and the data is ",doctor,userId);
+    const res=await axios.post(`${backendUrl}/user/doctors/book-appointment`,{doctor,userId},
       {
         headers:{
           Authorization:`Bearer ${token}`,
@@ -95,6 +95,6 @@ export const bookAppointmentAPI=async({doctorName,dateTime,time})=>{
     );  
     return res.data;
   } catch(error){
-      console.log("error in bookApppoinment API");
+      console.log("error in bookApppoinment API inservice",error);
   }
 }
