@@ -15,8 +15,8 @@ function App() {
         <Routes>
           <Route path="/doctor/:doctorName/dashboard" element={<DoctorDashboard />} />
           <Route path="/doctor/:doctorName/patients" element={<PatientList />} />
-          <Route path="/doctor/:doctorName/appointments/:id" element={<AppointmentDetails />} />
-          <Route path="/doctor/:doctorName/video-consultation/:id" element={<VideoConsultation />} />
+          <Route path="/doctor/:doctorName/appointments" element={<AppointmentDetails />} />
+          <Route path="/doctor/:doctorName/video-consultation" element={<VideoConsultation />} />
           <Route path="*" element={<Navigate to="/doctor/:doctorName/dashboard" />} />
         </Routes>
       </div>

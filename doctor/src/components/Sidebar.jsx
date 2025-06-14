@@ -9,6 +9,7 @@ const Sidebar = () => {
   const navigate = useNavigate();
 
   const token=Cookies.get('token');
+  console.log("token in sidebar",token);
 
   let doctorName = "";
   if (token) {

@@ -6,6 +6,8 @@ import { images } from "../../assets/asset";
 import { ImCross, ImArrowLeft2 } from "react-icons/im";
 import { toast } from "react-toastify";
 import Spinner from "../spinner/spinner";
+import Cookies from "js-cookie";
+
 // import { ChatContext } from "../../context/chatContext";
 
 
@@ -62,14 +64,11 @@ const LoginForm = () => {
       if (response.data.success) {
         toast.success("Login success");
         
-        // Store common user data
+        Cookies.set("token", response.data.token, { expires: 1 });
         localStorage.setItem("user", JSON.stringify(response.data.user));
         setToken(response.data.token);
-        localStorage.setItem("token", response.data.token);
-        console.log("Printing the response in login", response.data);
-        //console.log("token after logging in",token);
         // console.log("response after login in login form",response.data.user.id);
-        setUserId(response.data.id);
+        setUserId(response.data.user.id);
         // connectSocket(response.data.user.id);
         // connectSocket(response.data);
         // Store role-specific identifiers

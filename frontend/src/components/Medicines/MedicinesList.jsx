@@ -25,10 +25,10 @@ try {
   }, [medicineCart]);
 
   return (
-    <div className="bg-white shadow-lg rounded-lg p-5 max-w-xs mx-auto transition-all duration-300 hover:shadow-xl">
+    <div className="bg-white shadow-lg rounded-lg p-4 max-w-xs mx-auto transition-all duration-300 hover:shadow-xl">
       {/* Image Section */}
       <div className="h-48 w-full bg-gray-100 rounded-t-lg flex items-center justify-center overflow-hidden">
-        <img src={medicineImage} alt={name} className="h-full object-contain" />
+        <img src={medicineImage} alt={name} className="h-48 w-full object-fit" />
       </div>
 
       {/* Details Section */}

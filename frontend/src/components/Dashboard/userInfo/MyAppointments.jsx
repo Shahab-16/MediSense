@@ -4,6 +4,7 @@ import axios from 'axios';
 import { StoreContext } from '../../../context/StoreContext';
 
 const MyAppointments = () => {
+  
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -40,7 +41,7 @@ const MyAppointments = () => {
   };
 
   fetchAppointments();
-}, [token, BACKEND_URL]); // Add dependencies to useEffect
+}, [token, BACKEND_URL]); 
 
   const upcomingAppointments = appointments.filter(app => 
     new Date(`${app.date}T${app.time.replace(' ', ':')}`) > new Date() || 

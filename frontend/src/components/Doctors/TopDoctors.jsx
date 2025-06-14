@@ -34,7 +34,7 @@ const TopDoctors = () => {
             className='border border-[#C9D8FF] rounded-xl overflow-hidden cursor-pointer hover:translate-y-[-10px] transition-all duration-500'
           >
             <img 
-              className='bg-blue-100' 
+              className='bg-blue-100 object-fit w-full h-[250px]' 
               src={item.profileImage || "https://via.placeholder.com/150"} 
               alt="doctor"
             />

@@ -17,8 +17,13 @@ const Appointment = () => {
     const [allDoctorsInfo, setAllDoctorsInfo] = useState([]);
     //get user Id
     //using dummy ids
-    const userId="123456789";
-    const doctorId="987654321";
+    const {token}=useContext(StoreContext);
+    const payload=JSON.parse(atob(token.split('.')[1]));
+    const userId=payload.id
+    const doctorId=docInfo?._id
+
+
+    console.log("user id in appointment", userId , "doctor id in appointment",doctorId);
 
     // Fetch all doctors from database
     useEffect(() => {

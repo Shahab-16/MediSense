@@ -45,6 +45,7 @@ connectDB()
 const allowedOrigins = [
   'http://localhost:3000',
   'http://localhost:3001',
+  'http://localhost:3002',
   'https://medisense-doctor-section.vercel.app',
   'https://medisense-pharmacy.vercel.app',
   'http://localhost:5173',

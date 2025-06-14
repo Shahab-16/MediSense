@@ -1,8 +1,9 @@
 import React from 'react';
 
 const VideoConsultation = ({ match }) => {
-  const appointmentId = match.params.id;
-
+  //const appointmentId = match.params.id;
+  //dummy appointmentId taken
+  const appointmentId = "123";
   return (
     <div>
       <h2 className="text-3xl font-semibold">Video Consultation</h2>
