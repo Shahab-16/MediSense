@@ -13,6 +13,7 @@ const LoginForm = () => {
   // const {connectSocket} = useContext(ChatContext);
   const { role } = useParams();
   const [loading, setloading] = useState(false);
+  // const {userId,setUserId}=useContext()
   const [data, setData] = useState({
     firstName: "",
     lastName: "",
@@ -22,7 +23,7 @@ const LoginForm = () => {
   });
   const [otp, setOtp] = useState("");
   const [currState, setCurrState] = useState("Login");
-  const { login, setLogin,token,setToken,connectSocket} = useContext(StoreContext);
+  const { login, setLogin,token,setToken,connectSocket,userId,setUserId} = useContext(StoreContext);
   const navigate = useNavigate();
   const [isOtpSent, setIsOtpSent] = useState(false);
 
@@ -65,10 +66,11 @@ const LoginForm = () => {
         localStorage.setItem("user", JSON.stringify(response.data.user));
         setToken(response.data.token);
         localStorage.setItem("token", response.data.token);
-        //console.log("Printing the response in login", response.data);
+        console.log("Printing the response in login", response.data);
         //console.log("token after logging in",token);
-        //console.log("response after login",response.data.user.id);
-        connectSocket(response.data.user.id);
+        // console.log("response after login in login form",response.data.user.id);
+        setUserId(response.data.id);
+        // connectSocket(response.data.user.id);
         // connectSocket(response.data);
         // Store role-specific identifiers
         switch(role) {

@@ -1,12 +1,10 @@
-const mongoose=require("mongoose");
+const mongoose = require('mongoose');
 
-const messageSchema=mongoose.Schema({
-    receiverId:{type:mongoose.Schema.Types.ObjectId,ref:"User",required:true},
-    senderId:{type:mongoose.Schema.Types.ObjectId,ref:"User",required:true},
-    text:{type:String},
-    image:{type:String},
-    seen:{type:Boolean,default:false}
-},{timestamps:true});
+const messageSchema = new mongoose.Schema({
+  senderId: String,
+  receiverId: String,
+  content: String,
+  timestamp: { type: Date, default: Date.now },
+});
 
-const Message=mongoose.model('Message',messageSchema);
-module.exports= Message;
+module.exports = mongoose.model('Message', messageSchema);

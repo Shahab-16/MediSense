@@ -15,7 +15,11 @@ const Appointment = () => {
     const [slotTime, setSlotTime] = useState('');
     const daysOfWeek = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
     const [allDoctorsInfo, setAllDoctorsInfo] = useState([]);
-    
+    //get user Id
+    //using dummy ids
+    const userId="123456789";
+    const doctorId="987654321";
+
     // Fetch all doctors from database
     useEffect(() => {
         const fetchDoctors = async () => {
@@ -132,7 +136,7 @@ const Appointment = () => {
                         <div className="flex justify-center items-center gap-2 mr-5 mt-4 text-lg font-medium">
                             <MdChat className="text-blue-600 w-6 h-6" />
                             <button 
-                                onClick={() => navigate('/dashboard/doctors/chat-with-doctor')} 
+                                onClick={() => navigate(`/dashboard/doctors/chat-with-doctor/${userId}/${doctorId}`)} 
                                 className="bg-blue-600 rounded-md px-4 py-2 text-white"
                             >
                                 Chat with Doctor

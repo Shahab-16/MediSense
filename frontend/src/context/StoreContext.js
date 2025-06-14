@@ -12,6 +12,7 @@ const StoreContextProvider = ({ children }) => {
   const [selectedDoctors, setSelectedDoctors] = useState(null);
   const [message, setMessage] = useState([]);
   const [onlineUser, setOnlineUser] = useState(null);
+  const [userId,setUserId]=useState("");
   const backendurl = "http://localhost:5000";
 
   const [stats, setStats] = useState({
@@ -57,21 +58,21 @@ const StoreContextProvider = ({ children }) => {
     );
   };
 
-  const connectSocket = (id) => {
-    console.log("user data", id);
-    if (!id || socket?.connected) return;
-    const newSocket = io(backendurl, {
-      query: {
-        userId: id,
-      },
-    });
-    newSocket.connect();
-    setSocket(newSocket);
+  // const connectSocket = (id) => {
+  //   console.log("user data", id);
+  //   if (!id || socket?.connected) return;
+  //   const newSocket = io(backendurl, {
+  //     query: {
+  //       userId: id,
+  //     },
+  //   });
+  //   newSocket.connect();
+  //   setSocket(newSocket);
 
-    io.on("getOnlineUser", (userIds) => {
-      setOnlineUser(userIds);
-    });
-  };
+  //   io.on("getOnlineUser", (userIds) => {
+  //     setOnlineUser(userIds);
+  //   });
+  // };
   const addToMedicineCart = async (itemId, userId) => {
     if (!medicineCart[itemId]) {
       setMedicineCart((prev) => ({ ...prev, [itemId]: 1 }));
@@ -173,25 +174,27 @@ const StoreContextProvider = ({ children }) => {
     medicineCart,
     token,
     setToken,
-    selectedDoctors,
+    // selectedDoctors,
     setSelectedDoctors,
     BACKEND_URL,
     getMessage,
     sendMessage,
-    connectSocket,
+    // connectSocket,
     setMessage,
     appointmentCart,
     setAppointmentCart,
     addToAppointmentCart,
     removeFromAppointmentCart,
+    userId,
+    setUserId,
   };
-  const unsubscribeFromMessages = () => {
-    if (socket) socket.off("newMessage");
-  };
-  useEffect(() => {
-    subscribeToMessages();
-    return () => unsubscribeFromMessages();
-  }, [socket, selectedDoctors]);
+  // const unsubscribeFromMessages = () => {
+  //   if (socket) socket.off("newMessage");
+  // };
+  // useEffect(() => {
+  //   subscribeToMessages();
+  //   return () => unsubscribeFromMessages();
+  // }, [socket, selectedDoctors]);
 
   return (
     <StoreContext.Provider value={contextValue}>
