@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { FaBell } from "react-icons/fa";
+import { FaBell, FaVideo} from "react-icons/fa";
 import axios from "axios"
 import { useNavigate, useParams } from 'react-router-dom';
 const backendurl = 'http://localhost:5000';
@@ -136,6 +136,14 @@ const DoctorDashboard = () => {
               >
                 Chat with Patient
               </button>
+
+              <button
+  onClick={() => navigate(`/doctor/video-call-with-patient/${patient._id}/${docInfo._id}`)}
+  className="flex items-center px-4 py-2 mt-4 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition"
+>
+  <FaVideo className="mr-2" />
+  Start Video Call
+</button>
             </div>
           ))
         ) : (

@@ -1,15 +1,24 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { FaVideo, FaComment, FaCalendarAlt, FaClock, FaMoneyBillWave, FaCheckCircle, FaTimesCircle, FaHourglassHalf } from 'react-icons/fa';
-import axios from 'axios';
-import { StoreContext } from '../../../context/StoreContext';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect, useContext } from "react";
+import {
+  FaVideo,
+  FaComment,
+  FaCalendarAlt,
+  FaClock,
+  FaMoneyBillWave,
+  FaCheckCircle,
+  FaTimesCircle,
+  FaHourglassHalf,
+} from "react-icons/fa";
+import axios from "axios";
+import { StoreContext } from "../../../context/StoreContext";
+import { useNavigate } from "react-router-dom";
 
 const MyAppointments = () => {
   const navigate = useNavigate();
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [activeTab, setActiveTab] = useState('upcoming');
+  const [activeTab, setActiveTab] = useState("upcoming");
   const { BACKEND_URL, token } = useContext(StoreContext);
 
   useEffect(() => {
@@ -17,19 +26,22 @@ const MyAppointments = () => {
       try {
         let userId = null;
         if (token) {
-          const payload = JSON.parse(atob(token.split('.')[1]));
+          const payload = JSON.parse(atob(token.split(".")[1]));
           userId = payload.id;
         }
 
-        const response = await axios.get(`${BACKEND_URL}/user/doctors/get-all-appointments`, {
-          params: { userId },
-          headers: { Authorization: `Bearer ${token}` }
-        });
-        
+        const response = await axios.get(
+          `${BACKEND_URL}/user/doctors/get-all-appointments`,
+          {
+            params: { userId },
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+
         if (response.data.success) {
           setAppointments(response.data.data);
         } else {
-          setError('Failed to fetch appointments');
+          setError("Failed to fetch appointments");
         }
       } catch (err) {
         setError(err.message);
@@ -39,23 +51,27 @@ const MyAppointments = () => {
     };
 
     fetchAppointments();
-  }, [token, BACKEND_URL]); 
+  }, [token, BACKEND_URL]);
 
-  const upcomingAppointments = appointments.filter(app => 
-    new Date(`${app.date}T${app.time.replace(' ', ':')}`) > new Date() || 
-    (app.status === 'pending' || app.status === 'confirmed')
+  const upcomingAppointments = appointments.filter(
+    (app) =>
+      new Date(`${app.date}T${app.time.replace(" ", ":")}`) > new Date() ||
+      app.status === "pending" ||
+      app.status === "confirmed"
   );
 
-  const pastAppointments = appointments.filter(app => 
-    new Date(`${app.date}T${app.time.replace(' ', ':')}`) < new Date() && 
-    app.status !== 'pending' && app.status !== 'confirmed'
+  const pastAppointments = appointments.filter(
+    (app) =>
+      new Date(`${app.date}T${app.time.replace(" ", ":")}`) < new Date() &&
+      app.status !== "pending" &&
+      app.status !== "confirmed"
   );
 
   const getStatusIcon = (status) => {
     switch (status.toLowerCase()) {
-      case 'confirmed':
+      case "confirmed":
         return <FaCheckCircle className="text-green-500" />;
-      case 'cancelled':
+      case "cancelled":
         return <FaTimesCircle className="text-red-500" />;
       default:
         return <FaHourglassHalf className="text-yellow-500" />;
@@ -63,7 +79,12 @@ const MyAppointments = () => {
   };
 
   const formatDate = (dateString) => {
-    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    const options = {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    };
     return new Date(dateString).toLocaleDateString(undefined, options);
   };
 
@@ -88,31 +109,44 @@ const MyAppointments = () => {
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold text-gray-800 mb-8">My Appointments</h1>
-      
+
       <div className="flex border-b border-gray-200 mb-6">
         <button
-          className={`py-2 px-4 font-medium ${activeTab === 'upcoming' ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-500'}`}
-          onClick={() => setActiveTab('upcoming')}
+          className={`py-2 px-4 font-medium ${
+            activeTab === "upcoming"
+              ? "text-blue-600 border-b-2 border-blue-600"
+              : "text-gray-500"
+          }`}
+          onClick={() => setActiveTab("upcoming")}
         >
           Upcoming Appointments
         </button>
         <button
-          className={`py-2 px-4 font-medium ${activeTab === 'past' ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-500'}`}
-          onClick={() => setActiveTab('past')}
+          className={`py-2 px-4 font-medium ${
+            activeTab === "past"
+              ? "text-blue-600 border-b-2 border-blue-600"
+              : "text-gray-500"
+          }`}
+          onClick={() => setActiveTab("past")}
         >
           Past Appointments
         </button>
       </div>
 
-      {activeTab === 'upcoming' && (
+      {activeTab === "upcoming" && (
         <div className="space-y-6">
           {upcomingAppointments.length === 0 ? (
             <div className="text-center py-12">
-              <p className="text-gray-500 text-lg">No upcoming appointments scheduled</p>
+              <p className="text-gray-500 text-lg">
+                No upcoming appointments scheduled
+              </p>
             </div>
           ) : (
             upcomingAppointments.map((appointment) => (
-              <div key={appointment._id} className="bg-white rounded-lg shadow-md overflow-hidden">
+              <div
+                key={appointment._id}
+                className="bg-white rounded-lg shadow-md overflow-hidden"
+              >
                 <div className="p-6 flex flex-col md:flex-row">
                   <div className="flex-shrink-0 mb-4 md:mb-0 md:mr-6">
                     <img
@@ -124,15 +158,21 @@ const MyAppointments = () => {
                   <div className="flex-grow">
                     <div className="flex justify-between items-start">
                       <div>
-                        <h2 className="text-xl font-bold text-gray-800">{appointment.doctorName}</h2>
-                        <p className="text-gray-600">{appointment.specialization}</p>
+                        <h2 className="text-xl font-bold text-gray-800">
+                          {appointment.doctorName}
+                        </h2>
+                        <p className="text-gray-600">
+                          {appointment.specialization}
+                        </p>
                       </div>
                       <div className="flex items-center">
                         {getStatusIcon(appointment.status)}
-                        <span className="ml-2 capitalize">{appointment.status}</span>
+                        <span className="ml-2 capitalize">
+                          {appointment.status}
+                        </span>
                       </div>
                     </div>
-                    
+
                     <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="flex items-center text-gray-700">
                         <FaCalendarAlt className="mr-2 text-blue-500" />
@@ -145,23 +185,34 @@ const MyAppointments = () => {
                       <div className="flex items-center text-gray-700">
                         <FaMoneyBillWave className="mr-2 text-blue-500" />
                         <span>₹{appointment.fees}</span>
-                        <span className="ml-2 text-sm text-gray-500">({appointment.paymentStatus})</span>
+                        <span className="ml-2 text-sm text-gray-500">
+                          ({appointment.paymentStatus})
+                        </span>
                       </div>
                     </div>
-                    
+
                     <div className="mt-6 flex space-x-4">
-                      <button className="flex items-center px-4 py-2 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition">
+                      <button
+                        onClick={() =>
+                          navigate(`/dashboard/doctors/video-call-with-doctor/${appointment.userId}/${appointment.doctorId}`)
+                        }
+                        className="flex items-center px-4 py-2 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition"
+                      >
                         <FaVideo className="mr-2" />
                         Start Video Call
                       </button>
-                      <button 
-                        onClick={() => navigate(`/dashboard/doctors/chat-with-doctor/${appointment.userId}/${appointment.doctorId}`)} 
+                      <button
+                        onClick={() =>
+                          navigate(
+                            `/dashboard/doctors/chat-with-doctor/${appointment.userId}/${appointment.doctorId}`
+                          )
+                        }
                         className="flex items-center px-4 py-2 bg-green-100 text-green-700 rounded-lg hover:bg-green-200 transition"
                       >
                         <FaComment className="mr-2" />
                         Chat with Doctor
                       </button>
-                      {appointment.status === 'pending' && (
+                      {appointment.status === "pending" && (
                         <button className="ml-auto px-4 py-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition">
                           Cancel Appointment
                         </button>
@@ -175,15 +226,20 @@ const MyAppointments = () => {
         </div>
       )}
 
-      {activeTab === 'past' && (
+      {activeTab === "past" && (
         <div className="space-y-6">
           {pastAppointments.length === 0 ? (
             <div className="text-center py-12">
-              <p className="text-gray-500 text-lg">No past appointments found</p>
+              <p className="text-gray-500 text-lg">
+                No past appointments found
+              </p>
             </div>
           ) : (
             pastAppointments.map((appointment) => (
-              <div key={appointment._id} className="bg-white rounded-lg shadow-md overflow-hidden">
+              <div
+                key={appointment._id}
+                className="bg-white rounded-lg shadow-md overflow-hidden"
+              >
                 <div className="p-6 flex flex-col md:flex-row">
                   <div className="flex-shrink-0 mb-4 md:mb-0 md:mr-6">
                     <img
@@ -195,15 +251,21 @@ const MyAppointments = () => {
                   <div className="flex-grow">
                     <div className="flex justify-between items-start">
                       <div>
-                        <h2 className="text-xl font-bold text-gray-800">{appointment.doctorName}</h2>
-                        <p className="text-gray-600">{appointment.specialization}</p>
+                        <h2 className="text-xl font-bold text-gray-800">
+                          {appointment.doctorName}
+                        </h2>
+                        <p className="text-gray-600">
+                          {appointment.specialization}
+                        </p>
                       </div>
                       <div className="flex items-center">
                         {getStatusIcon(appointment.status)}
-                        <span className="ml-2 capitalize">{appointment.status}</span>
+                        <span className="ml-2 capitalize">
+                          {appointment.status}
+                        </span>
                       </div>
                     </div>
-                    
+
                     <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="flex items-center text-gray-700">
                         <FaCalendarAlt className="mr-2 text-blue-500" />
@@ -216,10 +278,12 @@ const MyAppointments = () => {
                       <div className="flex items-center text-gray-700">
                         <FaMoneyBillWave className="mr-2 text-blue-500" />
                         <span>₹{appointment.fees}</span>
-                        <span className="ml-2 text-sm text-gray-500">({appointment.paymentStatus})</span>
+                        <span className="ml-2 text-sm text-gray-500">
+                          ({appointment.paymentStatus})
+                        </span>
                       </div>
                     </div>
-                    
+
                     <div className="mt-6">
                       <button className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition">
                         View Prescription

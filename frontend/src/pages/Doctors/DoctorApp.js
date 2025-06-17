@@ -16,6 +16,7 @@ import AllHosptalsPage from './AllHospitalsPage';
 // import ChatPage from './ChatPage';
 import AppointmentVerifyPage from './AppointmentVerifyPage';
 import ChatWindowWrapper from './ChatPage'
+import VideoCall from  '../../components/Doctors/VideoCall';
 const Doctors = () => {
   return (
     <div className="min-h-screen flex flex-col">
@@ -38,7 +39,8 @@ const Doctors = () => {
           <Route path="/verify-appointment" element={<AppointmentVerifyPage/>}/>
           <Route path="/allhospitals" element={<AllHosptalsPage/>}/>
           {/* <Route path='/chat-with-doctor/:docId' element={<ChatPage/>}/> */}
-            <Route path='/chat-with-doctor/:userId/:doctorId' element={< ChatWindowWrapper/>}/>
+            <Route path='/chat-with-doctor/:userId/:doctorId' element={<ChatWindowWrapper/>}/>
+            <Route path='/video-call-with-doctor/:userId/:doctorId' element={<VideoCall/>}/>
           <Route path="*" element={<Navigate to="/dashboard/doctors" />} />
         </Routes>
       </div>

@@ -182,6 +182,36 @@ exports.verifyAppointment = async (req, res) => {
 };
 
 
+// Find appointment by users
+exports.findAppointmentByUsers = async (req, res) => {
+  try {
+    const { userId, doctorId } = req.query;
+    
+    const appointment = await Appointment.findOne({ 
+      userId, 
+      doctorId,
+      //status: 'confirmed' 
+    });
+    
+    if (!appointment) {
+      return res.status(404).json({ 
+        success: false, 
+        message: 'Appointment not found' 
+      });
+    }
+    
+    res.status(200).json({ 
+      success: true, 
+      appointment 
+    });
+  } catch (error) {
+    res.status(500).json({ 
+      success: false, 
+      message: error.message 
+    });
+  }
+};
+
 
 exports.getAppointments=async(req,res)=>{
   try{
