@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 
 const DoctorAuthHandler = () => {
   const navigate = useNavigate();
-
+  
   useEffect(() => {
     const handleAuthMessage = (event) => {
       if (event.data.type === 'AUTH_TOKEN') {

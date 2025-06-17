@@ -2,19 +2,20 @@ import React, { useState, useEffect, useContext } from 'react';
 import { FaVideo, FaComment, FaCalendarAlt, FaClock, FaMoneyBillWave, FaCheckCircle, FaTimesCircle, FaHourglassHalf } from 'react-icons/fa';
 import axios from 'axios';
 import { StoreContext } from '../../../context/StoreContext';
+import { useNavigate } from 'react-router-dom';
 
 const MyAppointments = () => {
-  
+  const navigate=useNavigate();
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [activeTab, setActiveTab] = useState('upcoming');
   const {BACKEND_URL,token} = useContext(StoreContext);
+  let userId = null;
 
  useEffect(() => {
   const fetchAppointments = async () => {
     try {
-      let userId = null;
       if (token) {
         const payload = JSON.parse(atob(token.split('.')[1]));
         userId = payload.id;
@@ -52,7 +53,8 @@ const MyAppointments = () => {
     new Date(`${app.date}T${app.time.replace(' ', ':')}`) < new Date() && 
     app.status !== 'pending' && app.status !== 'confirmed'
   );
-
+  const doctorName=upcomingAppointments;
+  console.log("doctor name123 ",doctorName);
   const getStatusIcon = (status) => {
     switch (status.toLowerCase()) {
       case 'confirmed':
@@ -156,7 +158,7 @@ const MyAppointments = () => {
                         <FaVideo className="mr-2" />
                         Start Video Call
                       </button>
-                      <button className="flex items-center px-4 py-2 bg-green-100 text-green-700 rounded-lg hover:bg-green-200 transition">
+                      <button  onClick={() => navigate(`/dashboard/doctors/chat-with-doctor/${appointment.userId}/${appointment._id}`)}  className="flex items-center px-4 py-2 bg-green-100 text-green-700 rounded-lg hover:bg-green-200 transition">
                         <FaComment className="mr-2" />
                         Chat with Doctor
                       </button>

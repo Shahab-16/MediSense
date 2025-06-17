@@ -3,6 +3,7 @@ import { useImmer } from "use-immer";
 import { FaUserEdit, FaSave, FaPills, FaCheckCircle, FaUserMd, FaCalendarAlt, FaCamera, FaHeartbeat, FaNotesMedical, FaWeight, FaRulerVertical, FaTint, FaUser } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
+
 const UserInfo = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [profileImage, setProfileImage] = useState("/default-profile.png");
@@ -125,5 +126,4 @@ const UserInfo = () => {
     </div>
   );
 };
-
 export default UserInfo;

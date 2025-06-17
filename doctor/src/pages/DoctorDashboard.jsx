@@ -1,89 +1,88 @@
 import React, { useState, useEffect } from "react";
 import { FaBell } from "react-icons/fa";
-
+import axios from "axios"
+import { useNavigate, useParams } from 'react-router-dom';
+const backendurl = 'http://localhost:5000';
 const DoctorDashboard = () => {
-  const [notifications, setNotifications] = useState([
-    { id: 1, message: "New lab report uploaded for Alice Johnson." },
-    { id: 2, message: "Bob Smith rescheduled his appointment to 11:30 AM." },
-    { id: 3, message: "Reminder: Staff meeting at 2:00 PM." },
-    { id: 4, message: "Medication update for Sarah Connor." },
-    { id: 5, message: "Urgent: Check patient Mike Anderson’s test results." },
-    { id: 6, message: "New message from Dr. Emily Carter." },
-    { id: 7, message: "Maintenance scheduled for the MRI machine tomorrow." },
-    { id: 8, message: "Patient feedback survey results are available." },
-  ]);
 
+  const navigate = useNavigate();
+  const [docInfo, setDocInfo] = useState([]);
+  const [currentPatients, setCurrentPatients] = useState([]);
+  const { doctorName } = useParams();
+  console.log("doctor name", doctorName);
+  useEffect(() => {
+    const fetchDoctorByName = async () => {
+      try {
+        const decodedName = doctorName.replace(/-/g, ' ');
+        const res = await axios.get(`${backendurl}/hospital/findDoctor/${decodedName}`);
+        if (!res.data || !res.data.success) {
+          console.log("Doctor not found");
+          return;
+        }
+
+        console.log("Fetched doctor data:", res.data.data); // ✅ log here
+        setDocInfo(res.data.data);
+
+      } catch (error) {
+        console.log("Error in fetching the doctor info:", error.message);
+      }
+    };
+
+    fetchDoctorByName();
+  }, [doctorName]);
+
+  useEffect(() => {
+    const fetchPatients = async () => {
+      try {
+        if (docInfo && docInfo.currentPatients?.length > 0) {
+          console.log("docINfo", docInfo);
+          const patientRes = await axios.post(`${backendurl}/hospital/getPatientByIds`, {
+            ids: docInfo.currentPatients,
+          });
+
+          if (patientRes.data.success) {
+            console.log("current patient", patientRes.data.data);
+            setCurrentPatients(patientRes.data.data);
+          }
+        }
+      } catch (error) {
+        console.log("Error in fetching the patient info:", error.message);
+      }
+    };
+
+    fetchPatients();
+  }, [docInfo]);
   const [showNotifications, setShowNotifications] = useState(false);
 
   const toggleNotifications = () => {
     setShowNotifications(!showNotifications);
   };
-
-  // State variables to store fetched data
+  const today = new Date();
+  const formattedToday = today.toISOString().split("T")[0];
+  // const todaysAppointments = Object.entries(docInfo.slot_booked).filter(
+  //   ([date, _]) => date === formattedToday
+  // );
   const [patientsCount, setPatientsCount] = useState(0);
   const [appointmentsToday, setAppointmentsToday] = useState(0);
   const [upcomingConsultations, setUpcomingConsultations] = useState(0);
   const [schedule, setSchedule] = useState([]);
-
+  const doctorId = 'DOCTOR_ID_FROM_AUTH'
   return (
     <div className="p-6 bg-gray-100 min-h-screen relative">
       {/* Notification Button at the Top-Right */}
-      <div className="absolute top-6 right-6">
-        <div className="relative">
-          <button
-            className="relative text-gray-600 top-5 right-5 focus:outline-none hover:text-blue-600"
-            onClick={toggleNotifications}
-          >
-            <FaBell size={28} />
-            {notifications.length > 0 && (
-              <span className="absolute top-0 right-0 inline-block w-5 h-5 bg-red-600 text-white text-xs font-bold leading-tight text-center rounded-full">
-                {notifications.length}
-              </span>
-            )}
-          </button>
-          {showNotifications && (
-            <div className="absolute right-0 mt-2 w-80 bg-white shadow-lg rounded-lg z-10">
-              <div className="p-4 border-b bg-blue-50 text-gray-800 font-semibold">
-                Notifications
-              </div>
-              <ul className="max-h-64 overflow-y-auto">
-                {notifications.length > 0 ? (
-                  notifications.map((notification) => (
-                    <li
-                      key={notification.id}
-                      className="px-4 py-3 border-b text-gray-700 hover:bg-blue-50 transition duration-150"
-                    >
-                      {notification.message}
-                    </li>
-                  ))
-                ) : (
-                  <li className="px-4 py-3 text-gray-500">No new notifications</li>
-                )}
-              </ul>
-              <div
-                className="p-3 text-center text-blue-500 hover:underline cursor-pointer bg-gray-50"
-                onClick={() => setNotifications([])}
-              >
-                Clear All
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
-
       {/* Doctor's Profile Section */}
       <div className="bg-gradient-to-r from-blue-500 to-purple-500 p-6 rounded-lg shadow-lg mb-6">
         <div className="flex items-center">
           <div className="w-24 h-24 rounded-full overflow-hidden border-4 border-white shadow-md">
             <img
-              src="https://via.placeholder.com/150"
+              src={docInfo.profileImage}
               alt="Doctor Profile"
               className="w-full h-full object-cover"
             />
           </div>
           <div className="ml-6">
-            <h2 className="text-3xl font-bold text-white">Dr. John Doe</h2>
-            <p className="text-white text-opacity-80">Cardiologist</p>
+            <h2 className="text-3xl font-bold text-white">{doctorName}</h2>
+            <p className="text-white text-opacity-80">{docInfo.specialization}</p>
           </div>
         </div>
       </div>
@@ -95,20 +94,16 @@ const DoctorDashboard = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
         <div className="bg-white p-6 shadow-lg rounded-lg">
           <h3 className="text-xl font-semibold text-gray-800">Total Patients</h3>
-          <p className="text-4xl font-bold text-blue-600">{patientsCount}</p>
+          <p className="text-4xl font-bold text-blue-600">{currentPatients.length}</p>
         </div>
         <div className="bg-white p-6 shadow-lg rounded-lg">
           <h3 className="text-xl font-semibold text-gray-800">Appointments Today</h3>
-          <p className="text-4xl font-bold text-green-600">{appointmentsToday}</p>
-        </div>
-        <div className="bg-white p-6 shadow-lg rounded-lg">
-          <h3 className="text-xl font-semibold text-gray-800">Upcoming Consultations</h3>
-          <p className="text-4xl font-bold text-purple-600">{upcomingConsultations}</p>
+          <p className="text-4xl font-bold text-green-600">{currentPatients.length}</p>
         </div>
       </div>
 
       {/* Calendar View */}
-      <div className="bg-white p-6 shadow-lg rounded-lg mt-8">
+      {/* <div className="bg-white p-6 shadow-lg rounded-lg mt-8">
         <h3 className="text-2xl font-bold text-gray-800">Today’s Schedule</h3>
         <div className="mt-4">
           <ul className="divide-y divide-gray-200">
@@ -127,6 +122,25 @@ const DoctorDashboard = () => {
             )}
           </ul>
         </div>
+      </div> */}
+      <div className="p-6">
+        <h1 className="text-2xl font-bold mb-4">Your Patients</h1>
+        {currentPatients.length > 0 ? (
+          currentPatients.map((patient) => (
+            <div key={patient._id} className="bg-gray-100 p-4 rounded mb-3 shadow">
+              <p className="font-semibold">{patient.firstName} {patient.lastName}</p>
+              <p className="text-sm text-gray-500">{patient.email}</p>
+              <button
+                onClick={() => navigate(`/doctor/chat-with-patient/${patient._id}/${docInfo._id}`)}
+                className="mt-2 bg-blue-600 text-white px-4 py-2 rounded"
+              >
+                Chat with Patient
+              </button>
+            </div>
+          ))
+        ) : (
+          <p className="text-gray-500">No current patients</p>
+        )}
       </div>
     </div>
   );

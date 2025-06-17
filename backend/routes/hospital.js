@@ -9,7 +9,9 @@ const {
   bookAppointment,
   getAllDoctors,
   getAllHopitals,
-  getHospitalByName
+  getHospitalByName,
+  getDoctorByName,
+  getPatientByIds
 } = require("../controllers/hospital/Hospital");
 const { authMiddleware, isHospitalMiddleware } = require("../middlewares/auth");
 
@@ -60,5 +62,6 @@ router.get(
   "/:get-name",
   getHospitalByName
 )
-
+router.get('/findDoctor/:name', getDoctorByName); 
+router.post('/getPatientByIds',getPatientByIds)
 module.exports = router;

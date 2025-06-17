@@ -1,12 +1,59 @@
-import React from 'react';
+import React, { useState, useEffect } from "react";
+import { FaBell } from "react-icons/fa";
+import axios from "axios"
+import { useNavigate, useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
+const backendurl = 'http://localhost:5000';
+
 const PatientList = () => {
-  const patients = [
-    { id: 1, name: 'Alice Johnson', condition: 'Fever', profilePic: 'https://via.placeholder.com/50' },
-    { id: 2, name: 'Bob Smith', condition: 'Cough', profilePic: 'https://via.placeholder.com/50' },
-    { id: 3, name: 'Charlie Brown', condition: 'Headache', profilePic: 'https://via.placeholder.com/50' },
-  ];
+  const navigate = useNavigate();
+  const [docInfo, setDocInfo] = useState([]);
+  const [currentPatients, setCurrentPatients] = useState([]);
+  const { doctorName } = useParams();
+  console.log("doctor name", doctorName);
+  useEffect(() => {
+    const fetchDoctorByName = async () => {
+      try {
+        const decodedName = doctorName.replace(/-/g, ' ');
+        const res = await axios.get(`${backendurl}/hospital/findDoctor/${decodedName}`);
+        if (!res.data || !res.data.success) {
+          console.log("Doctor not found");
+          return;
+        }
+
+        console.log("Fetched doctor data:", res.data.data); // ✅ log here
+        setDocInfo(res.data.data);
+
+      } catch (error) {
+        console.log("Error in fetching the doctor info:", error.message);
+      }
+    };
+
+    fetchDoctorByName();
+  }, [doctorName]);
+
+  useEffect(() => {
+    const fetchPatients = async () => {
+      try {
+        if (docInfo && docInfo.currentPatients?.length > 0) {
+          console.log("docINfo", docInfo);
+          const patientRes = await axios.post(`${backendurl}/hospital/getPatientByIds`, {
+            ids: docInfo.currentPatients,
+          });
+
+          if (patientRes.data.success) {
+            console.log("current patient", patientRes.data.data);
+            setCurrentPatients(patientRes.data.data);
+          }
+        }
+      } catch (error) {
+        console.log("Error in fetching the patient info:", error.message);
+      }
+    };
+
+    fetchPatients();
+  }, [docInfo]);
 
   const getCurrentDateTime = () => {
     const now = new Date();
@@ -27,23 +74,23 @@ const PatientList = () => {
             </tr>
           </thead>
           <tbody>
-            {patients.map(patient => (
+            {currentPatients.map(patient => (
               <tr key={patient.id} className="border-t hover:bg-gray-50 my-2 transition duration-200 shadow-lg rounded-lg">
                 <td className="px-6 py-4 flex items-center space-x-4">
                   <img
                     src={patient.profilePic}
-                    alt={`${patient.name}'s profile`}
+                    alt={`${patient.firstName}'s profile`}
                     className="w-16 h-16 rounded-full object-cover"
                   />
                   <div>
-                    <p className="text-lg font-semibold text-gray-800">{patient.name}</p>
-                    <p className="text-sm text-gray-500">Patient ID: {patient.id}</p>
+                    <p className="text-lg font-semibold text-gray-800">{patient.firstName} {patient.lastName}</p>
+                    <p className="text-sm text-gray-500">Patient ID: {patient._id}</p>
                   </div>
                 </td>
                 <td className="px-6 py-4 text-lg text-gray-600">{patient.condition}</td>
                 <td className="px-6 py-4 text-sm text-gray-500">{getCurrentDateTime()}</td>
                 <td className="px-6 py-4 text-lg text-blue-500">
-                  <Link to={`/appointments/${patient.id}`} className="hover:underline">View Appointment</Link>
+                  <Link to={`/appointments/${patient._id}`} className="hover:underline">View Appointment</Link>
                 </td>
               </tr>
             ))}

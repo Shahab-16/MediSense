@@ -250,7 +250,8 @@ exports.getAllHopitals = async (req,res)=>{
 }
 exports.getHospitalByName = async (req, res) => {
   try {
-    const HosName = req.params.name; 
+    console.log("Params:", req.params);
+    const HosName = req.params; 
 
     const hospital = await Hospital.findOne({ name: HosName }); 
     console.log("Hospital found:", hospital);
@@ -275,4 +276,46 @@ exports.getHospitalByName = async (req, res) => {
     });
   }
 };
+
+exports.getDoctorByName=async(req,res)=>{
+  try{
+    const docName=req.params.name;
+    console.log("docName",docName);
+    const doctor=await Doctor.findOne({name:docName});
+    if(!doctor){
+      return res.json({
+        succes:false,
+        data:docName,
+        message:"doctor not found"
+
+      })
+    }
+    return res.status(200).json({
+      success: true,
+      data:doctor
+    });
+  } catch(error){
+    console.log("error in find doctor by name controller",error.message);
+    return res.status(500).json({
+      succes:false,
+      message:"Interval server error"
+    })
+  }
+}
+
+exports.getPatientByIds=async(req,res)=>{
+  try {
+    const { ids } = req.body;
+    if (!ids || !Array.isArray(ids)) {
+      return res.status(400).json({ success: false, message: "Invalid or missing 'ids' array" });
+    }
+
+    const patients = await User.find({ _id: { $in: ids } });
+
+    res.status(200).json({ success: true, data: patients });
+  } catch (error) {
+    console.error("Error fetching patients:", error.message);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+}
 

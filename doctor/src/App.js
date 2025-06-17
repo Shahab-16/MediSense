@@ -5,6 +5,7 @@ import PatientList from './pages/PatientList';
 import AppointmentDetails from './pages/AppointmentDetails';
 import VideoConsultation from './pages/VideoConsultation';
 import Sidebar from './components/Sidebar';
+import ChatWindowWrapper from './pages/ChatPage';
 import { Navigate } from 'react-router-dom';
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
           <Route path="/doctor/:doctorName/patients" element={<PatientList />} />
           <Route path="/doctor/:doctorName/appointments" element={<AppointmentDetails />} />
           <Route path="/doctor/:doctorName/video-consultation" element={<VideoConsultation />} />
+          <Route path="/doctor/chat-with-patient/:userId/:doctorId" element={<ChatWindowWrapper/>}/>
           <Route path="*" element={<Navigate to="/doctor/:doctorName/dashboard" />} />
         </Routes>
       </div>
