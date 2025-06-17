@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { MdChat } from 'react-icons/md';
 import { StoreContext } from "../../context/StoreContext";
 import { useNavigate } from "react-router-dom";
 import { getDoctors } from "../../services/axios";
@@ -15,17 +14,8 @@ const Appointment = () => {
     const [slotTime, setSlotTime] = useState('');
     const daysOfWeek = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
     const [allDoctorsInfo, setAllDoctorsInfo] = useState([]);
-    //get user Id
-    //using dummy ids
-    const {token}=useContext(StoreContext);
-    const payload=JSON.parse(atob(token.split('.')[1]));
-    const userId=payload.id
-    const doctorId=docInfo?._id
+    const { token } = useContext(StoreContext);
 
-
-    console.log("user id in appointment", userId , "doctor id in appointment",doctorId);
-
-    // Fetch all doctors from database
     useEffect(() => {
         const fetchDoctors = async () => {
             try {
@@ -38,18 +28,15 @@ const Appointment = () => {
         fetchDoctors();
     }, [docName]);
 
-    // Find the specific doctor's info
     useEffect(() => {
         if (allDoctorsInfo.length > 0) {
             const doctor = allDoctorsInfo.find(doc => doc.name === docName);
             if (doctor) {
                 setDocInfo(doctor);
-                console.log("Doctor info:", doctor);
             }
         }
     }, [docName, allDoctorsInfo]);
 
-    // Generate available time slots
     const getAvailableSlots = () => {
         let today = new Date();
         let allSlots = [];
@@ -58,16 +45,13 @@ const Appointment = () => {
             let currDate = new Date(today);
             currDate.setDate(today.getDate() + i);
             let endTime = new Date(currDate);
-            endTime.setHours(21, 0, 0, 0); // End at 9 PM
+            endTime.setHours(21, 0, 0, 0);
 
-            // Set start time
             if (currDate.getDate() === today.getDate()) {
-                // If today, start from current hour + 1
                 const currentHour = today.getHours();
                 currDate.setHours(currentHour + 1);
                 currDate.setMinutes(0);
             } else {
-                // Future days start at 10 AM
                 currDate.setHours(10);
                 currDate.setMinutes(0);
             }
@@ -81,7 +65,7 @@ const Appointment = () => {
                 });
                 
                 timeSlots.push({
-                    date: new Date(currDate), // Store date object
+                    date: new Date(currDate),
                     time: formattedTime,
                 });
                 currDate.setMinutes(currDate.getMinutes() + 30);
@@ -109,7 +93,6 @@ const Appointment = () => {
             return;
         }
 
-        // Create appointment object
         const appointment = {
             doctorId: docInfo._id,
             docName: docInfo.name,
@@ -117,14 +100,11 @@ const Appointment = () => {
             fees: docInfo.fees,
             profileImage: docInfo.profileImage,
             success_rate: docInfo.success_rate,
-            dateTime: selectedSlot.date.toISOString(), // Store as ISO string
+            dateTime: selectedSlot.date.toISOString(),
             time: selectedSlot.time
         };
 
-        // Add to cart
         addToAppointmentCart(appointment);
-        
-        // Navigate to appointment cart
         navigate('/dashboard/doctors/my-appointment-cart');
     };
 
@@ -138,15 +118,6 @@ const Appointment = () => {
                             src={docInfo.profileImage} 
                             alt={`Dr. ${docInfo.name}`} 
                         />
-                        <div className="flex justify-center items-center gap-2 mr-5 mt-4 text-lg font-medium">
-                            <MdChat className="text-blue-600 w-6 h-6" />
-                            <button 
-                                onClick={() => navigate(`/dashboard/doctors/chat-with-doctor/${userId}/${doctorId}`)} 
-                                className="bg-blue-600 rounded-md px-4 py-2 text-white"
-                            >
-                                Chat with Doctor
-                            </button>
-                        </div>
                     </div>
                     
                     <div className="flex-1 border border-[#ADADAD] rounded-lg p-6 bg-white mt-4 sm:mt-0">

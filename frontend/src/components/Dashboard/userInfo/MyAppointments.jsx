@@ -5,44 +5,41 @@ import { StoreContext } from '../../../context/StoreContext';
 import { useNavigate } from 'react-router-dom';
 
 const MyAppointments = () => {
-  const navigate=useNavigate();
+  const navigate = useNavigate();
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [activeTab, setActiveTab] = useState('upcoming');
-  const {BACKEND_URL,token} = useContext(StoreContext);
-  let userId = null;
+  const { BACKEND_URL, token } = useContext(StoreContext);
 
- useEffect(() => {
-  const fetchAppointments = async () => {
-    try {
-      if (token) {
-        const payload = JSON.parse(atob(token.split('.')[1]));
-        userId = payload.id;
-      }
-      console.log("user id in my appointments", userId);
-      
-      const response = await axios.get(`${BACKEND_URL}/user/doctors/get-all-appointments`, {
-        params: { userId }, // Send userId as query parameter
-        headers: {
-          Authorization: `Bearer ${token}` // Include the token in headers if needed
+  useEffect(() => {
+    const fetchAppointments = async () => {
+      try {
+        let userId = null;
+        if (token) {
+          const payload = JSON.parse(atob(token.split('.')[1]));
+          userId = payload.id;
         }
-      });
-      
-      if (response.data.success) {
-        setAppointments(response.data.data);
-      } else {
-        setError('Failed to fetch appointments');
-      }
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
 
-  fetchAppointments();
-}, [token, BACKEND_URL]); 
+        const response = await axios.get(`${BACKEND_URL}/user/doctors/get-all-appointments`, {
+          params: { userId },
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        
+        if (response.data.success) {
+          setAppointments(response.data.data);
+        } else {
+          setError('Failed to fetch appointments');
+        }
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAppointments();
+  }, [token, BACKEND_URL]); 
 
   const upcomingAppointments = appointments.filter(app => 
     new Date(`${app.date}T${app.time.replace(' ', ':')}`) > new Date() || 
@@ -53,8 +50,7 @@ const MyAppointments = () => {
     new Date(`${app.date}T${app.time.replace(' ', ':')}`) < new Date() && 
     app.status !== 'pending' && app.status !== 'confirmed'
   );
-  const doctorName=upcomingAppointments;
-  console.log("doctor name123 ",doctorName);
+
   const getStatusIcon = (status) => {
     switch (status.toLowerCase()) {
       case 'confirmed':
@@ -158,7 +154,10 @@ const MyAppointments = () => {
                         <FaVideo className="mr-2" />
                         Start Video Call
                       </button>
-                      <button  onClick={() => navigate(`/dashboard/doctors/chat-with-doctor/${appointment.userId}/${appointment._id}`)}  className="flex items-center px-4 py-2 bg-green-100 text-green-700 rounded-lg hover:bg-green-200 transition">
+                      <button 
+                        onClick={() => navigate(`/dashboard/doctors/chat-with-doctor/${appointment.userId}/${appointment.doctorId}`)} 
+                        className="flex items-center px-4 py-2 bg-green-100 text-green-700 rounded-lg hover:bg-green-200 transition"
+                      >
                         <FaComment className="mr-2" />
                         Chat with Doctor
                       </button>
