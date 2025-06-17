@@ -17,12 +17,19 @@ const socketHandler = (io) => {
     });
 
     /** ---------------- VIDEO CALL SOCKET LOGIC ---------------- **/
-
-    // Join video call room
     socket.on('join-video-call', ({ roomId }) => {
       socket.join(roomId);
       console.log(`${socket.id} joined video call room: ${roomId}`);
-      socket.to(roomId).emit('user-joined', { socketId: socket.id });
+      
+      // Notify others in room about new user
+      const room = io.sockets.adapter.rooms.get(roomId);
+      if (room && room.size > 1) {
+        socket.to(roomId).emit('user-joined');
+      }
+    });
+
+    socket.on('call-initiated', ({ roomId }) => {
+      socket.to(roomId).emit('user-joined');
     });
 
     socket.on('offer', ({ roomId, offer }) => {

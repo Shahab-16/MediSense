@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { FaPhoneSlash, FaMicrophone, FaMicrophoneSlash, FaVideo, FaVideoSlash, FaUserMd, FaUserInjured } from 'react-icons/fa';
 import { IoMdExit } from 'react-icons/io';
-import { MdScreenShare, MdStopScreenShare, MdMoreVert } from 'react-icons/md';
+import { MdScreenShare, MdStopScreenShare } from 'react-icons/md';
 import { BsRecordCircleFill } from 'react-icons/bs';
 import io from 'socket.io-client';
 
@@ -35,7 +35,11 @@ const VideoCall = () => {
   const timerRef = useRef(null);
 
   const iceServers = {
-    iceServers: [{ urls: 'stun:stun.l.google.com:19302' }]
+    iceServers: [
+      { urls: 'stun:stun.l.google.com:19302' },
+      { urls: 'stun:stun1.l.google.com:19302' },
+      { urls: 'stun:stun2.l.google.com:19302' }
+    ]
   };
 
   // Format time for call duration
@@ -70,123 +74,149 @@ const VideoCall = () => {
   // WebRTC signaling
   useEffect(() => {
     if (!userId || !doctorId) return;
-
+    
+    // Create peer connection
+    peerRef.current = new RTCPeerConnection(iceServers);
+    
+    // Setup ICE candidate handler
+    peerRef.current.onicecandidate = (event) => {
+      if (event.candidate) {
+        socket.emit('ice-candidate', { roomId, candidate: event.candidate });
+      }
+    };
+    
+    // Setup track reception
+    peerRef.current.ontrack = (event) => {
+      const [remoteStream] = event.streams;
+      if (remoteVideoRef.current) {
+        remoteVideoRef.current.srcObject = remoteStream;
+      }
+    };
+    
+    // Setup connection state change handler
+    peerRef.current.onconnectionstatechange = () => {
+      console.log('Connection state:', peerRef.current.connectionState);
+      if (peerRef.current.connectionState === 'connected') {
+        setCallStatus('connected');
+        startTimer();
+      }
+    };
+    
+    // Join room and setup signaling
     socket.emit('join-video-call', { roomId });
-
-    socket.on('user-joined', async () => {
-      setCallStatus('ringing');
-      await createOffer();
-    });
-
+    
+    // Signaling event handlers
     socket.on('offer', async (offer) => {
-      await handleOffer(offer);
+      if (peerRef.current.signalingState !== 'stable') return;
+      
+      try {
+        await peerRef.current.setRemoteDescription(offer);
+        const answer = await peerRef.current.createAnswer();
+        await peerRef.current.setLocalDescription(answer);
+        socket.emit('answer', { roomId, answer });
+        setCallStatus('connected');
+        startTimer();
+      } catch (err) {
+        console.error('Error handling offer:', err);
+        setError('Failed to establish connection');
+      }
     });
-
+    
     socket.on('answer', async (answer) => {
-      await peerRef.current.setRemoteDescription(answer);
-      setCallStatus('connected');
-      startTimer();
+      if (peerRef.current.signalingState !== 'have-local-offer') return;
+      
+      try {
+        await peerRef.current.setRemoteDescription(answer);
+        setCallStatus('connected');
+        startTimer();
+      } catch (err) {
+        console.error('Error handling answer:', err);
+        setError('Failed to establish connection');
+      }
     });
-
+    
     socket.on('ice-candidate', async (candidate) => {
       try {
-        await peerRef.current.addIceCandidate(candidate);
+        await peerRef.current.addIceCandidate(
+          new RTCIceCandidate(candidate)
+        );
       } catch (e) {
         console.error('Error adding ICE candidate:', e);
       }
     });
+    
+    socket.on('user-joined', async () => {
+      if (callActive) return; // Prevent duplicate calls
+      setCallStatus('ringing');
+      await createOffer();
+    });
+    
+    socket.on('call-initiated', () => {
+      setCallStatus('ringing');
+    });
 
     return () => {
-      socket.disconnect();
-      if (timerRef.current) clearInterval(timerRef.current);
+      socket.off('offer');
+      socket.off('answer');
+      socket.off('ice-candidate');
+      socket.off('user-joined');
+      socket.off('call-initiated');
+      endCall();
     };
   }, [userId, doctorId]);
 
-  const createOffer = async () => {
-    const offer = await peerRef.current.createOffer();
-    await peerRef.current.setLocalDescription(offer);
-    socket.emit('offer', { roomId, offer });
-  };
-
-  const handleOffer = async (offer) => {
+  // Get media stream
+  const getMediaStream = async () => {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({
+      return await navigator.mediaDevices.getUserMedia({
         video: true,
         audio: true
       });
+    } catch (err) {
+      console.error("Error accessing media devices:", err);
+      setError('Could not access camera/microphone');
+      return null;
+    }
+  };
 
-      if (localVideoRef.current) {
-        localVideoRef.current.srcObject = stream;
-      }
+  const createOffer = async () => {
+    const stream = await getMediaStream();
+    if (!stream) return;
 
-      peerRef.current = new RTCPeerConnection(iceServers);
+    if (localVideoRef.current) {
+      localVideoRef.current.srcObject = stream;
+    }
+    
+    stream.getTracks().forEach(track => {
+      peerRef.current.addTrack(track, stream);
+    });
 
-      stream.getTracks().forEach(track => {
-        peerRef.current.addTrack(track, stream);
-      });
-
-      peerRef.current.ontrack = (event) => {
-        const [remoteStream] = event.streams;
-        if (remoteVideoRef.current) {
-          remoteVideoRef.current.srcObject = remoteStream;
-        }
-      };
-
-      peerRef.current.onicecandidate = (event) => {
-        if (event.candidate) {
-          socket.emit('ice-candidate', { roomId, candidate: event.candidate });
-        }
-      };
-
-      await peerRef.current.setRemoteDescription(offer);
-      const answer = await peerRef.current.createAnswer();
-      await peerRef.current.setLocalDescription(answer);
-      socket.emit('answer', { roomId, answer });
+    try {
+      const offer = await peerRef.current.createOffer();
+      await peerRef.current.setLocalDescription(offer);
+      socket.emit('offer', { roomId, offer });
       setCallActive(true);
-      setCallStatus('connected');
-      startTimer();
-    } catch (error) {
-      console.error('Error handling offer:', error);
-      setError('Failed to establish connection');
+    } catch (err) {
+      console.error("Error creating offer:", err);
+      setError('Failed to start call');
     }
   };
 
   const startCall = async () => {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: true,
-        audio: true
-      });
+    const stream = await getMediaStream();
+    if (!stream) return;
 
-      if (localVideoRef.current) {
-        localVideoRef.current.srcObject = stream;
-      }
-
-      peerRef.current = new RTCPeerConnection(iceServers);
-
-      stream.getTracks().forEach(track => {
-        peerRef.current.addTrack(track, stream);
-      });
-
-      peerRef.current.ontrack = (event) => {
-        const [remoteStream] = event.streams;
-        if (remoteVideoRef.current) {
-          remoteVideoRef.current.srcObject = remoteStream;
-        }
-      };
-
-      peerRef.current.onicecandidate = (event) => {
-        if (event.candidate) {
-          socket.emit('ice-candidate', { roomId, candidate: event.candidate });
-        }
-      };
-
-      setCallActive(true);
-      setCallStatus('ringing');
-    } catch (err) {
-      console.error("Error starting call:", err);
-      setError('Could not access media devices.');
+    if (localVideoRef.current) {
+      localVideoRef.current.srcObject = stream;
     }
+    
+    stream.getTracks().forEach(track => {
+      peerRef.current.addTrack(track, stream);
+    });
+
+    setCallActive(true);
+    setCallStatus('ringing');
+    socket.emit('call-initiated', { roomId });
   };
 
   const startTimer = () => {
@@ -202,10 +232,12 @@ const VideoCall = () => {
       localVideoRef.current.srcObject.getTracks().forEach(track => track.stop());
     }
     if (remoteVideoRef.current?.srcObject) {
-      remoteVideoRef.current.srcObject.getTracks().forEach(track => track.stop());
+      const remoteStream = remoteVideoRef.current.srcObject;
+      remoteStream.getTracks().forEach(track => track.stop());
     }
     if (peerRef.current) {
       peerRef.current.close();
+      peerRef.current = null;
     }
     setCallActive(false);
     if (timerRef.current) clearInterval(timerRef.current);
@@ -301,7 +333,7 @@ const VideoCall = () => {
   }
 
   return (
-    <div className="flex flex-col h-[90vh] bg-gray-900 mb-4">
+    <div className="flex flex-col h-[90vh] bg-gray-900 mb-[150px]">
       {/* Top status bar */}
       <div className="flex justify-between items-center px-6 py-3 bg-gray-800 text-white">
         <div className="flex items-center">
@@ -309,7 +341,7 @@ const VideoCall = () => {
             <FaUserMd className="text-xl" />
           </div>
           <div>
-            <h1 className="text-lg font-bold">MEDISNESE HEALTHCARE CONUSULTANT</h1>
+            <h1 className="text-lg font-bold">MEDISENSE HEALTHCARE CONSULTANT</h1>
             <p className="text-sm text-gray-300">Secure video session</p>
           </div>
         </div>
@@ -400,7 +432,7 @@ const VideoCall = () => {
       </div>
 
       {/* Call controls */}
-      <div className="py-4 px-8 bg-gray-800 border-t border-gray-700">
+      <div className="py-4 px-8 mb-8 bg-gray-800 border-t border-gray-700">
         <div className="flex justify-center items-center space-x-6">
           <button 
             onClick={toggleMic}
