@@ -54,13 +54,13 @@ const HospitalsList = () => {
     return <p className="text-center">Loading...</p>;
   }
 
-  // Show error message
+  // Show error message 
   if (error) {
     return <p className="text-center text-red-500">{error}</p>;
   }
 
   return (
-    <div className="flex flex-col max-w-[1320px] mx-auto gap-8 p-4 sm:p-8">
+    <div className="flex flex-col max-w-[1320px] mx-auto gap-8 p-4 sm:p-8 bg-black text-white">
       {/* Button to Add Hospital */}
       <span className="flex justify-center">
         <button
