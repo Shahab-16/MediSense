@@ -7,11 +7,11 @@ const adminRoute = require('./routes/admin');
 const hospitalRoute = require('./routes/hospital');
 const pharmacyRoute = require('./routes/pharmacy');
 const chatbotRoutes = require('./routes/userRoute');
-const messageRoutes=require('./routes/messageRoutes');
+const messageRoutes = require('./routes/messageRoutes');
 const chatRoutes = require('./routes/chatRoutes');
 const socketHandler = require('./routes/socket');
-const {Server}=require('socket.io');
-const http=require('http');
+const { Server } = require('socket.io');
+const http = require('http');
 
 require('dotenv').config(); // Load environment variables
 
@@ -31,8 +31,36 @@ console.log('Cloudinary Config:', {
 
 const app = express();
 
-const server=http.createServer(app);
-const io = new Server(server, { cors: { origin: '*' } });
+// Create HTTP server
+const server = http.createServer(app);
+
+// List of allowed origins for CORS and Socket.IO
+const allowedOrigins = [
+  'http://localhost:3000',
+  'http://localhost:3001',
+  'http://localhost:3002',
+  'http://localhost:5173',
+  'http://localhost:5174',
+  'https://medisense-doctor-section.vercel.app',
+  'https://medisense-pharmacy.vercel.app',
+  'https://medisense-hospital.vercel.app',
+  'https://medisense-admin.vercel.app',
+  'https://medisense-frontend.vercel.app',
+];
+
+// Configure Socket.IO
+const io = new Server(server, {
+  cors: {
+    origin: allowedOrigins,
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    credentials: true,
+  },
+  connectionStateRecovery: {
+    maxDisconnectionDuration: 2 * 60 * 1000, // 2 minutes
+    skipMiddlewares: true,
+  }
+});
+
 // Connect to the database
 connectDB()
   .then(() => console.log("Connected to the database"))
@@ -40,20 +68,6 @@ connectDB()
     console.error("Database connection error:", err);
     process.exit(1);
   });
-
-// List of allowed origins for CORS
-const allowedOrigins = [
-  'http://localhost:3000',
-  'http://localhost:3001',
-  'http://localhost:3002',
-  'https://medisense-doctor-section.vercel.app',
-  'https://medisense-pharmacy.vercel.app',
-  'http://localhost:5173',
-  'http://localhost:5174',
-  'https://medisense-hospital.vercel.app',
-  'https://medisense-admin.vercel.app',
-  'https://medisense-frontend.vercel.app',
-];
 
 // Enable CORS with dynamic origin checking
 app.use(
@@ -75,7 +89,7 @@ app.use(
 app.options('*', cors());
 
 // Parse JSON request bodies
-app.use(express.json());
+app.use(express.json({ limit: '10mb' }));
 
 // Parse cookies
 app.use(cookieParser());
@@ -85,10 +99,9 @@ app.use('/user', userRoute);
 app.use('/admin', adminRoute);  
 app.use('/hospital', hospitalRoute);
 app.use('/pharmacy', pharmacyRoute);
-
 app.use('/chatbot', chatbotRoutes);
-
-app.use('/message',messageRoutes);
+app.use('/message', messageRoutes);
+app.use('/message/chat', chatRoutes);
 
 // Default route
 app.get('/', (req, res) => {
@@ -100,35 +113,13 @@ app.use((err, req, res, next) => {
   console.error("Error:", err.stack);
   res.status(500).json({ error: 'Internal Server Error' });
 });
-app.use('/message/chat', chatRoutes);
+
+// Initialize Socket.IO handler
 socketHandler(io);
-// const io=new Server(server,{
-//   cors:{
-//     origin:allowedOrigins,
-//     methods:['GET','POST'],
-//     credentials:true,
-//   }
-// })
-// const userSocketMap={};
-// io.on('connection',(socket)=>{
-//   console.log("Patient got connected",socket.id);
-//   // const userId=socket.handshake.query.userId;
-//   // userSocketMap[userId]=socket.id;
-//   // console.log("user connected with user Id",userId);
-//   socket.on("send-message",({room,newMessage})=>{
-//     // const room=userSocketMap[id];
-//     console.log("recieved",newMessage);
-//     io.to(room).emit("recieved-msg",newMessage);
-//   });
-//   socket.on('disconnect',()=> {
-//     console.log("User disconnected",socket.id);
-//     // delete userSocketMap[userId];
-//   });
-// })
-// module.exports = { io, userSocketMap };
 
 // Start the server
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
+  console.log(`Socket.IO is listening for connections`);
 });
