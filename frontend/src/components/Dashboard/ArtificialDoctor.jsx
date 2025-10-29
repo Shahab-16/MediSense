@@ -6,7 +6,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 const ArtificialDoctor = () => {
-  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+  const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
   console.log("BACKEND_URL",BACKEND_URL); 
   const [isRecording, setIsRecording] = useState(false);
   const [doctorMessage, setDoctorMessage] = useState(

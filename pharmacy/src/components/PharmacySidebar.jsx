@@ -45,7 +45,7 @@ const PharmacySidebar = () => {
     localStorage.removeItem("token");
     toast.success("Logout done successfully");
     setTimeout(() => {
-      const frontend_url=process.env.FRONTEND_URL;
+      const frontend_url=import.meta.env.VITE_FRONTEND_URL;
       window.location.href = `${frontend_url}/`;
     }, 2000);
   };

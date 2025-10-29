@@ -5,7 +5,7 @@ import { io } from "socket.io-client";
 export const StoreContext = createContext();
 
 const StoreContextProvider = ({ children }) => {
-  const BACKEND_URL = process.env.BACKEND_URL;
+  const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
   const [socket, setSocket] = useState(null);
   const [login, setLogin] = useState(false);
   const [token, setToken] = useState("");
@@ -14,7 +14,7 @@ const StoreContextProvider = ({ children }) => {
   const [message, setMessage] = useState([]);
   const [onlineUser, setOnlineUser] = useState(null);
   const [userId,setUserId]=useState("");
-  const backendurl = process.env.BACKEND_URL;
+  const backendurl = process.env.REACT_APP_BACKEND_URL;
 
   const [stats, setStats] = useState({
     doctorsAvailable: 120,

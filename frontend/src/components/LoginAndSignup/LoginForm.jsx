@@ -28,7 +28,7 @@ const LoginForm = () => {
   const navigate = useNavigate();
   const [isOtpSent, setIsOtpSent] = useState(false);
 
-  const url = import.meta.env.VITE_BACKEND_URL;
+  const url = process.env.REACT_APP_BACKEND_URL;
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -89,10 +89,10 @@ const LoginForm = () => {
 
         // Set axios headers
         axios.defaults.headers.common["Authorization"] = `Bearer ${response.data.token}`;
-        const ADMIN_URL=process.env.ADMIN_URL;
-        const DOCTOR_URL=process.env.DOCTOR_URL;
-        const PHARMACY_URL=process.env.PHARMACY_URL;
-        const HOSPITAL_URL=process.env.HOSPITAL_URL;
+        const ADMIN_URL=process.env.REACT_APP_ADMIN_URL;
+        const DOCTOR_URL=process.env.REACT_APP_DOCTOR_URL;
+        const PHARMACY_URL=process.env.REACT_APP_PHARMACY_URL;
+        const HOSPITAL_URL=process.env.REACT_APP_HOSPITAL_URL;
         // Configure redirect URLs
         const redirectConfig = {
           admin: `$${ADMIN_URL}/admin/${response.data.adminId}/dashboard`,

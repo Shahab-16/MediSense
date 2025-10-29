@@ -7,11 +7,11 @@ import { MdScreenShare, MdStopScreenShare } from 'react-icons/md';
 import { BsRecordCircleFill } from 'react-icons/bs';
 import io from 'socket.io-client';
 
-const socket = io(process.env.BACKEND_URL);
+const socket = io(process.env.REACT_APP_BACKEND_URL);
 
 const VideoCall = () => {
   const { userId, doctorId } = useParams();
-  const BACKEND_URL = process.env.BACKEND_URL;
+  const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
   const token = document.cookie
     .split('; ')
     .find(row => row.startsWith('token='))

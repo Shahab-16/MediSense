@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { io } from 'socket.io-client';
 import axios from 'axios';
-const socket = io(process.env.BACKEND_URL);
+const socket = io(process.env.REACT_APP_BACKEND_URL);
 
 const ChatWindow = ({ userId, doctorId }) => {
-  const BACKEND_URL=process.env.BACKEND_URL;
+  const BACKEND_URL=process.env.REACT_APP_BACKEND_URL;
   const [messages, setMessages] = useState([]);
   const [content, setContent] = useState('');
 

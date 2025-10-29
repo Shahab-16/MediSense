@@ -14,7 +14,7 @@ const socket = io(url);
 const VideoCall = () => {
 
   const { userId, doctorId } = useParams();
-  const BACKEND_URL=process.env.BACKEND_URL;
+  const BACKEND_URL=process.env.REACT_APP_BACKEND_URL;
   const token = document.cookie
     .split('; ')
     .find(row => row.startsWith('token='))

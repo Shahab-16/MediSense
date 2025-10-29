@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 //const API_URL = "https://medisense-backend.vercel.app/admin";
-const BACKEND_URL=process.env.BACKEND_URL;
+const BACKEND_URL=process.env.REACT_APP_BACKEND_URL;
 const API_URL = `${BACKEND_URL}/admin`;
 
 // Create axios instance with default config

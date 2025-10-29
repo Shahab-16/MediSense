@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BASE_URL=process.env.BACKEND_URL
+const BASE_URL=import.meta.env.VITE_BACKEND_URL
 
 // Function to get the token from localStorage, cookies, or headers
 const getToken = () => {

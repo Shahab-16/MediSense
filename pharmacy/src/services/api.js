@@ -2,7 +2,8 @@ import axios from "axios";
 import { useActionState } from "react";
 
 //const BASE_URL = "https://medisense-backend.vercel.app";
-const BASE_URL =process.env.BACKEND_URL;
+const BASE_URL =import.meta.env.VITE_BACKEND_URL;
+console.log("base url",BASE_URL);
 // Function to get the token from localStorage, cookies, or headers
 const getToken = () => {
   // Check localStorage first
@@ -10,7 +11,7 @@ const getToken = () => {
   if (tokenFromLocalStorage) return tokenFromLocalStorage;
 
   // Check cookies
-  const tokenFromCookies = document.cookie
+  const tokenFromCookies = document.cookie    
     .split("; ")
     .find((row) => row.startsWith("token="))
     ?.split("=")[1];
