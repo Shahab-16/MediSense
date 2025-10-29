@@ -7,7 +7,6 @@ import { ImCross, ImArrowLeft2 } from "react-icons/im";
 import { toast } from "react-toastify";
 import Spinner from "../spinner/spinner";
 import Cookies from "js-cookie";
-
 // import { ChatContext } from "../../context/chatContext";
 
 
@@ -29,7 +28,7 @@ const LoginForm = () => {
   const navigate = useNavigate();
   const [isOtpSent, setIsOtpSent] = useState(false);
 
-  const url = "http://localhost:5000";
+  const url = import.meta.env.VITE_BACKEND_URL;
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -90,13 +89,16 @@ const LoginForm = () => {
 
         // Set axios headers
         axios.defaults.headers.common["Authorization"] = `Bearer ${response.data.token}`;
-
+        const ADMIN_URL=process.env.ADMIN_URL;
+        const DOCTOR_URL=process.env.DOCTOR_URL;
+        const PHARMACY_URL=process.env.PHARMACY_URL;
+        const HOSPITAL_URL=process.env.HOSPITAL_URL;
         // Configure redirect URLs
         const redirectConfig = {
-          admin: `http://localhost:3002/admin/${response.data.adminId}/dashboard`,
-          doctor: `http://localhost:3001/doctor/${response.data.doctorId}/dashboard`,
-          pharmacy: `http://localhost:5174/pharmacy/${response.data.pharmacyName}/dashboard`,
-          hospital: `http://localhost:5173/hospital/${response.data.hospitalName}/dashboard`,
+          admin: `$${ADMIN_URL}/admin/${response.data.adminId}/dashboard`,
+          doctor: `${DOCTOR_URL}/doctor/${response.data.doctorId}/dashboard`,
+          pharmacy: `${PHARMACY_URL}/pharmacy/${response.data.pharmacyName}/dashboard`,
+          hospital: `${HOSPITAL_URL}/hospital/${response.data.hospitalName}/dashboard`,
           user: "/dashboard/home"
         };
 

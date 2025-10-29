@@ -29,7 +29,7 @@ const Sidebar = () => {
     localStorage.removeItem("token");
     toast.success("Logout done successfully");
     setTimeout(() => {
-      window.location.href = "http://localhost:3000/";
+      window.location.href = `${process.env.FRONTEND_URL}/`;
     }, 2000);
   };
   

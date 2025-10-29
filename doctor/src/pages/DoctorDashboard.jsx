@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { FaBell, FaVideo} from "react-icons/fa";
 import axios from "axios"
 import { useNavigate, useParams } from 'react-router-dom';
-const backendurl = 'http://localhost:5000';
+const backendurl = process.env.BACKEND_URL;
 const DoctorDashboard = () => {
 
   const navigate = useNavigate();

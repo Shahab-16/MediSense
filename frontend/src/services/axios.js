@@ -2,14 +2,13 @@ import axios from "axios";
 // const BASE_URL = "http://localhost:5000";
 // 
 export const axiosInstance = axios.create({
-  baseURL: "http://localhost:5000",
+  baseURL:process.env.BACKEND_URL,
   headers: {
     "Content-Type": "application/json",
   },
 });
 
-const backendUrl="http://localhost:5000";
-
+const backendUrl=process.env.VITE_BACKEND_URL;
 export const getDoctors=async()=>{
     const response=await axiosInstance.get("/hospital/get-all-doctors");
     console.log("fetched doctors in services",response.data.data);

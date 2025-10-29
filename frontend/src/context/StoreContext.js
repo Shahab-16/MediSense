@@ -3,8 +3,9 @@ import { doctors } from "../assets/asset";
 import axios from "axios";
 import { io } from "socket.io-client";
 export const StoreContext = createContext();
+
 const StoreContextProvider = ({ children }) => {
-  const BACKEND_URL = "http://localhost:5000";
+  const BACKEND_URL = process.env.BACKEND_URL;
   const [socket, setSocket] = useState(null);
   const [login, setLogin] = useState(false);
   const [token, setToken] = useState("");
@@ -13,7 +14,7 @@ const StoreContextProvider = ({ children }) => {
   const [message, setMessage] = useState([]);
   const [onlineUser, setOnlineUser] = useState(null);
   const [userId,setUserId]=useState("");
-  const backendurl = "http://localhost:5000";
+  const backendurl = process.env.BACKEND_URL;
 
   const [stats, setStats] = useState({
     doctorsAvailable: 120,

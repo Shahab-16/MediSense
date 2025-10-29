@@ -2,7 +2,7 @@ import axios from "axios";
 import { useActionState } from "react";
 
 //const BASE_URL = "https://medisense-backend.vercel.app";
-const BASE_URL = "http://localhost:5000";
+const BASE_URL =process.env.BACKEND_URL;
 // Function to get the token from localStorage, cookies, or headers
 const getToken = () => {
   // Check localStorage first

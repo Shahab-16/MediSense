@@ -2,10 +2,11 @@ import React, { useState, useRef, useEffect, useContext } from "react";
 import { FaMicrophone, FaVolumeUp, FaStethoscope } from "react-icons/fa";
 import { motion } from "framer-motion";
 import axios from "axios";
+
 import { toast } from "react-toastify";
 
 const ArtificialDoctor = () => {
-  const BACKEND_URL = "http://localhost:5000";
+  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
   console.log("BACKEND_URL",BACKEND_URL); 
   const [isRecording, setIsRecording] = useState(false);
   const [doctorMessage, setDoctorMessage] = useState(

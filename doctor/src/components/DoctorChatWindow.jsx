@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { io } from 'socket.io-client';
 import axios from 'axios';
 
-const socket = io('http://localhost:5000');
+const socket = io(process.env.BACKEND_URL);
 
 const DoctorChatWindow = ({ doctorId, userId }) => {
+  const BACKEND_URL=process.env.BACKEND_URL;
   const [messages, setMessages] = useState([]);
   const [content, setContent] = useState('');
 
@@ -12,7 +13,7 @@ const DoctorChatWindow = ({ doctorId, userId }) => {
     const roomId = [doctorId, userId].sort().join('_');
     socket.emit('joinRoom', { userId, doctorId });
 
-    axios.get(`http://localhost:5000/message/chat/${userId}/${doctorId}`)
+    axios.get(`${BACKEND_URL}/message/chat/${userId}/${doctorId}`)
       .then((res) => setMessages(res.data))
       .catch((err) => console.error('Error fetching messages:', err));
 
