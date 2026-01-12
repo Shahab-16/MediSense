@@ -14,7 +14,7 @@ const hospitalRoute = require("./routes/hospital");
 const pharmacyRoute = require("./routes/pharmacy");
 const messageRoutes = require("./routes/messageRoutes");
 const chatRoutes = require("./routes/chatRoutes");
-const socketHandler = require("./routes/socket");
+const {socketHandler} = require("./routes/socket");
 
 // Cloudinary
 const cloudinary = require("cloudinary").v2;
