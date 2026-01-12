@@ -1,125 +1,111 @@
-const express = require('express');
-const cors = require('cors');
-const cookieParser = require('cookie-parser');
-const connectDB = require('./config/Database');
-const userRoute = require('./routes/userRoute');
-const adminRoute = require('./routes/admin');
-const hospitalRoute = require('./routes/hospital');
-const pharmacyRoute = require('./routes/pharmacy');
-const chatbotRoutes = require('./routes/userRoute');
-const messageRoutes = require('./routes/messageRoutes');
-const chatRoutes = require('./routes/chatRoutes');
-const socketHandler = require('./routes/socket');
-const { Server } = require('socket.io');
-const http = require('http');
+// server.js
+const express = require("express");
+const http = require("http");
+const cors = require("cors");
+const cookieParser = require("cookie-parser");
+const { Server } = require("socket.io");
+require("dotenv").config();
 
-require('dotenv').config(); // Load environment variables
+// Routes
+const connectDB = require("./config/Database");
+const userRoute = require("./routes/userRoute");
+const adminRoute = require("./routes/admin");
+const hospitalRoute = require("./routes/hospital");
+const pharmacyRoute = require("./routes/pharmacy");
+const messageRoutes = require("./routes/messageRoutes");
+const chatRoutes = require("./routes/chatRoutes");
+const socketHandler = require("./routes/socket");
 
-// Cloudinary Configuration
-const cloudinary = require('cloudinary').v2;
+// Cloudinary
+const cloudinary = require("cloudinary").v2;
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-console.log('Cloudinary Config:', {
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
-});
-
 const app = express();
-
-// Create HTTP server
 const server = http.createServer(app);
 
-// List of allowed origins for CORS and Socket.IO
+// ===============================
+// ✅ ALLOWED ORIGINS
+// ===============================
 const allowedOrigins = [
-  'http://localhost:3000',
-  'http://localhost:3001',
-  'http://localhost:3002',
-  'http://localhost:5173',
-  'http://localhost:5174',
-  'https://medisense-doctor-section.vercel.app',
-  'https://medisense-pharmacy.vercel.app',
-  'https://medisense-hospital.vercel.app',
-  'https://medisense-admin.vercel.app',
-  'https://medisense-frontend.vercel.app',
+  "http://localhost:3000",
+  "http://localhost:5173",
+  "https://medisense-frontend.vercel.app",
+  "https://medisense-doctor-section.vercel.app",
+  "https://medisense-pharmacy.vercel.app",
+  "https://medisense-hospital.vercel.app",
+  "https://medisense-admin.vercel.app",
 ];
 
-// Configure Socket.IO
-const io = new Server(server, {
-  cors: {
-    origin: allowedOrigins,
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    credentials: true,
-  },
-  connectionStateRecovery: {
-    maxDisconnectionDuration: 2 * 60 * 1000, // 2 minutes
-    skipMiddlewares: true,
-  }
-});
+// ===============================
+// ✅ EXPRESS MIDDLEWARE
+// ===============================
+app.use(express.json({ limit: "10mb" }));
+app.use(cookieParser());
 
-// Connect to the database
-connectDB()
-  .then(() => console.log("Connected to the database"))
-  .catch(err => {
-    console.error("Database connection error:", err);
-    process.exit(1);
-  });
-
-// Enable CORS with dynamic origin checking
 app.use(
   cors({
-    origin: function (origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error('Not allowed by CORS'));
-      }
-    },
-    credentials: true, // Allow credentials (cookies, authorization headers)
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
+    origin: allowedOrigins,
+    credentials: true,
+    methods: ["GET", "POST"],
   })
 );
 
-// Handle preflight requests
-app.options('*', cors());
-
-// Parse JSON request bodies
-app.use(express.json({ limit: '10mb' }));
-
-// Parse cookies
-app.use(cookieParser());
-
-// Routes
-app.use('/user', userRoute);
-app.use('/admin', adminRoute);  
-app.use('/hospital', hospitalRoute);
-app.use('/pharmacy', pharmacyRoute);
-app.use('/chatbot', chatbotRoutes);
-app.use('/message', messageRoutes);
-app.use('/message/chat', chatRoutes);
-
-// Default route
-app.get('/', (req, res) => {
-  res.send('Hello, MediSense Backend is Running!');
+// ===============================
+// ✅ SOCKET.IO SETUP (RENDER SAFE)
+// ===============================
+const io = new Server(server, {
+  transports: ["websocket"], // IMPORTANT
+  cors: {
+    origin: allowedOrigins,
+    credentials: true,
+  },
 });
 
-// Global Error Handler
-app.use((err, req, res, next) => {
-  console.error("Error:", err.stack);
-  res.status(500).json({ error: 'Internal Server Error' });
-});
-
-// Initialize Socket.IO handler
+// Initialize socket logic
 socketHandler(io);
 
-// Start the server
+// ===============================
+// ✅ DATABASE CONNECTION
+// ===============================
+connectDB()
+  .then(() => console.log("✅ MongoDB connected"))
+  .catch((err) => {
+    console.error("❌ DB Connection Error:", err);
+    process.exit(1);
+  });
+
+// ===============================
+// ✅ ROUTES
+// ===============================
+app.use("/user", userRoute);
+app.use("/admin", adminRoute);
+app.use("/hospital", hospitalRoute);
+app.use("/pharmacy", pharmacyRoute);
+app.use("/message", messageRoutes);
+app.use("/message/chat", chatRoutes);
+
+// Health check
+app.get("/", (req, res) => {
+  res.send("🚀 MediSense Backend is Running");
+});
+
+// ===============================
+// ✅ GLOBAL ERROR HANDLER
+// ===============================
+app.use((err, req, res, next) => {
+  console.error("🔥 Error:", err);
+  res.status(500).json({ error: "Internal Server Error" });
+});
+
+// ===============================
+// ✅ START SERVER
+// ===============================
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-  console.log(`Socket.IO is listening for connections`);
+  console.log(`✅ Server running on port ${PORT}`);
+  console.log(`✅ Socket.IO ready`);
 });
