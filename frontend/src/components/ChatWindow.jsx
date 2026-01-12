@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { io } from 'socket.io-client';
 import axios from 'axios';
-const socket = io(process.env.REACT_APP_BACKEND_URL);
+const socket = io(process.env.REACT_APP_BACKEND_URL, {
+  transports: ["websocket"],
+  withCredentials: true,
+});
 
 const ChatWindow = ({ userId, doctorId }) => {
   const BACKEND_URL=process.env.REACT_APP_BACKEND_URL;
