@@ -1,7 +1,6 @@
-const mongoose = require("mongoose"); // ✅ MUST be here
+const mongoose = require("mongoose");
 const Message = require("../models/Message");
-const { io, userSocketMap } = require("../server");
-
+const { getIO, getUserSocketMap } = require("../routes/socket");
 
 exports.getMessage = async (req, res) => {
   try {
@@ -10,19 +9,18 @@ exports.getMessage = async (req, res) => {
 
     const chats = await Message.find({
       $or: [
-        { senderId: senderId, receiverId: receiverId },
-        { senderId: receiverId, receiverId: senderId }
-      ]
+        { senderId, receiverId },
+        { senderId: receiverId, receiverId: senderId },
+      ],
     });
 
     await Message.updateMany(
-      { senderId: senderId, receiverId },
+      { senderId: receiverId, receiverId: senderId },
       { seen: true }
     );
 
     res.status(200).json({ success: true, message: chats });
   } catch (error) {
-    console.log("Error in getMessage:", error.message);
     res.status(500).json({ success: false, message: error.message });
   }
 };
@@ -31,21 +29,16 @@ exports.sendMessage = async (req, res) => {
   try {
     const { text } = req.body;
     const senderId = req.user.id;
-    console.log("user id ",senderId);
     const receiverId = req.params.id;
 
-    if (!receiverId) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Receiver ID is required" });
-    }
-
-    
     const newMessage = await Message.create({
       senderId,
       receiverId,
       text,
     });
+
+    const io = getIO();
+    const userSocketMap = getUserSocketMap();
 
     const receiverSocketId = userSocketMap[receiverId];
     if (receiverSocketId) {
@@ -54,7 +47,6 @@ exports.sendMessage = async (req, res) => {
 
     res.status(200).json({ success: true, newMessage });
   } catch (error) {
-    // console.log("user id ",senderId);
     res.status(500).json({ success: false, message: error.message });
   }
 };
